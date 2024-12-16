@@ -13,9 +13,37 @@ FetchContent_Declare(SFML
     SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
-add_executable(main src/main.cpp)
+add_executable(main src/main.cpp
+        src/engine/Core.cpp
+        src/engine/Core.h
+        src/engine/SceneManager.cpp
+        src/engine/SceneManager.h
+        src/engine/IScene.h
+        src/engine/IState.h
+        src/engine/StateMachineManager.h
+        src/game/scenes/Level.cpp
+        src/game/scenes/Level.h
+        src/engine/ModifiableTexture.cpp
+        src/engine/ModifiableTexture.h
+        src/game/Map.cpp
+        src/game/Map.h
+        src/game/Node.cpp
+        src/game/Node.h
+        src/engine/GameObject.h
+        src/game/lemmings/Lemming.cpp
+        src/game/lemmings/Lemming.h
+        src/game/lemmings/states/Walker.cpp
+        src/game/lemmings/states/Walker.h
+        src/engine/Timer.cpp
+        src/engine/Timer.h
+        src/game/lemmings/states/Faller.cpp
+        src/game/lemmings/states/Faller.h
+        src/engine/AnimatedTexture.cpp
+        src/engine/AnimatedTexture.h
+)
 target_link_libraries(main PRIVATE sfml-graphics)
 target_compile_features(main PRIVATE cxx_std_17)
+target_compile_definitions(main PUBLIC ASSETS_PATH="${CMAKE_CURRENT_SOURCE_DIR}/src/assets/")
 
 if(WIN32)
     add_custom_command(
