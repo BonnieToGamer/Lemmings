@@ -2,8 +2,17 @@
 
 int main()
 {
-    auto window = sf::RenderWindow({1920u, 1080u}, "CMake SFML Project");
+    uint width = 800u;
+    uint height = 480u;
+    auto window = sf::RenderWindow({width, height}, "CMake SFML Project", sf::Style::Titlebar | sf::Style::Close);
     window.setFramerateLimit(144);
+    
+    uint displayWidth = sf::VideoMode::getDesktopMode().width;
+    uint displayHeight = sf::VideoMode::getDesktopMode().height;
+    window.setPosition(sf::Vector2i(
+        static_cast<int>(displayWidth / 2 - width / 2),
+        static_cast<int>(displayHeight / 2 - height / 2))
+    );
 
     while (window.isOpen())
     {
@@ -15,7 +24,7 @@ int main()
             }
         }
 
-        window.clear();
+        window.clear(sf::Color(100, 149, 237));
         window.display();
     }
 }
