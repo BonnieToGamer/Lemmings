@@ -10,13 +10,15 @@ namespace Lemmings::States {
 
 class Walker final : public Engine::IState<Lemming> {
 private:
-    int dir = 1;
     const float SPEED = 2;
     
 public:
     void enter() override;
     void exit() override;
     std::shared_ptr<IState<Lemming>> update(float delta) override;
+
+    bool checkFall(float xOffset) const;
+    bool checkWalk(float xOffset, float yOffset) const;
 };
 
 } // Lemmings

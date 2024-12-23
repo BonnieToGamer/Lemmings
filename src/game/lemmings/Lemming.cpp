@@ -4,6 +4,7 @@
 
 #include "Lemming.h"
 
+#include <complex.h>
 #include <stdexcept>
 
 #include "SFML/Graphics/RectangleShape.hpp"
@@ -18,49 +19,42 @@ namespace Lemmings {
             std::make_unique<Engine::StateMachineManager<Lemming>>(std::make_shared<States::Walker>(), this->shared_from_this());
 
 
-        auto walkerAnim = std::make_shared<Engine::AnimatedTexture>();
-        auto fallerAnim = std::make_shared<Engine::AnimatedTexture>();
-        const auto walk1 = std::make_shared<sf::Texture>();
-        const auto walk2 = std::make_shared<sf::Texture>();
-        const auto fall1 = std::make_shared<sf::Texture>();
-        const auto fall2 = std::make_shared<sf::Texture>();
+        const auto lemmingTexture = std::make_shared<sf::Texture>();
         
-        if (!walk1->loadFromFile(ASSETS_PATH"lemming.png"))
-            throw std::runtime_error("Couldn't load texture!");
-        if (!walk2->loadFromFile(ASSETS_PATH"lemming1.png"))
+        if (!lemmingTexture->loadFromFile(ASSETS_PATH"lemming.png"))
             throw std::runtime_error("Couldn't load texture!");
 
-        if (!fall1->loadFromFile(ASSETS_PATH"lemmingfall.png"))
-            throw std::runtime_error("Couldn't load texture!");
+        sf::Vector2u spriteSize(TEXTURE_WIDTH, TEXTURE_HEIGHT);
+        auto walkerAnim = std::make_shared<Engine::AnimatedTexture>(lemmingTexture, spriteSize, true);
+        auto fallerAnim = std::make_shared<Engine::AnimatedTexture>(lemmingTexture, spriteSize, true);
+        auto diggerAnim = std::make_shared<Engine::AnimatedTexture>(lemmingTexture, spriteSize, true);
 
-        if (!fall2->loadFromFile(ASSETS_PATH"lemmingfall2.png"))
-            throw std::runtime_error("Couldn't load texture!");
+        walkerAnim->addSpriteSheetAnim(8, 0, {0, 0}, 0);
+        fallerAnim->addSpriteSheetAnim(4, 1, {0, 1}, 0);
+        diggerAnim->addSpriteSheetAnim(15, 2, {0, 2}, 0);
         
-        walkerAnim->addToTimeline(0.0f, walk1);
-        walkerAnim->addToTimeline(0.25f, walk2);
-        walkerAnim->addToTimeline(0.5f, walk2);
-
-        fallerAnim->addToTimeline(0.0f, fall1);
-        fallerAnim->addToTimeline(0.25f, fall2);
-        fallerAnim->addToTimeline(0.5f, fall2);
-
-        this->animations_.emplace("Walker", walkerAnim);
-        this->animations_.emplace("Faller", fallerAnim);
-
+        this->animations_.emplace(Job::Walker, walkerAnim);
+        this->animations_.emplace(Job::Faller, fallerAnim);
+        this->animations_.emplace(Job::Digger, diggerAnim);
         this->currentAnimatedTexture_ = walkerAnim;
     }
 
     void Lemming::update(float delta)
     {
-        this->currentAnimatedTexture_->update(delta);
-        if (this->fixedUpdateTimer_.update(delta))
-            this->stateMachineManager_->update(delta);
+        this->currentAnimatedTexture_->nextFrame();
+        this->stateMachineManager_->update(delta);
     }
 
-    void Lemming::draw(sf::RenderTexture& renderTexture)
+    void Lemming::draw(sf::RenderTarget& renderTarget)
     {
-        this->currentAnimatedTexture_->setPosition(this->position_.x - TEXTURE_WIDTH / 2, this->position_.y - TEXTURE_HEIGHT + 1);
-        this->currentAnimatedTexture_->draw(renderTexture);
+        this->currentAnimatedTexture_->setPosition(this->position_.x - TEXTURE_WIDTH / 2 + (this->currentDir_ == 1 ? 1 : 0),
+                                                   this->position_.y - TEXTURE_HEIGHT + 1);
+        this->currentAnimatedTexture_->draw(renderTarget);
+        
+        sf::RectangleShape rectShape(sf::Vector2f(1.0f, 1.0f));
+        rectShape.setFillColor(sf::Color::Green);
+        rectShape.setPosition(this->position_.x, this->position_.y);
+        renderTarget.draw(rectShape);
     }
 
     const sf::Vector2f& Lemming::getPosition()
@@ -78,12 +72,37 @@ namespace Lemmings {
         return this->map_;
     }
 
-    void Lemming::playAnimation(const std::string& name)
+    void Lemming::playAnimation(Job job)
     {
-        if (auto itr = this->animations_.find(name); itr == this->animations_.end())
+        if (const auto itr = this->animations_.find(job); itr == this->animations_.end())
             return;
             
-        this->currentAnimatedTexture_ = this->animations_[name];
+        this->currentAnimatedTexture_ = this->animations_[job];
         this->currentAnimatedTexture_->init();
+    }
+
+    void Lemming::flipSprite() const
+    {
+        this->currentAnimatedTexture_->flipSprite();
+    }
+
+    bool Lemming::checkCollision(const float x, const float y) const
+    {
+        if (x < 0 || x >= static_cast<float>(this->map_->width()) ||
+            y < 0 || y >= static_cast<float>(this->map_->height()))
+            return true;
+
+        const int index = static_cast<int>(x) + static_cast<int>(y) * this->map_->width();
+        return (*this->map_)[index].isEnabled();
+    }
+
+    int Lemming::dir() const
+    {
+        return this->currentDir_;
+    }
+
+    void Lemming::setDir(const int newDir)
+    {
+        this->currentDir_ = newDir;
     }
 } // Lemmings

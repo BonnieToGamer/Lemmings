@@ -6,20 +6,29 @@
 
 #include <iostream>
 
+#include "../Camera.h"
 #include "../Map.h"
 #include "../../engine/Core.h"
 #include "../lemmings/Lemming.h"
+#include "../lemmings/LemmingsHandler.h"
 
 namespace Lemmings::Scene {
     void Level::init()
     {
-        const auto map = std::make_shared<Map>(ASSETS_PATH"map.png");
-        const auto lemming = std::make_shared<Lemming>(map);
-        lemming->setPosition(sf::Vector2f(3, 0));
+        const auto map = std::make_shared<Map>(ASSETS_PATH"map2.png");
+        const auto lemmingHandler = std::make_shared<LemmingsHandler>(map);
+        const auto camera = std::make_shared<Camera>();
+        
+        lemmingHandler->addLemming({225, 29});
+        
+        this->addGameObject(camera);
         this->addGameObject(map);
-        this->addGameObject(lemming);
+        this->addGameObject(lemmingHandler);
 
         IScene::init();
+        
+        camera->activate();
+        camera->setPosition({69, 0});
     }
 
     void Level::update(float delta)
@@ -38,8 +47,8 @@ namespace Lemmings::Scene {
         //     - sf::Vector2i(4, 4);
     }
 
-    void Level::draw(sf::RenderTexture& renderTexture)
+    void Level::draw(sf::RenderTarget& renderTarget)
     {
-        IScene::draw(renderTexture);
+        IScene::draw(renderTarget);
     }
 } // Lemmings

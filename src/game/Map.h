@@ -14,7 +14,7 @@ namespace Lemmings {
 class Map final : public Engine::GameObject {
 private:
     Engine::ModifiableTexture modifiableTexture_;
-    std::vector<Node> nodes_;
+    std::vector<std::unique_ptr<Node>> nodes_;
     bool nodesAccessed_ = false;
     std::queue<int> accessedQueue_;
 
@@ -24,10 +24,10 @@ public:
     uint width();
     uint height();
     
-    const Node& operator[](int index);
+    Node& operator[](int index);
     void init() override;
     void update(float delta) override;
-    void draw(sf::RenderTexture& renderTexture) override;
+    void draw(sf::RenderTarget& renderTarget) override;
 };
 
 } // Lemmings

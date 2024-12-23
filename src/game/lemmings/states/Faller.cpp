@@ -9,7 +9,7 @@
 namespace Lemmings::States {
     void Faller::enter()
     {
-        this->parent_->playAnimation("Faller");
+        this->parent_->playAnimation(Lemming::Faller);
     }
 
     void Faller::exit()
@@ -20,8 +20,7 @@ namespace Lemmings::States {
     {
         sf::Vector2f pos = this->parent_->getPosition();
 
-        int index = pos.x + (pos.y + 1) * this->parent_->map()->width();
-        if ((*this->parent_->map())[index].isEnabled())
+        if (this->parent_->checkCollision(pos.x, pos.y + 1))
             return std::make_shared<Walker>();
 
         this->parent_->setPosition(sf::Vector2f(pos.x, pos.y + 1));

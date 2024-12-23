@@ -40,6 +40,12 @@ add_executable(main src/main.cpp
         src/game/lemmings/states/Faller.h
         src/engine/AnimatedTexture.cpp
         src/engine/AnimatedTexture.h
+        src/game/lemmings/LemmingsHandler.cpp
+        src/game/lemmings/LemmingsHandler.h
+        src/game/Camera.cpp
+        src/game/Camera.h
+        src/game/lemmings/states/Digger.cpp
+        src/game/lemmings/states/Digger.h
 )
 target_link_libraries(main PRIVATE sfml-graphics)
 target_compile_features(main PRIVATE cxx_std_17)

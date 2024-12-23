@@ -10,7 +10,8 @@
 namespace Lemmings {
     Map::Map(const std::string& mapName) : modifiableTexture_(mapName), nodes_()
     {
-        nodes_.reserve(this->modifiableTexture_.width() * this->modifiableTexture_.height());
+        int size = this->modifiableTexture_.width() * this->modifiableTexture_.height();
+        this->nodes_.reserve(size);
         
         for (int y = 0; y < this->modifiableTexture_.height(); y++)
         {
@@ -18,8 +19,9 @@ namespace Lemmings {
             {
                 const sf::Color color = this->modifiableTexture_.getPixel(x, y);
                 const int index = x + y * this->modifiableTexture_.width();
-
-                nodes_[index] = Node(sf::Vector2i(x, y), color.a != 0);
+                
+                std::unique_ptr<Node> node = std::make_unique<Node>(sf::Vector2i(x, y), color.a != 0);
+                this->nodes_.emplace_back(std::move(node));
             }
         }
     }
@@ -34,11 +36,11 @@ namespace Lemmings {
         return this->modifiableTexture_.height();
     }
 
-    const Node& Map::operator[](int index)
+    Node& Map::operator[](int index)
     {
         this->nodesAccessed_ = true;
         this->accessedQueue_.push(index);
-        return this->nodes_[index];
+        return *this->nodes_[index];
     }
 
     void Map::init()
@@ -54,19 +56,21 @@ namespace Lemmings {
                 const uint index = this->accessedQueue_.front();
                 this->accessedQueue_.pop();
 
-                if (this->nodes_[index].isEnabled())
+                if (this->nodes_[index]->isEnabled())
                     return;
 
                 const uint x = index % this->modifiableTexture_.width();
-                const uint y = index / this->modifiableTexture_.height();
+                const uint y = index / this->modifiableTexture_.width();
                 
                 this->modifiableTexture_.setPixel(x, y, sf::Color::Transparent);
             }
+
+            this->modifiableTexture_.updateTexture();
         }
     } 
 
-    void Map::draw(sf::RenderTexture& renderTexture)
+    void Map::draw(sf::RenderTarget& renderTarget)
     {
-        renderTexture.draw(this->modifiableTexture_.getSprite());
+        renderTarget.draw(this->modifiableTexture_.getSprite());
     }
 } // Lemmings

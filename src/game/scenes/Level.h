@@ -13,7 +13,7 @@ class Level : public Engine::IScene {
 public:
     void init() override;
     void update(float delta) override;
-    void draw(sf::RenderTexture& renderTexture) override;
+    void draw(sf::RenderTarget& renderTarget) override;
 };
 
 } // Lemmings

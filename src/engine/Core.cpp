@@ -31,7 +31,6 @@ namespace Lemmings::Engine
             throw std::runtime_error("Couldn't create render texture");
         
         this->sceneManager_.addScene(std::make_shared<Scene::Level>());
-        this->windowResized();
     }
 
     void Core::run()
@@ -47,13 +46,16 @@ namespace Lemmings::Engine
 
     void Core::update(const float delta)
     {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+        {
+            if (!this->slowTimer_.update(delta))
+                return;
+        }
+        
         for (auto event = sf::Event(); renderWindow_->pollEvent(event);)
         {
             if (event.type == sf::Event::Closed)
                 renderWindow_->close();
-
-            else if (event.type == sf::Event::Resized)
-                this->windowResized();
         }
 
         if (const std::shared_ptr<IScene> scene = this->sceneManager_.getCurrentScene())
@@ -62,39 +64,20 @@ namespace Lemmings::Engine
 
     void Core::draw()
     {
-        this->renderTexture_.clear(sf::Color::White);
-        if (std::shared_ptr<IScene> scene = this->sceneManager_.getCurrentScene())
-            scene->draw(this->renderTexture_);
-        this->renderTexture_.display();
-
-        this->renderSprite_.setTexture(this->renderTexture_.getTexture());
-        
+        // this->renderTexture_.clear(sf::Color::White);
         renderWindow_->clear(sf::Color(100, 149, 237));
-        this->renderWindow_->draw(this->renderSprite_);
-        renderWindow_->display();
-    }
+        if (std::shared_ptr<IScene> scene = this->sceneManager_.getCurrentScene())
+            scene->draw(*this->renderWindow_);
+        // this->renderTexture_.display();
 
-    int Core::getScale()
-    {
-        // TODO: THIS METHOD
-        return 4;
+        // this->renderSprite_.setTexture(this->renderTexture_.getTexture());
+        
+        // this->renderWindow_->draw(this->renderSprite_);
+        renderWindow_->display();
     }
 
     sf::RenderWindow* Core::getWindow()
     {
         return this->renderWindow_.get();
-    }
-
-    sf::FloatRect Core::getScaleRectangle() const
-    {
-        // TODO: THIS METHOD
-        return {0, 0, 4, 4};
-    }
-
-    void Core::windowResized()
-    {
-        const sf::FloatRect scaleRect = this->getScaleRectangle();
-        this->renderSprite_.setPosition(scaleRect.getPosition().x, scaleRect.getPosition().y);
-        this->renderSprite_.setScale(scaleRect.width, scaleRect.height);
     }
 }

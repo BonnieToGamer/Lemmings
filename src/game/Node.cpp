@@ -12,4 +12,9 @@ namespace Lemmings {
     {
         return this->enabled_;
     }
+
+    void Node::disable()
+    {
+        this->enabled_ = false;
+    }
 } // Lemmings

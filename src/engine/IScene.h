@@ -22,7 +22,7 @@ public:
     virtual ~IScene() = default;
     virtual void init();
     virtual void update(float delta);
-    virtual void draw(sf::RenderTexture& renderTexture);
+    virtual void draw(sf::RenderTarget& renderTarget);
 };
 
 inline void IScene::addGameObject(const std::shared_ptr<GameObject>& gameObject)
@@ -32,19 +32,19 @@ inline void IScene::addGameObject(const std::shared_ptr<GameObject>& gameObject)
 
 inline void IScene::init()
 {
-    for (auto gameObject : this->gameObjects_)
+    for (auto& gameObject : this->gameObjects_)
         gameObject->init();
 }
 
 inline void IScene::update(float delta)
 {
-    for (auto gameObject : this->gameObjects_)
+    for (auto& gameObject : this->gameObjects_)
         gameObject->update(delta);
 }
 
-inline void IScene::draw(sf::RenderTexture& renderTexture)
+inline void IScene::draw(sf::RenderTarget& renderTarget)
 {
-    for (auto gameObject : this->gameObjects_)
-        gameObject->draw(renderTexture);
+    for (auto& gameObject : this->gameObjects_)
+        gameObject->draw(renderTarget);
 }
 } // Lemmings
