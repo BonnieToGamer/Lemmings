@@ -98,7 +98,7 @@ namespace Lemmings {
 
         Job job = this->ui_->getCurrentJob();
 
-        if (job == Job::Nothing)
+        if (job == Job::Nothing || !this->ui_->canAssignCurrentJob())
             return;
         
         bool success = false;

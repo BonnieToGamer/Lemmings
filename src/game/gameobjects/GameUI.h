@@ -49,8 +49,7 @@ public:
     Job getCurrentJob();
     void decreaseCurrentJob();
     void setLemmingJobStat(uint amount, Job currentJob);
-
-    
+    bool canAssignCurrentJob();    
 };
     
 template<typename ButtonType, typename... Args>

@@ -134,4 +134,9 @@ namespace Lemmings {
         else
             this->amountOfHoverdLemmings_.setEmpty();
     }
+
+    bool GameUI::canAssignCurrentJob()
+    {
+        return this->currentJobButton_->getAmount() > 0;
+    }
 } // Lemmings

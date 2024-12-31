@@ -55,4 +55,9 @@ namespace Lemmings::UI {
     {
         this->amount_--;
     }
+
+    uint JobButton::getAmount()
+    {
+        return this->amount_;
+    }
 } // Lemmings
