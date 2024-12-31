@@ -12,7 +12,7 @@
 #include "SFML/Window/Mouse.hpp"
 
 namespace Lemmings {
-    Cursor::Cursor(std::shared_ptr<LemmingsHandler> lemmingHandler, std::shared_ptr<Camera> cam, std::shared_ptr<GameUI> ui) : lemmingsHandler_(std::move(lemmingHandler)), camera_(std::move(cam)), ui_(std::move(ui))
+    Cursor::Cursor(LemmingsHandler* lemmingHandler, Camera* cam, GameUI* ui) : lemmingsHandler_(lemmingHandler), camera_(cam), ui_(ui)
     {
     }
 

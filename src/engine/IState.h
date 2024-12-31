@@ -18,7 +18,7 @@ public:
     virtual ~IState() = default;
     virtual void enter() = 0;
     virtual void exit() = 0;
-    virtual std::shared_ptr<IState<T>> update(float delta) = 0;
+    virtual std::unique_ptr<IState<T>> update(float delta) = 0;
 };
 
 } // Lemmings

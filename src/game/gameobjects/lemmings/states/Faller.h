@@ -12,7 +12,7 @@ class Faller final : public Engine::IState<Lemming> {
 public:
     void enter() override;
     void exit() override;
-    std::shared_ptr<IState<Lemming>> update(float delta) override;
+    std::unique_ptr<IState<Lemming>> update(float delta) override;
 };
 
 } // Lemmings

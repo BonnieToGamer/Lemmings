@@ -84,7 +84,7 @@ namespace Lemmings::States {
     {
     }
 
-    std::shared_ptr<Engine::IState<Lemming>> Miner::update(float delta)
+    std::unique_ptr<Engine::IState<Lemming>> Miner::update(float delta)
     {
         this->mineCounter++;
         sf::Vector2i pos = this->parent_->getPosition();
@@ -94,7 +94,7 @@ namespace Lemmings::States {
         } 
         else if (this->mineCounter == MINE_COUNTER_STEP_TWO) {
             if (digStepTwo(pos, this->parent_->dir())) {
-                return std::make_shared<Faller>();
+                return std::make_unique<Faller>();
             }
         } 
         else if (this->mineCounter == MINE_COUNTER_RESET_THRESHOLD) {

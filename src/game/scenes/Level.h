@@ -16,7 +16,7 @@ private:
     
 public:
     Level(const std::string& levelName);
-    std::shared_ptr<LevelData> parseLevel();
+    std::unique_ptr<LevelData> parseLevel() const;
     void init() override;
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;

@@ -10,7 +10,7 @@
 #include "../../engine/Core.h"
 
 namespace Lemmings {
-    GameUI::GameUI(std::shared_ptr<Camera> cam, std::shared_ptr<LevelData> levelData) : camera_(std::move(cam)), levelData_(std::move(levelData))
+    GameUI::GameUI(Camera* cam, LevelData* levelData) : camera_(cam), levelData_(levelData)
     {
     }
 

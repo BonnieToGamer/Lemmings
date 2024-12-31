@@ -42,7 +42,7 @@ private:
     sf::Vector2i position_;
     std::shared_ptr<Engine::AnimatedTexture> currentAnimatedTexture_;
     std::unique_ptr<Engine::StateMachineManager<Lemming>> stateMachineManager_;
-    std::shared_ptr<Map> map_;
+    Map* map_;
     std::unordered_map<Job, std::shared_ptr<Engine::AnimatedTexture>> animations_;
     Direction currentDir_ = Right;
     Job currentJob_ = Job::Faller;
@@ -59,14 +59,14 @@ private:
 public:
     Engine::Event<Lemming*> deathEvent; 
     
-    explicit Lemming(std::shared_ptr<Map> map);
+    explicit Lemming(Map* map);
 
     void init() override;
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;
     const sf::Vector2i& getPosition();
     void setPosition(const sf::Vector2i& newPos);
-    std::shared_ptr<Map> map();
+    Map* map();
     void playAnimation(Job job);
     void setAnimationOffset(sf::Vector2i offset);
     void flipSprite() const;

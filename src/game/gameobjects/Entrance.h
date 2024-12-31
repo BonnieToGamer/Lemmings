@@ -19,7 +19,7 @@ private:
     Engine::Timer animationTimer_ = Engine::Timer(0.0667f);
     Engine::Timer spawnTimer_;
     uint spawnRate_ = 0;
-    std::shared_ptr<GameUI> ui_;
+    GameUI* ui_;
     sf::Vector2i position_;
     uint currentAnimationFrame_;
     LemmingsHandler* lemmingsHandler_;
@@ -31,7 +31,7 @@ private:
 
     float calcSpawnRate() const;
 public:
-    Entrance(std::shared_ptr<GameUI> ui, sf::Vector2i position, LemmingsHandler* lemmingsHandler, uint spa);
+    Entrance(GameUI* ui, sf::Vector2i position, LemmingsHandler* lemmingsHandler, uint spa);
     void init() override;
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;

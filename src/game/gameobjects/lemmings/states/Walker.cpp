@@ -17,12 +17,12 @@ namespace Lemmings::States {
 
     void Walker::exit() { }
 
-    std::shared_ptr<Engine::IState<Lemming>> Walker::update(float delta)
+    std::unique_ptr<Engine::IState<Lemming>> Walker::update(float delta)
     {        
         sf::Vector2i pos = this->parent_->getPosition();
 
         if (this->checkFall(0))
-            return std::make_shared<Faller>();
+            return std::make_unique<Faller>();
 
         bool walked = false;
         for (int x = 0; x < SPEED; x++)

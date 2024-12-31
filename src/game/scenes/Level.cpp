@@ -22,7 +22,7 @@ namespace Lemmings::Scene {
         
     }
 
-    std::shared_ptr<LevelData> Level::parseLevel()
+    std::unique_ptr<LevelData> Level::parseLevel() const
     {
         std::ifstream file(ASSETS_PATH"levels/" + this->levelName_ + ".lvl");
 
@@ -31,7 +31,7 @@ namespace Lemmings::Scene {
 
         std::string line;
         int index = 0;
-        std::shared_ptr<LevelData> data = std::make_shared<LevelData>();
+        std::unique_ptr<LevelData> data = std::make_unique<LevelData>();
 
         auto errorCheckStringToInt = [](const std::string& input, const char* endPtr)
         {
@@ -116,29 +116,31 @@ namespace Lemmings::Scene {
 
     void Level::init()
     {
-        std::shared_ptr<LevelData> data = this->parseLevel();
+        std::unique_ptr<LevelData> data = this->parseLevel();
         
-        const auto map = std::make_shared<Map>(ASSETS_PATH + data->image);
-        const auto lemmingHandler = std::make_shared<LemmingsHandler>(map);
-        const auto camera = std::make_shared<Camera>();
-        const auto ui = std::make_shared<GameUI>(camera, data);
-        const auto entrance = std::make_shared<Entrance>(ui, sf::Vector2i(200.0f, 29.0f), lemmingHandler.get(), data->releaseRate);
-        const auto cursor = std::make_shared<Cursor>(lemmingHandler, camera, ui);
+        auto map = std::make_unique<Map>(ASSETS_PATH + data->image);
+        auto lemmingHandler = std::make_unique<LemmingsHandler>(map.get());
+        auto camera = std::make_unique<Camera>();
+        auto ui = std::make_unique<GameUI>(camera.get(), data.get());
+        auto entrance = std::make_unique<Entrance>(ui.get(), sf::Vector2i(200.0f, 29.0f), lemmingHandler.get(), data->releaseRate);
+        auto cursor = std::make_unique<Cursor>(lemmingHandler.get(), camera.get(), ui.get());
         
         // lemmingHandler->addLemming({225, 29});
         // lemmingHandler->addLemming({315, 50});
+
+        Camera* cam = camera.get();
         
-        this->addGameObject(camera);
-        this->addGameObject(map);
-        this->addGameObject(entrance);
-        this->addGameObject(lemmingHandler);
-        this->addGameObject(ui);
-        this->addGameObject(cursor);
+        this->addGameObject(std::move(camera));
+        this->addGameObject(std::move(map));
+        this->addGameObject(std::move(entrance));
+        this->addGameObject(std::move(lemmingHandler));
+        this->addGameObject(std::move(ui));
+        this->addGameObject(std::move(cursor));
         
         IScene::init();
         
-        camera->activate();
-        camera->setPosition({69, 0});
+        cam->activate();
+        cam->setPosition({69, 0});
     }
 
     void Level::update(float delta)

@@ -17,7 +17,7 @@ namespace Lemmings {
         this->lemmings_.erase(it, this->lemmings_.end());
     }
 
-    LemmingsHandler::LemmingsHandler(std::shared_ptr<Map> map): fixedUpdateTimer_(0.0667f), map_(std::move(map))
+    LemmingsHandler::LemmingsHandler(Map* map): fixedUpdateTimer_(0.0667f), map_(map)
     {
     }
 
