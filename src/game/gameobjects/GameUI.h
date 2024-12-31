@@ -15,12 +15,11 @@ namespace Lemmings {
 
 class GameUI final : public Engine::GameObject {
 private:
-    std::shared_ptr<Camera> camera_;
-
+    Camera* camera_;
     static constexpr uint AMOUNT_OF_BUTTONS = 13;
     std::vector<std::unique_ptr<UI::Button>> buttons_;
     UI::JobButton* currentJobButton_ = nullptr;
-    std::shared_ptr<LevelData> levelData_;
+    LevelData* levelData_;
     uint mouseHoverAmount;
     Job mouseHoverJob;
     sf::Texture jobTextTexture_;
@@ -38,7 +37,7 @@ private:
 public:
     Engine::Event<UI::UIButtonType> spawnRateChanged;
     
-    explicit GameUI(std::shared_ptr<Camera> cam, std::shared_ptr<LevelData> levelData);
+    explicit GameUI(Camera* cam, LevelData* levelData);
     void init() override;
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;

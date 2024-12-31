@@ -13,10 +13,10 @@ namespace Lemmings::Engine {
 class IScene
 {
 private:
-    std::vector<std::shared_ptr<GameObject>> gameObjects_;    
+    std::vector<std::unique_ptr<GameObject>> gameObjects_;    
 
 protected:
-    void addGameObject(std::shared_ptr<GameObject> gameObject);
+    void addGameObject(std::unique_ptr<GameObject> gameObject);
     
 public:
     virtual ~IScene() = default;
@@ -26,7 +26,7 @@ public:
     virtual void draw(sf::RenderTarget& renderTarget);
 };
 
-inline void IScene::addGameObject(std::shared_ptr<GameObject> gameObject)
+inline void IScene::addGameObject(std::unique_ptr<GameObject> gameObject)
 {
     this->gameObjects_.emplace_back(std::move(gameObject));
 }

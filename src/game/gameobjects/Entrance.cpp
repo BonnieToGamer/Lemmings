@@ -12,7 +12,7 @@ namespace Lemmings {
         return 120.0f / static_cast<float>(this->spawnRate_);
     }
 
-    Entrance::Entrance(std::shared_ptr<GameUI> ui, sf::Vector2i position, LemmingsHandler* lemmingsHandler, uint spawnRate) : spawnTimer_(0.0f), ui_(std::move(ui)), position_(position), currentAnimationFrame_(0), lemmingsHandler_(lemmingsHandler), spawnRate_(spawnRate)
+    Entrance::Entrance(GameUI* ui, sf::Vector2i position, LemmingsHandler* lemmingsHandler, uint spawnRate) : spawnTimer_(0.0f), ui_(std::move(ui)), position_(position), currentAnimationFrame_(0), lemmingsHandler_(lemmingsHandler), spawnRate_(spawnRate)
     {
         this->ui_->spawnRateChanged += [this](uint newSpawnRate) { this->spawnRateChanged(newSpawnRate); };
         this->spawnTimer_ = Engine::Timer(this->calcSpawnRate());

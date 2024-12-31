@@ -17,7 +17,7 @@ namespace Lemmings::States {
     {
     }
 
-    std::shared_ptr<Engine::IState<Lemming>> Digger::digDown()
+    std::unique_ptr<Engine::IState<Lemming>> Digger::digDown()
     {
         sf::Vector2i pos = this->parent_->getPosition();
         int digStartY = -1;
@@ -43,12 +43,12 @@ namespace Lemmings::States {
         }
 
         if (allGone)
-            return std::make_shared<Faller>();
+            return std::make_unique<Faller>();
 
         return nullptr;
     }
 
-    std::shared_ptr<Engine::IState<Lemming>> Digger::update(float delta)
+    std::unique_ptr<Engine::IState<Lemming>> Digger::update(float delta)
     {
         this->digCounter_++;
 

@@ -32,7 +32,7 @@ namespace Lemmings::Engine
         if (!this->renderTexture_.create(DESIGNED_RESOLUTION_WIDTH, DESIGNED_RESOLUTION_HEIGHT))
             throw std::runtime_error("Couldn't create render texture");
         
-        this->sceneManager_.addScene(std::make_shared<Scene::Level>("fun1"));
+        this->sceneManager_.addScene(std::make_unique<Scene::Level>("fun1"));
     }
 
     void Core::run()
@@ -70,7 +70,7 @@ namespace Lemmings::Engine
                 windowSizeChangedEvent.invoke();
         }
 
-        if (const std::shared_ptr<IScene> scene = this->sceneManager_.getCurrentScene())
+        if (IScene* scene = this->sceneManager_.getCurrentScene())
             scene->update(delta);
     }
 
@@ -79,7 +79,7 @@ namespace Lemmings::Engine
         // this->renderTexture_.clear(sf::Color::White);
         // renderWindow_->clear(sf::Color(100, 149, 237));
         renderWindow_->clear(sf::Color::Black);
-        if (std::shared_ptr<IScene> scene = this->sceneManager_.getCurrentScene())
+        if (IScene* scene = this->sceneManager_.getCurrentScene())
             scene->draw(*this->renderWindow_);
         // this->renderTexture_.display();
 

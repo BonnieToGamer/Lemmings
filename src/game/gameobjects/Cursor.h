@@ -16,9 +16,9 @@ namespace Lemmings {
     private:
         sf::Texture texture_;
         sf::Sprite sprite_;
-        std::shared_ptr<LemmingsHandler> lemmingsHandler_;
-        std::shared_ptr<Camera> camera_;
-        std::shared_ptr<GameUI> ui_;
+        LemmingsHandler* lemmingsHandler_;
+        Camera* camera_;
+        GameUI* ui_;
         bool wasMouseHeldLastFrame = false;
 
         const uint CAMERA_MOVE_SPEED = 5;
@@ -36,7 +36,7 @@ namespace Lemmings {
         bool isMouseNearRightBoundary(sf::Vector2f mousePos, sf::Vector2f cameraPos);
 
     public:
-        explicit Cursor(std::shared_ptr<LemmingsHandler> lemmingHandler, std::shared_ptr<Camera> cam, std::shared_ptr<GameUI> ui);
+        explicit Cursor(LemmingsHandler* lemmingHandler, Camera* cam, GameUI* ui);
         void init() override;
         void update(float delta) override;
         void draw(sf::RenderTarget& renderTarget) override;

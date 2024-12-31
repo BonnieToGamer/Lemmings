@@ -10,29 +10,29 @@ namespace Lemmings::Engine {
     template <typename T>
     class StateMachineManager {
     private:
-        std::shared_ptr<IState<T>> currentState_;
+        std::unique_ptr<IState<T>> currentState_;
         T* parent_;
 
     public:
-        StateMachineManager(std::shared_ptr<IState<T>> startingState, T* parent);
-        void changeState(std::shared_ptr<IState<T>> state);
+        StateMachineManager(std::unique_ptr<IState<T>> startingState, T* parent);
+        void changeState(std::unique_ptr<IState<T>> state);
         void update(float delta);
     };
 
     // Implementation of the template methods
     template <typename T>
-    StateMachineManager<T>::StateMachineManager(std::shared_ptr<IState<T>> startingState, T* parent) : parent_(parent)
+    StateMachineManager<T>::StateMachineManager(std::unique_ptr<IState<T>> startingState, T* parent) : parent_(parent)
     {
-        this->changeState(startingState);
+        this->changeState(std::move(startingState));
     }
 
     template <typename T>
-    void StateMachineManager<T>::changeState(std::shared_ptr<IState<T>> state)
+    void StateMachineManager<T>::changeState(std::unique_ptr<IState<T>> state)
     {
         if (this->currentState_ != nullptr)
             this->currentState_->exit();
 
-        this->currentState_ = state;
+        this->currentState_ = std::move(state);
         this->currentState_->setParent(this->parent_);
         this->currentState_->enter();
     }
@@ -40,7 +40,7 @@ namespace Lemmings::Engine {
     template <typename T>
     void StateMachineManager<T>::update(float delta)
     {
-        std::shared_ptr<IState<T>> newState = this->currentState_->update(delta);
-        if (newState != nullptr) this->changeState(newState);
+        std::unique_ptr<IState<T>> newState = this->currentState_->update(delta);
+        if (newState != nullptr) this->changeState(std::move(newState));
     }
 } // namespace Lemmings::Engine

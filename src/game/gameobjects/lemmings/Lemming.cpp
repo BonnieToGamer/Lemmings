@@ -28,12 +28,12 @@ namespace Lemmings {
         this->deathEvent.invoke(this);
     }
 
-    Lemming::Lemming(std::shared_ptr<Map> map) : map_(map) { }
+    Lemming::Lemming(Map* map) : map_(map) { }
 
     void Lemming::init()
     {
         this->stateMachineManager_ =
-            std::make_unique<Engine::StateMachineManager<Lemming>>(std::make_shared<States::Walker>(), this);
+            std::make_unique<Engine::StateMachineManager<Lemming>>(std::make_unique<States::Walker>(), this);
 
         if (lemmingTexture_ == nullptr)
         {
@@ -98,7 +98,7 @@ namespace Lemmings {
         this->currentAnimatedTexture_->setPosition(actualPos.x, actualPos.y);
     }
 
-    std::shared_ptr<Map> Lemming::map()
+    Map* Lemming::map()
     {
         return this->map_;
     }
@@ -160,15 +160,15 @@ namespace Lemmings {
         if (this->currentJob_ != Job::Walker)
             return false;
         
-        std::shared_ptr<Engine::IState<Lemming>> state;
+        std::unique_ptr<Engine::IState<Lemming>> state;
 
         switch (job)
         {
         case Digger:
-            state = std::make_shared<States::Digger>();
+            state = std::make_unique<States::Digger>();
             break;
         case Miner:
-            state = std::make_shared<States::Miner>();
+            state = std::make_unique<States::Miner>();
             break;
         default:
             state = nullptr;
@@ -177,7 +177,7 @@ namespace Lemmings {
 
         if (state != nullptr)
         {
-            this->stateMachineManager_->changeState(state);
+            this->stateMachineManager_->changeState(std::move(state));
             return true;
         }
         

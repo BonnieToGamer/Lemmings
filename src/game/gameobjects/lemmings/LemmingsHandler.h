@@ -13,12 +13,12 @@ class LemmingsHandler final : public Engine::GameObject {
 private:
     std::vector<std::unique_ptr<Lemming>> lemmings_;
     Engine::Timer fixedUpdateTimer_;
-    std::shared_ptr<Map> map_;
+    Map* map_;
 
     void onLemmingDeath(Lemming* lemming);
     
 public:
-    explicit LemmingsHandler(std::shared_ptr<Map> map);
+    explicit LemmingsHandler(Map* map);
     void init() override;
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;

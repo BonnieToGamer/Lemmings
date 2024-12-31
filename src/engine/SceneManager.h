@@ -13,13 +13,13 @@ namespace Lemmings::Engine
 {
     class SceneManager {
     private:
-        std::stack<std::shared_ptr<IScene>> sceneStack_;
+        std::stack<std::unique_ptr<IScene>> sceneStack_;
 
     public:
         SceneManager();
 
-        void addScene(std::shared_ptr<IScene> scene);
+        void addScene(std::unique_ptr<IScene> scene);
         void removeScene();
-        std::shared_ptr<IScene> getCurrentScene();
+        IScene* getCurrentScene();
     };
 }
