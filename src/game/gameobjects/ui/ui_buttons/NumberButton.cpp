@@ -5,7 +5,7 @@
 #include "NumberButton.h"
 #include <stdexcept>
 
-namespace Lemmings {
+namespace Lemmings::UI {
     NumberButton::NumberButton(UI::UIButtonType buttonIndex, uint amount, bool held, float heldTimer, sf::Keyboard::Key shortCutKey) : Button(buttonIndex, held, heldTimer, shortCutKey), amount_(amount)
     {
     }

@@ -18,13 +18,14 @@ private:
     std::shared_ptr<Camera> camera_;
 
     static constexpr uint AMOUNT_OF_BUTTONS = 13;
-    std::vector<std::unique_ptr<Button>> buttons_;
-    JobButton* currentJobButton_ = nullptr;
+    std::vector<std::unique_ptr<UI::Button>> buttons_;
+    UI::JobButton* currentJobButton_ = nullptr;
     std::shared_ptr<LevelData> levelData_;
     uint mouseHoverAmount;
     Job mouseHoverJob;
     sf::Texture jobTextTexture_;
     sf::Sprite jobTextSprite_;
+    UI::DualNumericSprite amountOfHoverdLemmings_;
     std::unique_ptr<UI::TimeDisplay> time_;
     std::unique_ptr<UI::LemmingInfoDisplay> lemmingStats_;
 
@@ -57,11 +58,11 @@ void GameUI::createButton(UI::UIButtonType id, Args&&... args) {
     // perfect forwarding and compile-time conditional statements are nice.
     auto button = std::make_unique<ButtonType>(id, std::forward<Args>(args)...);
     
-    if constexpr (std::is_same<ButtonType, NumberButton>::value) {
+    if constexpr (std::is_same<ButtonType, UI::NumberButton>::value) {
         button->buttonClickEvent += [this](UI::UIButtonType index) {
             this->releaseRateButtonClicked(index);
         };
-    } else if constexpr (std::is_same<ButtonType, JobButton>::value) {
+    } else if constexpr (std::is_same<ButtonType, UI::JobButton>::value) {
         button->buttonClickEvent += [this](UI::UIButtonType index) {
             this->jobButtonClicked(index);
         };

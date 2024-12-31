@@ -6,7 +6,7 @@
 
 #include <stdexcept>
 
-namespace Lemmings {
+namespace Lemmings::UI {
     std::unique_ptr<sf::Texture> NumericSprite::texture_;
     
     void NumericSprite::init()
@@ -32,6 +32,11 @@ namespace Lemmings {
     void NumericSprite::setPosition(sf::Vector2f pos)
     {
         this->sprite_.setPosition(pos.x, pos.y);
+    }
+
+    sf::Vector2f NumericSprite::getPosition()
+    {
+        return this->sprite_.getPosition();
     }
 
     void NumericSprite::setNumber(Number number)

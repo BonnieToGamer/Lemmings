@@ -71,6 +71,8 @@ add_executable(main src/main.cpp
         src/game/gameobjects/ui/LemmingInfoDisplay.cpp
         src/game/gameobjects/ui/LemmingInfoDisplay.h
         src/game/gameobjects/ui/UIButtonType.h
+        src/game/gameobjects/ui/DualNumericSprite.cpp
+        src/game/gameobjects/ui/DualNumericSprite.h
 )
 target_link_libraries(main PRIVATE sfml-graphics)
 target_compile_features(main PRIVATE cxx_std_17)

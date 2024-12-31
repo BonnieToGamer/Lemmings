@@ -6,7 +6,7 @@
 
 #include "SFML/Graphics/RectangleShape.hpp"
 
-namespace Lemmings {
+namespace Lemmings::UI {
     JobButton::JobButton(UI::UIButtonType buttonIndex, uint amount, bool held, Job job, float heldTimer, sf::Keyboard::Key shortCutKey) : NumberButton(buttonIndex, amount, held, heldTimer, shortCutKey), job_(job), selected_(false)
     {
     }

@@ -6,7 +6,7 @@
 #include "NumberButton.h"
 #include "../../lemmings/Lemming.h"
 
-namespace Lemmings {
+namespace Lemmings::UI {
 
 class JobButton final : public NumberButton {
 private:

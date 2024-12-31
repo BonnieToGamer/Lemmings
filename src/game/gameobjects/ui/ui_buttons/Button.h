@@ -11,7 +11,7 @@
 #include "SFML/Graphics/Texture.hpp"
 #include "SFML/Window/Keyboard.hpp"
 
-namespace Lemmings {
+namespace Lemmings::UI {
 
 class Button : public Engine::GameObject {
 protected:

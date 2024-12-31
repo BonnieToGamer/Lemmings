@@ -9,7 +9,7 @@
 #include "../../../../engine/Core.h"
 #include "SFML/Graphics/RenderWindow.hpp"
 
-namespace Lemmings {
+namespace Lemmings::UI {
     Button::Button(UI::UIButtonType buttonIndex, bool held, float heldTimer, sf::Keyboard::Key shortCutKey) : index_(buttonIndex), timer_(heldTimer), held_(held), shortCutKey_(shortCutKey)
     {
     }

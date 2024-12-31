@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include "DualNumericSprite.h"
 #include "NumericSprite.h"
 #include "SFML/Graphics/Sprite.hpp"
 #include "SFML/Graphics/Texture.hpp"
@@ -19,11 +20,8 @@ private:
     sf::Sprite outWordSprite_;
     sf::Sprite inWordSprite_;
 
-    NumericSprite outTens_;
-    NumericSprite outOnes_;
-
-    NumericSprite inPercentTens_;
-    NumericSprite inPercentOnes_;
+    DualNumericSprite outSprite_;
+    DualNumericSprite inSprite_;
 
 public:
     LemmingInfoDisplay(uint max);

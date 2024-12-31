@@ -5,7 +5,7 @@
 #pragma once
 #include "Button.h"
 
-namespace Lemmings {
+namespace Lemmings::UI {
 
 class NumberButton : public Button {
 private:

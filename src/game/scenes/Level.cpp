@@ -160,6 +160,6 @@ namespace Lemmings::Scene {
     void Level::destroy()
     {
         Lemming::destroyTextures();
-        NumericSprite::destroyTextures();
+        UI::NumericSprite::destroyTextures();
     }
 } // Lemmings

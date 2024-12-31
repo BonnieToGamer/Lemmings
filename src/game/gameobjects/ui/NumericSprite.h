@@ -9,7 +9,7 @@
 #include "SFML/Graphics/Sprite.hpp"
 #include "SFML/Graphics/Texture.hpp"
 
-namespace Lemmings {
+namespace Lemmings::UI {
 
 class NumericSprite final : public Engine::GameObject {
 public:
@@ -42,6 +42,7 @@ public:
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;
     void setPosition(sf::Vector2f pos);
+    sf::Vector2f getPosition();
     void setNumber(Number number);
     static void destroyTextures();
 };
