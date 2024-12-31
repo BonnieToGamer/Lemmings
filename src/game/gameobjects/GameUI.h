@@ -19,12 +19,13 @@ private:
     static constexpr uint AMOUNT_OF_BUTTONS = 13;
     std::vector<std::unique_ptr<UI::Button>> buttons_;
     UI::JobButton* currentJobButton_ = nullptr;
-    LevelData* levelData_;
+    const LevelData* levelData_;
     uint mouseHoverAmount;
+    uint currentReleaseRate_;
     Job mouseHoverJob;
     sf::Texture jobTextTexture_;
     sf::Sprite jobTextSprite_;
-    UI::DualNumericSprite amountOfHoverdLemmings_;
+    UI::DualNumericSprite amountOfHoveredLemmings_;
     std::unique_ptr<UI::TimeDisplay> time_;
     std::unique_ptr<UI::LemmingInfoDisplay> lemmingStats_;
 
@@ -35,7 +36,7 @@ private:
     template<typename ButtonType, typename... Args>
     void createButton(UI::UIButtonType id, Args&&... args);
 public:
-    Engine::Event<UI::UIButtonType> spawnRateChanged;
+    Engine::Event<uint> spawnRateChangedEvent;
     
     explicit GameUI(Camera* cam, LevelData* levelData);
     void init() override;
@@ -48,7 +49,8 @@ public:
     Job getCurrentJob();
     void decreaseCurrentJob();
     void setLemmingJobStat(uint amount, Job currentJob);
-    bool canAssignCurrentJob();    
+    bool canAssignCurrentJob();
+    void setAmountOut(uint amount);
 };
     
 template<typename ButtonType, typename... Args>

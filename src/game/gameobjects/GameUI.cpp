@@ -27,7 +27,7 @@ namespace Lemmings {
         this->jobTextSprite_.setTexture(this->jobTextTexture_);
         this->jobTextSprite_.setPosition(this->camera_->position().x, textY);
 
-        float heldTimer = 0.15f;
+        float heldTimer = 0.1f;
 
         createButton<UI::NumberButton>(UI::ReleaseRateDecrease, this->levelData_->releaseRate, true, heldTimer, sf::Keyboard::F1);
         createButton<UI::NumberButton>(UI::ReleaseRateIncrease, this->levelData_->releaseRate, true, heldTimer, sf::Keyboard::F2);
@@ -53,8 +53,10 @@ namespace Lemmings {
         this->lemmingStats_->init();
         this->lemmingStats_->setPosition({0, textY});
 
-        this->amountOfHoverdLemmings_.init();
-        this->amountOfHoverdLemmings_.setPosition({0, textY});
+        this->amountOfHoveredLemmings_.init();
+        this->amountOfHoveredLemmings_.setPosition({0, textY});
+
+        this->currentReleaseRate_ = this->levelData_->releaseRate;
         
         this->cameraMoved();
     }
@@ -76,7 +78,7 @@ namespace Lemmings {
         renderTarget.draw(this->jobTextSprite_);
         this->time_->draw(renderTarget);
         this->lemmingStats_->draw(renderTarget);
-        this->amountOfHoverdLemmings_.draw(renderTarget);
+        this->amountOfHoveredLemmings_.draw(renderTarget);
     }
 
     void GameUI::cameraMoved()
@@ -84,7 +86,7 @@ namespace Lemmings {
         this->jobTextSprite_.setPosition(this->camera_->position().x, this->jobTextSprite_.getPosition().y);
         this->time_->setPosition(sf::Vector2f(this->camera_->position().x + Engine::Core::DESIGNED_RESOLUTION_WIDTH - UI::TimeDisplay::WIDTH, this->time_->getPosition().y));
         this->lemmingStats_->setPosition(sf::Vector2f(this->camera_->position().x + 111, this->lemmingStats_->getPosition().y));
-        this->amountOfHoverdLemmings_.setPosition(sf::Vector2f(this->camera_->position().x + UI::NumericSprite::NUMBER_WIDTH * 9, this->amountOfHoverdLemmings_.getPosition().y));
+        this->amountOfHoveredLemmings_.setPosition(sf::Vector2f(this->camera_->position().x + UI::NumericSprite::NUMBER_WIDTH * 9, this->amountOfHoveredLemmings_.getPosition().y));
 
         for (auto& button : this->buttons_)
             button->setPosition({this->camera_->position().x + button->getIndex() * button->BUTTON_WIDTH, static_cast<float>(Engine::Core::DESIGNED_RESOLUTION_HEIGHT - button->BUTTON_HEIGHT)});
@@ -107,8 +109,26 @@ namespace Lemmings {
 
     void GameUI::releaseRateButtonClicked(UI::UIButtonType index)
     {
-        std::cout << index << " release rate clicked!" << std::endl;
+       if (index == UI::ReleaseRateDecrease)
+       {
+           if (this->currentReleaseRate_ <= this->levelData_->releaseRate)
+               return;
 
+           this->currentReleaseRate_--;
+           this->spawnRateChangedEvent.invoke(this->currentReleaseRate_);
+           dynamic_cast<UI::NumberButton*>(this->buttons_[UI::ReleaseRateIncrease].get())->setAmount(this->currentReleaseRate_);
+       }
+
+        else if (index == UI::ReleaseRateIncrease)
+        {
+            if (this->currentReleaseRate_ >= 99)
+                return;
+
+            this->currentReleaseRate_++;
+            this->spawnRateChangedEvent.invoke(this->currentReleaseRate_);
+            dynamic_cast<UI::NumberButton*>(this->buttons_[UI::ReleaseRateIncrease].get())->setAmount(this->currentReleaseRate_);
+
+        }
     }
 
     Job GameUI::getCurrentJob()
@@ -130,13 +150,18 @@ namespace Lemmings {
         this->jobTextSprite_.setTextureRect({0, static_cast<int>(static_cast<int>(this->mouseHoverJob) * JOB_NAME_TEXTURE_HEIGHT), static_cast<int>(JOB_NAME_TEXTURE_WIDTH), static_cast<int>(JOB_NAME_TEXTURE_HEIGHT)});
         
         if (this->mouseHoverAmount != 0)
-            this->amountOfHoverdLemmings_.setValue(this->mouseHoverAmount);
+            this->amountOfHoveredLemmings_.setValue(this->mouseHoverAmount);
         else
-            this->amountOfHoverdLemmings_.setEmpty();
+            this->amountOfHoveredLemmings_.setEmpty();
     }
 
     bool GameUI::canAssignCurrentJob()
     {
         return this->currentJobButton_->getAmount() > 0;
+    }
+
+    void GameUI::setAmountOut(uint amount)
+    {
+        this->lemmingStats_->setAmountOut(amount);
     }
 } // Lemmings

@@ -19,4 +19,9 @@ namespace Lemmings {
 
         return false;
     }
+
+    void Engine::Timer::changeStopTime(float newTime)
+    {
+        this->stopTime_ = newTime;
+    }
 } // Lemmings

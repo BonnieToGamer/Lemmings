@@ -13,6 +13,7 @@ namespace Lemmings::Scene {
 class Level : public Engine::IScene {
 private:
     std::string levelName_;
+    std::unique_ptr<LevelData> levelData_;
     
 public:
     Level(const std::string& levelName);

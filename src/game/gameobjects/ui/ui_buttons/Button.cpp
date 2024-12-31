@@ -43,7 +43,7 @@ namespace Lemmings::UI {
             this->isMouseButtonDown_ = true;
         }
         
-        if (this->shortCutKey_ != IGNORE_KEY && (this->held_ ? true : !this->isMouseButtonDown_) && sf::Keyboard::isKeyPressed(this->shortCutKey_))
+        if (this->shortCutKey_ != IGNORE_KEY && (this->held_ ? this->timer_.update(delta) : !this->isMouseButtonDown_) && sf::Keyboard::isKeyPressed(this->shortCutKey_))
         {
             this->buttonClickEvent.invoke(this->index_);
             this->isMouseButtonDown_ = true;

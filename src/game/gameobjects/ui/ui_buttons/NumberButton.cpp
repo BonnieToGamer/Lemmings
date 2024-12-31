@@ -58,4 +58,9 @@ namespace Lemmings::UI {
         this->tensSprite_.setPosition(spritePos + this->NUMBER_OFFSET);
         this->onesSprite_.setPosition(spritePos + this->NUMBER_OFFSET + sf::Vector2f(this->NUMBER_TEXTURE_WIDTH, 0));
     }
+
+    void NumberButton::setAmount(uint amount)
+    {
+        this->amount_ = amount;
+    }
 } // Lemmings

@@ -26,6 +26,7 @@ public:
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;
     void setPosition(sf::Vector2f pos) override;
+    void setAmount(uint amount);
 };
 
 } // Lemmings

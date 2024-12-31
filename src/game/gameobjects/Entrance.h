@@ -18,11 +18,13 @@ private:
     std::unique_ptr<Engine::AnimatedTexture> animatedTexture_;
     Engine::Timer animationTimer_ = Engine::Timer(0.0667f);
     Engine::Timer spawnTimer_;
-    uint spawnRate_ = 0;
     GameUI* ui_;
     sf::Vector2i position_;
-    uint currentAnimationFrame_;
     LemmingsHandler* lemmingsHandler_;
+    uint currentAnimationFrame_;
+    uint spawnRate_ = 0;
+    uint amountOfLemmings_;
+    uint currentAmountOfLemmings_ = 0;
 
     const sf::Vector2i SPAWN_POINT = { 21, 15 };
     const uint ENTRANCE_SPRITE_WIDTH = 41;
@@ -31,7 +33,7 @@ private:
 
     float calcSpawnRate() const;
 public:
-    Entrance(GameUI* ui, sf::Vector2i position, LemmingsHandler* lemmingsHandler, uint spa);
+    Entrance(GameUI* ui, sf::Vector2i position, LemmingsHandler* lemmingsHandler, uint spawnRate, uint amountOfLemmings);
     void init() override;
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;

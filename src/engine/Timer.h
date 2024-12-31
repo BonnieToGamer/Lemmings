@@ -12,8 +12,9 @@ private:
     float stopTime_;
 
 public:
-    Timer(float stopTime);
+    explicit Timer(float stopTime);
     bool update(float delta);
+    void changeStopTime(float newTime);
 };
 
 } // Lemmings

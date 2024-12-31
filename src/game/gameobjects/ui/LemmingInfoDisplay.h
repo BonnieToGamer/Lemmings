@@ -30,6 +30,8 @@ public:
     void draw(sf::RenderTarget& renderTarget) override;
     void setPosition(sf::Vector2f pos);
     sf::Vector2f getPosition();
+    void setAmountOut(uint out);
+    void setAmountIn(uint in);
 };
 
 } // Lemmings

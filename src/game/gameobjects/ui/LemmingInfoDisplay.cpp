@@ -54,4 +54,14 @@ namespace Lemmings::UI {
     {
         return this->position_;
     }
+
+    void LemmingInfoDisplay::setAmountOut(uint out)
+    {
+        this->out_ = out;
+    }
+
+    void LemmingInfoDisplay::setAmountIn(uint in)
+    {
+        this->in_ = in;
+    }
 } // Lemmings

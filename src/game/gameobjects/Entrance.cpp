@@ -9,12 +9,15 @@
 namespace Lemmings {
     float Entrance::calcSpawnRate() const
     {
-        return 120.0f / static_cast<float>(this->spawnRate_);
+        // A really rough interpretation of lemmings spawn rate system.
+        // I counted frames between spawn rates 50 and 100 which equaled
+        // 121 and 16 frames respectively on a 60 fps video
+        return -0.035066f * static_cast<float>(this->spawnRate_ - 50) + 2.02;
     }
 
-    Entrance::Entrance(GameUI* ui, sf::Vector2i position, LemmingsHandler* lemmingsHandler, uint spawnRate) : spawnTimer_(0.0f), ui_(std::move(ui)), position_(position), currentAnimationFrame_(0), lemmingsHandler_(lemmingsHandler), spawnRate_(spawnRate)
+    Entrance::Entrance(GameUI* ui, sf::Vector2i position, LemmingsHandler* lemmingsHandler, uint spawnRate, uint amountOfLemmings) : spawnTimer_(0.0f), ui_(ui), position_(position), currentAnimationFrame_(0), lemmingsHandler_(lemmingsHandler), spawnRate_(spawnRate), amountOfLemmings_(amountOfLemmings)
     {
-        this->ui_->spawnRateChanged += [this](uint newSpawnRate) { this->spawnRateChanged(newSpawnRate); };
+        this->ui_->spawnRateChangedEvent += [this](uint newSpawnRate) { this->spawnRateChanged(newSpawnRate); };
         this->spawnTimer_ = Engine::Timer(this->calcSpawnRate());
     }
 
@@ -38,9 +41,11 @@ namespace Lemmings {
             this->currentAnimationFrame_++;
         }
 
-        if (this->spawnTimer_.update(delta) && this->currentAnimationFrame_ >= NUMBER_OF_FRAMES)
+        if (this->spawnTimer_.update(delta) && this->currentAnimationFrame_ >= NUMBER_OF_FRAMES && this->currentAmountOfLemmings_ < this->amountOfLemmings_)
         {
             this->lemmingsHandler_->addLemming(SPAWN_POINT + this->position_);
+            this->currentAmountOfLemmings_++;
+            this->ui_->setAmountOut(this->currentAmountOfLemmings_);
         }
     }
 
@@ -52,6 +57,6 @@ namespace Lemmings {
     void Entrance::spawnRateChanged(uint newSpawnRate)
     {
         this->spawnRate_ = newSpawnRate;
-        this->spawnTimer_ = Engine::Timer(this->calcSpawnRate());
+        this->spawnTimer_.changeStopTime(this->calcSpawnRate());
     }
 } // Lemmings
