@@ -16,18 +16,19 @@ private:
     std::vector<std::shared_ptr<GameObject>> gameObjects_;    
 
 protected:
-    void addGameObject(const std::shared_ptr<GameObject>& gameObject);
+    void addGameObject(std::shared_ptr<GameObject> gameObject);
     
 public:
     virtual ~IScene() = default;
     virtual void init();
+    virtual void destroy() = 0;
     virtual void update(float delta);
     virtual void draw(sf::RenderTarget& renderTarget);
 };
 
-inline void IScene::addGameObject(const std::shared_ptr<GameObject>& gameObject)
+inline void IScene::addGameObject(std::shared_ptr<GameObject> gameObject)
 {
-    this->gameObjects_.emplace_back(gameObject);
+    this->gameObjects_.emplace_back(std::move(gameObject));
 }
 
 inline void IScene::init()

@@ -4,8 +4,10 @@
 
 #include "AnimatedTexture.h"
 
+#include <utility>
+
 namespace Lemmings::Engine {
-    AnimatedTexture::AnimatedTexture(const std::shared_ptr<sf::Texture>& spriteSheet, sf::Vector2u spriteSize, bool manual) : texture_(spriteSheet), elapsed_(0), flipOffset_(0), spriteSize_(spriteSize), manual_(manual)
+    AnimatedTexture::AnimatedTexture(std::shared_ptr<sf::Texture> spriteSheet, sf::Vector2u spriteSize, bool manual) : texture_(std::move(spriteSheet)), elapsed_(0), flipOffset_(0), spriteSize_(spriteSize), manual_(manual)
     {
         this->sprite_.setTexture(*this->texture_);
     }
@@ -57,6 +59,15 @@ namespace Lemmings::Engine {
         this->flipOffset_ = this->sprite_.getScale().x < 0 ? this->spriteSize_.x * std::abs(this->sprite_.getScale().x) : 0.0f;
     }
 
+    void AnimatedTexture::setFlipped(const int dir)
+    {
+        if ((this->sprite_.getScale().x < 0 && dir < 0) ||
+            (this->sprite_.getScale().x > 0 && dir > 0))
+            return;
+
+        this->flipSprite();
+    }
+
     void AnimatedTexture::setScale(const float scaleX, const float scaleY)
     {
         this->sprite_.setScale(scaleX, scaleY);
@@ -69,7 +80,12 @@ namespace Lemmings::Engine {
         this->sprite_.setTextureRect(this->rects_[this->currentFrame_]);
     }
 
-    void AnimatedTexture::addSpriteSheetAnim(int amountOfFrames, int yOffset, sf::Vector2u offset, float animationSpeed)
+    void AnimatedTexture::setOffset(sf::Vector2i offset)
+    {
+        this->offset_ = offset;
+    }
+
+    void AnimatedTexture::addSpriteSheetAnim(int amountOfFrames, int yOffset, sf::Vector2i offset, float animationSpeed)
     {
         this->offset_ = offset;
         

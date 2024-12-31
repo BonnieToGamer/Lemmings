@@ -11,19 +11,17 @@
 namespace Lemmings::States {
     void Walker::enter()
     {
-        this->parent_->playAnimation(Lemming::Walker);
+        this->parent_->playAnimation(Job::Walker);
+        this->parent_->updateCurrentJob(Job::Walker);
     }
 
     void Walker::exit() { }
 
     std::shared_ptr<Engine::IState<Lemming>> Walker::update(float delta)
-    {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-            return std::make_shared<Digger>();
-        
-        sf::Vector2f pos = this->parent_->getPosition();
+    {        
+        sf::Vector2i pos = this->parent_->getPosition();
 
-        if (this->checkFall(-2) && this->checkFall(2))
+        if (this->checkFall(0))
             return std::make_shared<Faller>();
 
         bool walked = false;
@@ -35,7 +33,7 @@ namespace Lemmings::States {
                 
                 if (!nodeEnabled)
                 {
-                    this->parent_->setPosition(sf::Vector2f(pos.x + this->parent_->dir(), pos.y - y));
+                    this->parent_->setPosition(sf::Vector2i(pos.x + this->parent_->dir(), pos.y - y));
                     walked = true;
                     break;
                 }
@@ -47,7 +45,7 @@ namespace Lemmings::States {
         
         if (!walked)
         {
-            this->parent_->setDir(this->parent_->dir() * -1);
+            this->parent_->setDir(static_cast<Direction>(static_cast<int>(this->parent_->dir()) * -1));
             this->parent_->flipSprite();
         }
         return nullptr;
@@ -55,7 +53,7 @@ namespace Lemmings::States {
 
     bool Walker::checkFall(const float xOffset) const
     {
-        sf::Vector2f pos = this->parent_->getPosition();
+        sf::Vector2i pos = this->parent_->getPosition();
 
         bool falling = true;
         for (int y = 0; y > -4; y--)
@@ -69,7 +67,7 @@ namespace Lemmings::States {
 
     bool Walker::checkWalk(const float xOffset, const float yOffset) const
     {
-        sf::Vector2f pos = this->parent_->getPosition();
+        sf::Vector2i pos = this->parent_->getPosition();
         bool nodeEnabled = this->parent_->checkCollision(pos.x + this->parent_->dir() + xOffset, pos.y - yOffset);
         
         return nodeEnabled;

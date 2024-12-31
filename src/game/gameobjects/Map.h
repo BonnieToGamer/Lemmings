@@ -6,8 +6,8 @@
 #include <queue>
 
 #include "Node.h"
-#include "../engine/GameObject.h"
-#include "../engine/ModifiableTexture.h"
+#include "../../engine/GameObject.h"
+#include "../../engine/ModifiableTexture.h"
 
 namespace Lemmings {
 
@@ -24,10 +24,11 @@ public:
     uint width();
     uint height();
     
-    Node& operator[](int index);
+    const Node& operator[](int index);
     void init() override;
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;
+    void changeNode(int index, bool value);
 };
 
 } // Lemmings

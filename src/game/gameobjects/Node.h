@@ -15,7 +15,7 @@ private:
 public:
     Node(sf::Vector2i position, bool enabled);
     bool isEnabled() const;
-    void disable();
+    void setEnabled(bool value);
 };
 
 } // Lemmings

@@ -13,8 +13,8 @@ namespace Lemmings {
         return this->enabled_;
     }
 
-    void Node::disable()
+    void Node::setEnabled(bool value)
     {
-        this->enabled_ = false;
+        this->enabled_ = value;
     }
 } // Lemmings

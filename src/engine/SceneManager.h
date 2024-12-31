@@ -18,7 +18,7 @@ namespace Lemmings::Engine
     public:
         SceneManager();
 
-        void addScene(const std::shared_ptr<IScene>& scene);
+        void addScene(std::shared_ptr<IScene> scene);
         void removeScene();
         std::shared_ptr<IScene> getCurrentScene();
     };

@@ -25,27 +25,52 @@ add_executable(main src/main.cpp
         src/game/scenes/Level.h
         src/engine/ModifiableTexture.cpp
         src/engine/ModifiableTexture.h
-        src/game/Map.cpp
-        src/game/Map.h
-        src/game/Node.cpp
-        src/game/Node.h
+        src/game/gameobjects/Map.cpp
+        src/game/gameobjects/Map.h
+        src/game/gameobjects/Node.cpp
+        src/game/gameobjects/Node.h
         src/engine/GameObject.h
-        src/game/lemmings/Lemming.cpp
-        src/game/lemmings/Lemming.h
-        src/game/lemmings/states/Walker.cpp
-        src/game/lemmings/states/Walker.h
+        src/game/gameobjects/lemmings/Lemming.cpp
+        src/game/gameobjects/lemmings/Lemming.h
+        src/game/gameobjects/lemmings/states/Walker.cpp
+        src/game/gameobjects/lemmings/states/Walker.h
         src/engine/Timer.cpp
         src/engine/Timer.h
-        src/game/lemmings/states/Faller.cpp
-        src/game/lemmings/states/Faller.h
+        src/game/gameobjects/lemmings/states/Faller.cpp
+        src/game/gameobjects/lemmings/states/Faller.h
         src/engine/AnimatedTexture.cpp
         src/engine/AnimatedTexture.h
-        src/game/lemmings/LemmingsHandler.cpp
-        src/game/lemmings/LemmingsHandler.h
-        src/game/Camera.cpp
-        src/game/Camera.h
-        src/game/lemmings/states/Digger.cpp
-        src/game/lemmings/states/Digger.h
+        src/game/gameobjects/lemmings/LemmingsHandler.cpp
+        src/game/gameobjects/lemmings/LemmingsHandler.h
+        src/game/gameobjects/Camera.cpp
+        src/game/gameobjects/Camera.h
+        src/game/gameobjects/lemmings/states/Digger.cpp
+        src/game/gameobjects/lemmings/states/Digger.h
+        src/game/gameobjects/Cursor.cpp
+        src/game/gameobjects/Cursor.h
+        src/engine/Event.h
+        src/game/LevelData.h
+        src/game/gameobjects/Entrance.cpp
+        src/game/gameobjects/Entrance.h
+        src/game/gameobjects/Exit.cpp
+        src/game/gameobjects/Exit.h
+        src/game/gameobjects/ui/ui_buttons/Button.cpp
+        src/game/gameobjects/ui/ui_buttons/Button.h
+        src/game/gameobjects/ui/ui_buttons/NumberButton.cpp
+        src/game/gameobjects/ui/ui_buttons/NumberButton.h
+        src/game/gameobjects/ui/ui_buttons/JobButton.cpp
+        src/game/gameobjects/ui/ui_buttons/JobButton.h
+        src/game/gameobjects/GameUI.cpp
+        src/game/gameobjects/GameUI.h
+        src/game/gameobjects/lemmings/states/Miner.cpp
+        src/game/gameobjects/lemmings/states/Miner.h
+        src/game/gameobjects/ui/NumericSprite.cpp
+        src/game/gameobjects/ui/NumericSprite.h
+        src/game/gameobjects/ui/TimeDisplay.cpp
+        src/game/gameobjects/ui/TimeDisplay.h
+        src/game/gameobjects/ui/LemmingInfoDisplay.cpp
+        src/game/gameobjects/ui/LemmingInfoDisplay.h
+        src/game/gameobjects/ui/UIButtonType.h
 )
 target_link_libraries(main PRIVATE sfml-graphics)
 target_compile_features(main PRIVATE cxx_std_17)

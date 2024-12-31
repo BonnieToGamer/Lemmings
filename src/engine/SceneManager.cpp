@@ -8,17 +8,18 @@ namespace Lemmings::Engine
 {
     SceneManager::SceneManager() : sceneStack_() { }
 
-    void SceneManager::addScene(const std::shared_ptr<IScene>& scene)
+    void SceneManager::addScene(std::shared_ptr<IScene> scene)
     {
         scene->init();
-        this->sceneStack_.push(scene);
+        this->sceneStack_.push(std::move(scene));
     }
 
     void SceneManager::removeScene()
     {
         if (this->sceneStack_.empty())
             return;
-        
+
+        this->sceneStack_.top()->destroy();
         this->sceneStack_.pop();
     }
 

@@ -11,6 +11,8 @@
 namespace Lemmings::Engine
 {
     Core* Core::INSTANCE = nullptr;
+    Event<> Core::windowSizeChangedEvent = Event<>();
+    
     Core::Core() : sceneManager_(), renderTexture_(), renderSprite_()
     {
         INSTANCE = this;
@@ -30,7 +32,7 @@ namespace Lemmings::Engine
         if (!this->renderTexture_.create(DESIGNED_RESOLUTION_WIDTH, DESIGNED_RESOLUTION_HEIGHT))
             throw std::runtime_error("Couldn't create render texture");
         
-        this->sceneManager_.addScene(std::make_shared<Scene::Level>());
+        this->sceneManager_.addScene(std::make_shared<Scene::Level>("fun1"));
     }
 
     void Core::run()
@@ -42,6 +44,8 @@ namespace Lemmings::Engine
             this->update(elapsed.asSeconds());
             this->draw();
         }
+
+        this->sceneManager_.removeScene();
     }
 
     void Core::update(const float delta)
@@ -51,11 +55,19 @@ namespace Lemmings::Engine
             if (!this->slowTimer_.update(delta))
                 return;
         }
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        {
+                return;
+        }
+        
         
         for (auto event = sf::Event(); renderWindow_->pollEvent(event);)
         {
             if (event.type == sf::Event::Closed)
                 renderWindow_->close();
+            else if (event.type == sf::Event::Resized)
+                windowSizeChangedEvent.invoke();
         }
 
         if (const std::shared_ptr<IScene> scene = this->sceneManager_.getCurrentScene())
@@ -65,7 +77,8 @@ namespace Lemmings::Engine
     void Core::draw()
     {
         // this->renderTexture_.clear(sf::Color::White);
-        renderWindow_->clear(sf::Color(100, 149, 237));
+        // renderWindow_->clear(sf::Color(100, 149, 237));
+        renderWindow_->clear(sf::Color::Black);
         if (std::shared_ptr<IScene> scene = this->sceneManager_.getCurrentScene())
             scene->draw(*this->renderWindow_);
         // this->renderTexture_.display();

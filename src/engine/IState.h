@@ -11,10 +11,10 @@ template <typename T>
 class IState {
 
 protected:
-    std::shared_ptr<T> parent_;
+    T* parent_;
 
 public:
-    void setParent(std::shared_ptr<T> parent) { this->parent_ = parent; }
+    void setParent(T* parent) { this->parent_ = parent; }
     virtual ~IState() = default;
     virtual void enter() = 0;
     virtual void exit() = 0;

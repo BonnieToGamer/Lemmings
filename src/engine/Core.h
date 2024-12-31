@@ -5,6 +5,7 @@
 #pragma once
 #include <memory>
 
+#include "Event.h"
 #include "SceneManager.h"
 #include "Timer.h"
 #include "SFML/Graphics.hpp"
@@ -25,6 +26,7 @@ namespace Lemmings::Engine
     public:
         static constexpr uint DESIGNED_RESOLUTION_WIDTH = 320;
         static constexpr uint DESIGNED_RESOLUTION_HEIGHT = 200;
+        static Event<> windowSizeChangedEvent;
         
         static Core* Instance() { return INSTANCE; }
         

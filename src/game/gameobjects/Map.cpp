@@ -4,7 +4,7 @@
 
 #include "Map.h"
 
-#include "../engine/Core.h"
+#include "../../engine/Core.h"
 #include "SFML/Window/Mouse.hpp"
 
 namespace Lemmings {
@@ -36,10 +36,8 @@ namespace Lemmings {
         return this->modifiableTexture_.height();
     }
 
-    Node& Map::operator[](int index)
+    const Node& Map::operator[](int index)
     {
-        this->nodesAccessed_ = true;
-        this->accessedQueue_.push(index);
         return *this->nodes_[index];
     }
 
@@ -72,5 +70,12 @@ namespace Lemmings {
     void Map::draw(sf::RenderTarget& renderTarget)
     {
         renderTarget.draw(this->modifiableTexture_.getSprite());
+    }
+
+    void Map::changeNode(int index, bool value)
+    {
+        this->nodesAccessed_ = true;
+        this->accessedQueue_.push(index);
+        this->nodes_[index]->setEnabled(value);
     }
 } // Lemmings
