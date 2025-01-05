@@ -60,7 +60,7 @@ private:
     void loadTexture(std::shared_ptr<sf::Texture>& texture, const std::string& textureName);
     
 public:
-    Engine::Event<Lemming*> deathEvent; 
+    static Engine::Event<Lemming*> deathEvent; 
     
     explicit Lemming(Map* map);
 

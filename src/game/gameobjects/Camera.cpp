@@ -8,9 +8,16 @@
 #include <math.h>
 
 namespace Lemmings {
+    Engine::Event<Camera*> Camera::movedEvent;
+
+    Camera::~Camera()
+    {
+        Engine::Core::windowSizeChangedEvent -= this->WINDOW_RESIZED_HANDLER;
+    }
+
     void Camera::init()
     {
-        Engine::Core::windowSizeChangedEvent += std::bind(&Camera::windowResized, this);
+        Engine::Core::windowSizeChangedEvent += this->WINDOW_RESIZED_HANDLER;
         
         this->view_ = sf::View(sf::FloatRect(
             0,
@@ -49,7 +56,7 @@ namespace Lemmings {
             std::round(newPos.x) + HALF_SCREEN_SIZE.x,
             std::round(newPos.y) + HALF_SCREEN_SIZE.y
         );
-        movedEvent.invoke();
+        movedEvent.invoke(this);
     }
 
     void Camera::windowResized()

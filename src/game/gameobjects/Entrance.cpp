@@ -7,6 +7,8 @@
 #include <stdexcept>
 
 namespace Lemmings {
+    Engine::Event<uint> Entrance::spawnEvent;
+    
     float Entrance::calcSpawnRate() const
     {
         // A really rough interpretation of lemmings spawn rate system.
@@ -15,10 +17,15 @@ namespace Lemmings {
         return -0.035066f * static_cast<float>(this->spawnRate_ - 50) + 2.02;
     }
 
-    Entrance::Entrance(GameUI* ui, sf::Vector2i position, LemmingsHandler* lemmingsHandler, uint spawnRate, uint amountOfLemmings) : spawnTimer_(0.0f), ui_(ui), position_(position), currentAnimationFrame_(0), lemmingsHandler_(lemmingsHandler), spawnRate_(spawnRate), amountOfLemmings_(amountOfLemmings)
+    Entrance::Entrance(sf::Vector2i position, LemmingsHandler* lemmingsHandler, uint spawnRate, uint amountOfLemmings) : spawnTimer_(0.0f), position_(position), currentAnimationFrame_(0), lemmingsHandler_(lemmingsHandler), spawnRate_(spawnRate), amountOfLemmings_(amountOfLemmings)
     {
-        this->ui_->spawnRateChangedEvent += [this](uint newSpawnRate) { this->spawnRateChanged(newSpawnRate); };
+        GameUI::spawnRateChangedEvent += this->SPAWN_RATE_CHANGED_HANDLER;
         this->spawnTimer_ = Engine::Timer(this->calcSpawnRate());
+    }
+
+    Entrance::~Entrance()
+    {
+        GameUI::spawnRateChangedEvent -= this->SPAWN_RATE_CHANGED_HANDLER;
     }
 
     void Entrance::init()
@@ -45,7 +52,7 @@ namespace Lemmings {
         {
             this->lemmingsHandler_->addLemming(SPAWN_POINT + this->position_);
             this->currentAmountOfLemmings_++;
-            this->ui_->setAmountOut(this->currentAmountOfLemmings_);
+            spawnEvent.invoke(this->currentAmountOfLemmings_);
         }
     }
 

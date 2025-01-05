@@ -7,16 +7,25 @@
 #include <iostream>
 #include <stdexcept>
 
+#include "Entrance.h"
 #include "../../engine/Core.h"
 
 namespace Lemmings {
-    GameUI::GameUI(Camera* cam, LevelData* levelData) : camera_(cam), levelData_(levelData)
+    Engine::Event<uint> GameUI::spawnRateChangedEvent;
+    
+    GameUI::GameUI(LevelData* levelData) : levelData_(levelData)
     {
+    }
+
+    GameUI::~GameUI()
+    {
+        Camera::movedEvent -= this->CAMERA_MOVED_HANDLER;
+        Entrance::spawnEvent -= this->SPAWN_EVENT_HANDLER;
     }
 
     void GameUI::init()
     {
-        this->camera_->movedEvent += [this] { cameraMoved(); };
+        Camera::movedEvent += this->CAMERA_MOVED_HANDLER;
         this->buttons_.reserve(this->AMOUNT_OF_BUTTONS);
 
         if (!jobTextTexture_.loadFromFile(ASSETS_PATH"job_names.png"))
@@ -25,7 +34,7 @@ namespace Lemmings {
         float textY = Engine::Core::DESIGNED_RESOLUTION_HEIGHT - UI::Button::BUTTON_HEIGHT - JOB_NAME_TEXTURE_HEIGHT - 2.0f;
 
         this->jobTextSprite_.setTexture(this->jobTextTexture_);
-        this->jobTextSprite_.setPosition(this->camera_->position().x, textY);
+        this->jobTextSprite_.setPosition(0, textY);
 
         float heldTimer = 0.1f;
 
@@ -45,11 +54,11 @@ namespace Lemmings {
         for (auto& button : this->buttons_)
             button->init();
 
-        this->time_ = std::make_unique<UI::TimeDisplay>(sf::Vector2f(this->camera_->position().x * 2 - UI::TimeDisplay::WIDTH, textY));
+        this->time_ = std::make_unique<UI::TimeDisplay>(sf::Vector2f(0, textY));
         this->time_->init();
-        this->time_->setTime(123);
+        this->time_->setTime(this->levelData_->timeLimit);
 
-        this->lemmingStats_ = std::make_unique<UI::LemmingInfoDisplay>(levelData_->amountOfLemmings);
+        this->lemmingStats_ = std::make_unique<UI::LemmingInfoDisplay>(this->levelData_->amountOfLemmings);
         this->lemmingStats_->init();
         this->lemmingStats_->setPosition({0, textY});
 
@@ -57,8 +66,8 @@ namespace Lemmings {
         this->amountOfHoveredLemmings_.setPosition({0, textY});
 
         this->currentReleaseRate_ = this->levelData_->releaseRate;
-        
-        this->cameraMoved();
+
+        Entrance::spawnEvent += this->SPAWN_EVENT_HANDLER;
     }
 
     void GameUI::update(float delta)
@@ -81,15 +90,15 @@ namespace Lemmings {
         this->amountOfHoveredLemmings_.draw(renderTarget);
     }
 
-    void GameUI::cameraMoved()
+    void GameUI::cameraMoved(Camera* camera)
     {
-        this->jobTextSprite_.setPosition(this->camera_->position().x, this->jobTextSprite_.getPosition().y);
-        this->time_->setPosition(sf::Vector2f(this->camera_->position().x + Engine::Core::DESIGNED_RESOLUTION_WIDTH - UI::TimeDisplay::WIDTH, this->time_->getPosition().y));
-        this->lemmingStats_->setPosition(sf::Vector2f(this->camera_->position().x + 111, this->lemmingStats_->getPosition().y));
-        this->amountOfHoveredLemmings_.setPosition(sf::Vector2f(this->camera_->position().x + UI::NumericSprite::NUMBER_WIDTH * 9, this->amountOfHoveredLemmings_.getPosition().y));
+        this->jobTextSprite_.setPosition(camera->position().x, this->jobTextSprite_.getPosition().y);
+        this->time_->setPosition(sf::Vector2f(camera->position().x + Engine::Core::DESIGNED_RESOLUTION_WIDTH - UI::TimeDisplay::WIDTH, this->time_->getPosition().y));
+        this->lemmingStats_->setPosition(sf::Vector2f(camera->position().x + 111, this->lemmingStats_->getPosition().y));
+        this->amountOfHoveredLemmings_.setPosition(sf::Vector2f(camera->position().x + UI::NumericSprite::NUMBER_WIDTH * 9, this->amountOfHoveredLemmings_.getPosition().y));
 
         for (auto& button : this->buttons_)
-            button->setPosition({this->camera_->position().x + button->getIndex() * button->BUTTON_WIDTH, static_cast<float>(Engine::Core::DESIGNED_RESOLUTION_HEIGHT - button->BUTTON_HEIGHT)});
+            button->setPosition({camera->position().x + button->getIndex() * button->BUTTON_WIDTH, static_cast<float>(Engine::Core::DESIGNED_RESOLUTION_HEIGHT - button->BUTTON_HEIGHT)});
     }
 
     void GameUI::buttonClicked(UI::UIButtonType index)

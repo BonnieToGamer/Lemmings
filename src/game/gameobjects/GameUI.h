@@ -15,7 +15,6 @@ namespace Lemmings {
 
 class GameUI final : public Engine::GameObject {
 private:
-    Camera* camera_;
     static constexpr uint AMOUNT_OF_BUTTONS = 13;
     std::vector<std::unique_ptr<UI::Button>> buttons_;
     UI::JobButton* currentJobButton_ = nullptr;
@@ -31,18 +30,20 @@ private:
 
     const uint JOB_NAME_TEXTURE_WIDTH = 150;
     const uint JOB_NAME_TEXTURE_HEIGHT = 15;
-    const sf::Vector2f timeUiPlacement = sf::Vector2f();
+    const auto SPAWN_EVENT_HANDLER = [this] (uint amount) { this->setAmountOut(amount); };
+    const auto CAMERA_MOVED_HANDLER = [this] (Camera* sender) { this->cameraMoved(sender); };
 
     template<typename ButtonType, typename... Args>
     void createButton(UI::UIButtonType id, Args&&... args);
 public:
-    Engine::Event<uint> spawnRateChangedEvent;
+    static Engine::Event<uint> spawnRateChangedEvent;
     
-    explicit GameUI(Camera* cam, LevelData* levelData);
+    explicit GameUI(LevelData* levelData);
+    ~GameUI();
     void init() override;
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;
-    void cameraMoved();
+    void cameraMoved(Camera* camera);
     void buttonClicked(UI::UIButtonType index);
     void jobButtonClicked(UI::UIButtonType index);
     void releaseRateButtonClicked(UI::UIButtonType index);
@@ -56,6 +57,7 @@ public:
 template<typename ButtonType, typename... Args>
 void GameUI::createButton(UI::UIButtonType id, Args&&... args) {
     // perfect forwarding and compile-time conditional statements are nice.
+    // although I miss my reflections
     auto button = std::make_unique<ButtonType>(id, std::forward<Args>(args)...);
     
     if constexpr (std::is_same<ButtonType, UI::NumberButton>::value) {

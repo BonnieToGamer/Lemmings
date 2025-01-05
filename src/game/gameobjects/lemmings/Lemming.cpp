@@ -15,6 +15,7 @@
 namespace Lemmings {
     std::shared_ptr<sf::Texture> Lemming::lemmingTexture_;
     std::shared_ptr<sf::Texture> Lemming::dirtTexture_;
+    Engine::Event<Lemming*> Lemming::deathEvent;
 
     void Lemming::addAnimation(Job job, uint amountOfFrames, uint row, const sf::Vector2u& spriteSize, const sf::Vector2i& offset, std::shared_ptr<sf::Texture> texture, bool addDirt, std::shared_ptr<sf::Texture> dirtTexture)
     {

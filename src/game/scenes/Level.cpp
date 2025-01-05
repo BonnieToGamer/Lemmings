@@ -124,8 +124,8 @@ namespace Lemmings::Scene {
         auto map = std::make_unique<Map>(ASSETS_PATH + this->levelData_->image);
         auto lemmingHandler = std::make_unique<LemmingsHandler>(map.get());
         auto camera = std::make_unique<Camera>();
-        auto ui = std::make_unique<GameUI>(camera.get(), this->levelData_.get());
-        auto entrance = std::make_unique<Entrance>(ui.get(), sf::Vector2i(200.0f, 29.0f), lemmingHandler.get(), this->levelData_->releaseRate, this->levelData_->amountOfLemmings);
+        auto ui = std::make_unique<GameUI>(this->levelData_.get());
+        auto entrance = std::make_unique<Entrance>(sf::Vector2i(200.0f, 29.0f), lemmingHandler.get(), this->levelData_->releaseRate, this->levelData_->amountOfLemmings);
         auto cursor = std::make_unique<Cursor>(lemmingHandler.get(), camera.get(), ui.get());
         
         // lemmingHandler->addLemming({225, 29});

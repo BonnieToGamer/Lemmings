@@ -15,10 +15,13 @@ private:
     Engine::Timer fixedUpdateTimer_;
     Map* map_;
 
+    const auto LEMMING_DEATH_HANDLER = [this] (Lemming* lemming) { this->onLemmingDeath(lemming); };
+    
     void onLemmingDeath(Lemming* lemming);
     
 public:
     explicit LemmingsHandler(Map* map);
+    ~LemmingsHandler();
     void init() override;
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;

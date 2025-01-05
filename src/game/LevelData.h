@@ -4,8 +4,9 @@
 
 #pragma once
 #include <string>
+#include <map>
 
-#include "gameobjects/Map.h"
+#include "SFML/Graphics/Color.hpp"
 
 namespace Lemmings {
 
@@ -37,7 +38,7 @@ public:
     uint miners;
     uint diggers;
 
-    inline static const Map<DirtIndexColor, sf::Color> indexToColor = {
+    inline static const std::map<DirtIndexColor, sf::Color> indexToColor = {
         {dirt, sf::Color(120, 77, 0)},
         {sand, sf::Color::Yellow},
         {quartz, sf::Color::White},

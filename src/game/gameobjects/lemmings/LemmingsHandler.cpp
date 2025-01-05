@@ -21,12 +21,17 @@ namespace Lemmings {
     {
     }
 
+    LemmingsHandler::~LemmingsHandler()
+    {
+        Lemming::deathEvent -= LEMMING_DEATH_HANDLER;
+    }
+
     void LemmingsHandler::init()
     {
+        Lemming::deathEvent += LEMMING_DEATH_HANDLER;
         for (auto& lemming : this->lemmings_)
         {
             lemming->init();
-            lemming->deathEvent += [this] (Lemming* lemming) { this->onLemmingDeath(lemming); };
         }
     }
 
