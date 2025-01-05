@@ -10,7 +10,7 @@ namespace Lemmings::States {
     void Faller::enter()
     {
         this->parent_->playAnimation(Job::Faller);
-        this->parent_->updateCurrentJob(Job::Faller);
+        this->parent_->forceUpdateNewJob(Job::Faller);
     }
 
     void Faller::exit()

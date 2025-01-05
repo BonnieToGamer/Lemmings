@@ -2,17 +2,18 @@
 
 This project is a clone of the classic DOS game Lemmings, originally developed by DMA Design in 1991. The goal of this clone is to replicate the original gameplay as part of a course on C++.
 
-# Current status
+## Current status
 The clone is still in development, with some key features already implemented, including:
 * Basic Lemmings AI.
 * Level loading and destruction
 
-# Level structure:
+## Level structure:
 The level file structure is quite simple but does not conform to any standard.
 ```
 level number
 level name
 level image
+dirt index
 time limit (seconds)
 save requirement
 amount of lemmings
@@ -24,9 +25,18 @@ example level: fun1.lvl
 1
 Just dig!
 map.png
+0
 300
 1
 10
 50
 0,0,0,0,0,0,0,10
 ```
+## Known mistakes
+These are some the mistakes I've realised I've done but it's too late to change.
+
+### Scene/Gameobjects
+While it's possible to add gameobjects to a scene. But that creates a problem because I can only add gameobjects to the scene. I can't add gameobjects as children of other gameobjects. This causes some strange code in the repo.
+
+### Timer
+The timer object is a bit of a strange one. Since it is derived from the game object class but it behaves differently. This can be fixed by adding a `Engine::Event` to the Timer and changing the update behaviour to call invoke the event. But there is still a glaring issue with the Timer class. It's that it relies on the update loop. If the game where to freeze or for some reason the update loop takes longer than expected the timer may fire to early. To prevent this it could be multithreaded and  timers could be on a separate thread.

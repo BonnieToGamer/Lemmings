@@ -85,6 +85,11 @@ namespace Lemmings::Engine {
         this->offset_ = offset;
     }
 
+    void AnimatedTexture::setColor(sf::Color color)
+    {
+        this->sprite_.setColor(color);
+    }
+
     void AnimatedTexture::addSpriteSheetAnim(int amountOfFrames, int yOffset, sf::Vector2i offset, float animationSpeed)
     {
         this->offset_ = offset;

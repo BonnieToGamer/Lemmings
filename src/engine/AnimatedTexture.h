@@ -37,6 +37,7 @@ namespace Lemmings::Engine
         void setScale(float scaleX, float scaleY);
         void nextFrame();
         void setOffset(sf::Vector2i offset);
+        void setColor(sf::Color color);
 
         void addSpriteSheetAnim(int amountOfFrames, int yOffset, sf::Vector2i spriteOffset, float animationSpeed);
     };

@@ -12,7 +12,7 @@ namespace Lemmings::States {
     void Walker::enter()
     {
         this->parent_->playAnimation(Job::Walker);
-        this->parent_->updateCurrentJob(Job::Walker);
+        this->parent_->forceUpdateNewJob(Job::Walker);
     }
 
     void Walker::exit() { }

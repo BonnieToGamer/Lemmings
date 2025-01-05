@@ -65,20 +65,23 @@ namespace Lemmings::Scene {
                 data->image = line;
                 break;
             case 3:
+                data->dirtIndex = std::strtol(line.c_str(), &endPtr, 10);
+                errorCheckStringToInt(line, endPtr);
+            case 4:
                 data->timeLimit = std::strtol(line.c_str(), &endPtr, 10);
                 errorCheckStringToInt(line, endPtr);
                 break;
-            case 4:
+            case 5:
                 data->saveRequirement = std::strtol(line.c_str(), &endPtr, 10);
                 errorCheckStringToInt(line, endPtr);
                 break;
-            case 5:
+            case 6:
                 data->amountOfLemmings = std::strtol(line.c_str(), &endPtr, 10);
                 errorCheckStringToInt(line, endPtr);
-            case 6:
+            case 7:
                 data->releaseRate = std::strtol(line.c_str(), &endPtr, 10);
                 errorCheckStringToInt(line, endPtr);
-            case 7: { // New case for the last line
+            case 8: { // New case for the last line
                     std::stringstream ss(line);
                     std::string token;
                     std::vector fields = {

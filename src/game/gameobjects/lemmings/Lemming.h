@@ -39,11 +39,13 @@ enum Direction
     
 class Lemming : public Engine::GameObject {
 private:
+    Map* map_;
     sf::Vector2i position_;
     std::shared_ptr<Engine::AnimatedTexture> currentAnimatedTexture_;
+    std::shared_ptr<Engine::AnimatedTexture> currentAnimatedDirtTexture_;
     std::unique_ptr<Engine::StateMachineManager<Lemming>> stateMachineManager_;
-    Map* map_;
     std::unordered_map<Job, std::shared_ptr<Engine::AnimatedTexture>> animations_;
+    std::unordered_map<Job, std::shared_ptr<Engine::AnimatedTexture>> dirtAnimations_;
     Direction currentDir_ = Right;
     Job currentJob_ = Job::Faller;
     
@@ -51,10 +53,11 @@ private:
     const uint TEXTURE_HEIGHT = 16;
 
     static std::shared_ptr<sf::Texture> lemmingTexture_;
-    static std::shared_ptr<sf::Texture> lemmingMiningTexture_;
+    static std::shared_ptr<sf::Texture> dirtTexture_;
 
-    void addAnimation(Job job, uint amountOfFrames, uint row, const sf::Vector2u& spriteSize, const sf::Vector2i& offset, std::shared_ptr<sf::Texture> texture);
+    void addAnimation(Job job, uint amountOfFrames, uint row, const sf::Vector2u& spriteSize, const sf::Vector2i& offset, std::shared_ptr<sf::Texture> texture, bool addDirt = false, std::shared_ptr<sf::Texture> dirtTexture = nullptr);
     void die();
+    void loadTexture(std::shared_ptr<sf::Texture>& texture, const std::string& textureName);
     
 public:
     Engine::Event<Lemming*> deathEvent; 
@@ -69,12 +72,12 @@ public:
     Map* map();
     void playAnimation(Job job);
     void setAnimationOffset(sf::Vector2i offset);
-    void flipSprite() const;
+    void flipSprite();
     Direction dir() const;
     void setDir(Direction newDir);
     sf::Vector2i getActualPos();
     sf::Vector2i getSize();
-    void updateCurrentJob(Job job);
+    void forceUpdateNewJob(Job job);
     Job getCurrentJob() const;
     bool tryAssignJob(Job job) const;
     
