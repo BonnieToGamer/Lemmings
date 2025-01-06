@@ -15,7 +15,7 @@ private:
     Engine::Timer fixedUpdateTimer_;
     Map* map_;
 
-    const auto LEMMING_DEATH_HANDLER = [this] (Lemming* lemming) { this->onLemmingDeath(lemming); };
+    const std::function<void(Lemming*)> LEMMING_DEATH_HANDLER = [this] (Lemming* lemming) { this->onLemmingDeath(lemming); };
     
     void onLemmingDeath(Lemming* lemming);
     

@@ -19,21 +19,22 @@ private:
     sf::Texture timeWordTexture_;
     sf::Sprite timeWordSprite_;
 
-    NumericSprite minute_;
-    NumericSprite dash_;
-    NumericSprite secondsTens_;
-    NumericSprite secondsOnes_;
+    NumericSprite* minute_;
+    NumericSprite* dash_;
+    NumericSprite* secondsTens_;
+    NumericSprite* secondsOnes_;
 
 public:
     static constexpr uint WIDTH = NumericSprite::NUMBER_WIDTH * 9;
     
-    TimeDisplay(sf::Vector2f position);
+    TimeDisplay(sf::Vector2f position, uint time);
     void init() override;
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;
     void setTime(uint time);
     void setPosition(sf::Vector2f position);
     sf::Vector2f getPosition();
+    void onTimerComplete();
 };
 
 } // Lemmigs

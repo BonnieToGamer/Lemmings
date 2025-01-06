@@ -3,16 +3,22 @@
 //
 
 #pragma once
+#include <memory>
 #include "SFML/Graphics/RenderTexture.hpp"
 
 namespace Lemmings::Engine {
 
 class GameObject {
+private:
+    std::vector<std::unique_ptr<GameObject>> children_;
+    
 public:
     virtual ~GameObject() = default;
-    virtual void init() = 0;
-    virtual void update(float delta) = 0;
-    virtual void draw(sf::RenderTarget& renderTarget) = 0;
+    virtual void init();
+    virtual void update(float delta);
+    virtual void draw(sf::RenderTarget& renderTarget);
+    
+    void addChild(std::unique_ptr<GameObject> child);
+    void removeChild(std::unique_ptr<GameObject> child);
 };
-
 } // Lemmings

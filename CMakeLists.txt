@@ -29,6 +29,7 @@ add_executable(main src/main.cpp
         src/game/gameobjects/Map.h
         src/game/gameobjects/Node.cpp
         src/game/gameobjects/Node.h
+        src/engine/GameObject.cpp
         src/engine/GameObject.h
         src/game/gameobjects/lemmings/Lemming.cpp
         src/game/gameobjects/lemmings/Lemming.h

@@ -16,7 +16,7 @@ namespace Lemmings {
 class GameUI final : public Engine::GameObject {
 private:
     static constexpr uint AMOUNT_OF_BUTTONS = 13;
-    std::vector<std::unique_ptr<UI::Button>> buttons_;
+    std::vector<UI::Button*> buttons_;
     UI::JobButton* currentJobButton_ = nullptr;
     const LevelData* levelData_;
     uint mouseHoverAmount;
@@ -24,14 +24,14 @@ private:
     Job mouseHoverJob;
     sf::Texture jobTextTexture_;
     sf::Sprite jobTextSprite_;
-    UI::DualNumericSprite amountOfHoveredLemmings_;
-    std::unique_ptr<UI::TimeDisplay> time_;
-    std::unique_ptr<UI::LemmingInfoDisplay> lemmingStats_;
+    UI::DualNumericSprite* amountOfHoveredLemmings_;
+    UI::TimeDisplay* time_;
+    UI::LemmingInfoDisplay* lemmingStats_;
 
     const uint JOB_NAME_TEXTURE_WIDTH = 150;
     const uint JOB_NAME_TEXTURE_HEIGHT = 15;
-    const auto SPAWN_EVENT_HANDLER = [this] (uint amount) { this->setAmountOut(amount); };
-    const auto CAMERA_MOVED_HANDLER = [this] (Camera* sender) { this->cameraMoved(sender); };
+    const std::function<void(uint)> SPAWN_EVENT_HANDLER = [this] (uint amount) { this->setAmountOut(amount); };
+    const std::function<void(Camera*)> CAMERA_MOVED_HANDLER = [this] (Camera* sender) { this->cameraMoved(sender); };
 
     template<typename ButtonType, typename... Args>
     void createButton(UI::UIButtonType id, Args&&... args);
@@ -74,6 +74,7 @@ void GameUI::createButton(UI::UIButtonType id, Args&&... args) {
         };
     }
 
-    this->buttons_.push_back(std::move(button));
+    this->buttons_.push_back(button.get());
+    this->addChild(std::move(button));
 }
 } // Lemmings

@@ -4,6 +4,7 @@
 * [ ] Make timer into an event
 * [x] Make engine more event driven
 * [ ] Remake AnimatedTexture (split into two classes SpriteSheet and SpriteSheetAnimation)
+* [ ] Add render order
 
 ## UI
 * [x] Make the rest of the buttons

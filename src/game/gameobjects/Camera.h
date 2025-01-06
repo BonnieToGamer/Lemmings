@@ -14,8 +14,8 @@ private:
     sf::View view_;
     sf::Vector2f position_;
     const sf::Vector2f HALF_SCREEN_SIZE = {Engine::Core::DESIGNED_RESOLUTION_WIDTH / 2, Engine::Core::DESIGNED_RESOLUTION_HEIGHT / 2};
-    const auto WINDOW_RESIZED_HANDLER = [this] { this->windowResized(); };
-    
+    const std::function<void()> WINDOW_RESIZED_HANDLER = [this] { this->windowResized(); };
+
 public:
     static Engine::Event<Camera*> movedEvent;
 

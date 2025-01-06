@@ -14,7 +14,8 @@ namespace Lemmings {
         if (this->elapsed_ >= this->stopTime_)
         {
             this->elapsed_ = 0;
-            return true;
+            this->onTimerCompleteEvent.invoke();
+            return true;    
         }
 
         return false;
