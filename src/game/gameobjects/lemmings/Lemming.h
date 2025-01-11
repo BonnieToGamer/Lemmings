@@ -62,7 +62,7 @@ private:
     sf::Texture* lemmingTexture_;
     sf::Texture* dirtTexture_;
 
-    void addAnimation(Job job, uint amountOfFrames, const sf::Vector2u& offset, bool addDirt);
+    void addAnimation(Job job, uint amountOfFrames, const sf::Vector2u& offset);
     void die();
     
 public:

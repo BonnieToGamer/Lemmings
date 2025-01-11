@@ -18,7 +18,7 @@ namespace Lemmings {
     Engine::Event<Lemming*> Lemming::deathEvent;
     Engine::Event<Lemming*> Lemming::winEvent;
 
-    void Lemming::addAnimation(Job job, uint amountOfFrames, const sf::Vector2u& offset, const bool addDirt)
+    void Lemming::addAnimation(Job job, uint amountOfFrames, const sf::Vector2u& offset)
     {
         auto animation = std::make_unique<Engine::SpriteSheetAnimation>(
             this->lemmingSpriteSheet.get(),
@@ -28,9 +28,6 @@ namespace Lemmings {
         );
         
         this->animations_.addAnimation(job, std::move(animation));
-        
-        if (!addDirt)
-            return;
 
         animation = std::make_unique<Engine::SpriteSheetAnimation>(
             this->dirtSpriteSheet.get(),
@@ -56,16 +53,17 @@ namespace Lemmings {
 
         this->lemmingSpriteSheet = std::make_unique<Engine::SpriteSheet>(sf::Vector2u(TEXTURE_WIDTH, TEXTURE_HEIGHT), lemmingTexture_);
         this->dirtSpriteSheet = std::make_unique<Engine::SpriteSheet>(sf::Vector2u(TEXTURE_WIDTH, TEXTURE_HEIGHT), dirtTexture_);
+        this->dirtSpriteSheet->setColor(this->data_->indexToColor.at(static_cast<LevelData::DirtIndexColor>(this->data_->dirtIndex)));
 
         this->lemmingSpriteSheet->init();
         this->dirtSpriteSheet->init();
 
-        this->addAnimation(Walker, 8, {0, 0}, false);
-        this->addAnimation(Faller, 4, {0, 1}, false);
-        this->addAnimation(Digger, 15, {0, 2}, true);
-        this->addAnimation(Miner, 25, {0, 3}, true);
-        this->addAnimation(Winner, 8, {0, 4}, false);
-        this->addAnimation(Blocker, 16, {0, 5}, false);
+        this->addAnimation(Walker, 8, {0, 0});
+        this->addAnimation(Faller, 4, {0, 1});
+        this->addAnimation(Digger, 15, {0, 2});
+        this->addAnimation(Miner, 24, {0, 3});
+        this->addAnimation(Winner, 8, {0, 4});
+        this->addAnimation(Blocker, 16, {0, 5});
 
         this->stateMachineManager_ =
             std::make_unique<Engine::StateMachineManager<Lemming>>(std::make_unique<States::Faller>(), this);
@@ -81,9 +79,7 @@ namespace Lemmings {
     void Lemming::draw(sf::RenderTarget& renderTarget)
     {
         this->lemmingSpriteSheet->draw(renderTarget);
-
-        if (this->dirtAnimations_.getCurrentAnimation() == nullptr)
-            this->dirtSpriteSheet->draw(renderTarget);
+        this->dirtSpriteSheet->draw(renderTarget);
         
         sf::RectangleShape rectShape(sf::Vector2f(1.0f, 1.0f));
         rectShape.setFillColor(sf::Color::Green);
@@ -119,13 +115,13 @@ namespace Lemmings {
         
         this->animations_.changeAnimation(job);
         this->animations_.getCurrentAnimation()->resetAnimation();
+        this->lemmingSpriteSheet->setOffset(offset);
+        this->lemmingSpriteSheet->setFlipped(this->currentDir_);
 
         this->dirtAnimations_.changeAnimation(job);
-        if (this->dirtAnimations_.getCurrentAnimation() != nullptr)
-            this->dirtAnimations_.getCurrentAnimation()->resetAnimation();
-
-        this->lemmingSpriteSheet->setOffset(offset);
+        this->dirtAnimations_.getCurrentAnimation()->resetAnimation();
         this->dirtSpriteSheet->setOffset(offset);
+        this->dirtSpriteSheet->setFlipped(this->currentDir_);
     }
 
     void Lemming::flipSprite()

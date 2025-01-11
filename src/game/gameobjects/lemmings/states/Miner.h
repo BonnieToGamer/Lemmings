@@ -33,7 +33,7 @@ private:
 
     static constexpr int MINE_COUNTER_STEP_ONE = 1;
     static constexpr int MINE_COUNTER_STEP_TWO = 2;
-    static constexpr int MINE_COUNTER_RESET_THRESHOLD = 25;
+    static constexpr int MINE_COUNTER_RESET_THRESHOLD = 24;
 
     static constexpr int MINE_COUNTER_RESET_OFFSET_X_LEFT = -4;
     static constexpr int MINE_COUNTER_RESET_OFFSET_X_RIGHT = 4;
