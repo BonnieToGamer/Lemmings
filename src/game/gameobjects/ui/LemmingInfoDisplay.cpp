@@ -6,6 +6,8 @@
 
 #include <stdexcept>
 
+#include "../../../engine/Core.h"
+
 namespace Lemmings::UI {
     LemmingInfoDisplay::LemmingInfoDisplay(uint max) : out_(0), in_(0), max_(max)
     {
@@ -16,11 +18,10 @@ namespace Lemmings::UI {
         this->outSprite_.init();
         this->inSprite_.init();
 
-        if (!this->reservedWordsTexture_.loadFromFile(ASSETS_PATH"reserved_words.png"))
-            throw std::runtime_error("Could not load reserved_words.png");
+        this->reservedWordsTexture_ = Engine::Core::contentManager->getTexture("reserved_words");
 
-        this->outWordSprite_.setTexture(this->reservedWordsTexture_);
-        this->inWordSprite_.setTexture(this->reservedWordsTexture_);
+        this->outWordSprite_.setTexture(*this->reservedWordsTexture_);
+        this->inWordSprite_.setTexture(*this->reservedWordsTexture_);
         this->outWordSprite_.setTextureRect({0, 15, 24, 15});
         this->inWordSprite_.setTextureRect({0, 0, 16, 15});
 

@@ -15,7 +15,7 @@ namespace Lemmings::UI {
 
 class Button : public Engine::GameObject {
 protected:
-    sf::Texture texture_;
+    sf::Texture* texture_;
     sf::Sprite sprite_;
     UI::UIButtonType index_;
     Engine::Timer timer_;

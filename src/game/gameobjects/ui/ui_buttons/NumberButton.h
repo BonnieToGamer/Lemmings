@@ -9,7 +9,7 @@ namespace Lemmings::UI {
 
 class NumberButton : public Button {
 private:
-    sf::Texture numberTexture_;
+    sf::Texture* numberTexture_;
     sf::Sprite tensSprite_;
     sf::Sprite onesSprite_;
 

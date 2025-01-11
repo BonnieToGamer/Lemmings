@@ -4,32 +4,41 @@
 
 #include "Lemming.h"
 
-#include <complex.h>
-#include <stdexcept>
-
+#include "../Exit.h"
+#include "../../../engine/Core.h"
 #include "SFML/Graphics/RectangleShape.hpp"
 #include "states/Digger.h"
+#include "states/Faller.h"
 #include "states/Miner.h"
 #include "states/Walker.h"
+#include "states/Winner.h"
 
 namespace Lemmings {
-    std::shared_ptr<sf::Texture> Lemming::lemmingTexture_;
-    std::shared_ptr<sf::Texture> Lemming::dirtTexture_;
     Engine::Event<Lemming*> Lemming::deathEvent;
+    Engine::Event<Lemming*> Lemming::winEvent;
 
-    void Lemming::addAnimation(Job job, uint amountOfFrames, uint row, const sf::Vector2u& spriteSize, const sf::Vector2i& offset, std::shared_ptr<sf::Texture> texture, bool addDirt, std::shared_ptr<sf::Texture> dirtTexture)
+    void Lemming::addAnimation(Job job, uint amountOfFrames, const sf::Vector2u& offset, const bool addDirt)
     {
-        auto animation = std::make_shared<Engine::AnimatedTexture>(texture, spriteSize, true);
-        animation->addSpriteSheetAnim(amountOfFrames, row, offset, 0);
-        this->animations_.emplace(job, animation);
-
-        if (!addDirt && !dirtTexture)
+        auto animation = std::make_unique<Engine::SpriteSheetAnimation>(
+            this->lemmingSpriteSheet.get(),
+            Engine::SpriteSheetAnimation::Right,
+            amountOfFrames,
+            sf::Vector2u(offset.x, offset.y)
+        );
+        
+        this->animations_.addAnimation(job, std::move(animation));
+        
+        if (!addDirt)
             return;
 
-        animation = std::make_shared<Engine::AnimatedTexture>(dirtTexture, spriteSize, true);
-        animation->addSpriteSheetAnim(amountOfFrames, row, offset, 0);
-        // animation->setColor()
-        this->dirtAnimations_.emplace(job, animation);
+        animation = std::make_unique<Engine::SpriteSheetAnimation>(
+            this->dirtSpriteSheet.get(),
+            Engine::SpriteSheetAnimation::Right,
+            amountOfFrames,
+            sf::Vector2u(offset.x,offset.y)
+        );
+        
+        this->dirtAnimations_.addAnimation(job, std::move(animation));
     }
 
     void Lemming::die()
@@ -37,52 +46,42 @@ namespace Lemmings {
         this->deathEvent.invoke(this);
     }
 
-    Lemming::Lemming(Map* map) : map_(map) { }
-
-    void Lemming::loadTexture(std::shared_ptr<sf::Texture>& texture, const std::string& textureName)
-    {
-        if (texture == nullptr)
-        {
-            texture = std::make_shared<sf::Texture>();
-        
-            if (!texture->loadFromFile(ASSETS_PATH + textureName))
-                throw std::runtime_error("Couldn't load texture!");
-        }
-    }
+    Lemming::Lemming(Map* map, LevelData* data) : map_(map), data_(data) { }
 
     void Lemming::init()
     {
+        this->lemmingTexture_ = Engine::Core::contentManager->getTexture("lemming");
+        this->dirtTexture_ = Engine::Core::contentManager->getTexture("dirt");
+
+        this->lemmingSpriteSheet = std::make_unique<Engine::SpriteSheet>(sf::Vector2u(TEXTURE_WIDTH, TEXTURE_HEIGHT), lemmingTexture_);
+        this->dirtSpriteSheet = std::make_unique<Engine::SpriteSheet>(sf::Vector2u(TEXTURE_WIDTH, TEXTURE_HEIGHT), dirtTexture_);
+
+        this->lemmingSpriteSheet->init();
+        this->dirtSpriteSheet->init();
+
+        this->addAnimation(Walker, 8, {0, 0}, false);
+        this->addAnimation(Faller, 4, {0, 1}, false);
+        this->addAnimation(Digger, 15, {0, 2}, true);
+        this->addAnimation(Miner, 25, {0, 3}, true);
+        this->addAnimation(Winner, 8, {0, 4}, false);
+
         this->stateMachineManager_ =
-            std::make_unique<Engine::StateMachineManager<Lemming>>(std::make_unique<States::Walker>(), this);
-
-        this->loadTexture(lemmingTexture_, "lemming.png");
-        this->loadTexture(dirtTexture_, "dirt.png");
-
-        sf::Vector2u spriteSize(TEXTURE_WIDTH, TEXTURE_HEIGHT);
-        sf::Vector2u mineSpriteSize(TEXTURE_WIDTH + 1, TEXTURE_HEIGHT);
-        
-        this->addAnimation(Job::Walker, 8, 0, spriteSize, {0, 0}, lemmingTexture_);
-        this->addAnimation(Job::Faller, 4, 1, spriteSize, {0, 1}, lemmingTexture_);
-        this->addAnimation(Job::Digger, 15, 2, spriteSize, {0, 2}, lemmingTexture_, true, dirtTexture_);
-        this->addAnimation(Job::Miner, 25, 3, mineSpriteSize, {2, 4}, lemmingTexture_);
-
-        this->playAnimation(Walker);
-        // this->currentAnimtedTexture_ = this->animations_[Job::Walker];
+            std::make_unique<Engine::StateMachineManager<Lemming>>(std::make_unique<States::Faller>(), this);
     }
 
     void Lemming::update(float delta)
     {
         this->stateMachineManager_->update(delta);
-        this->currentAnimatedTexture_->nextFrame();
-        if (this->currentAnimatedDirtTexture_ != nullptr) this->currentAnimatedDirtTexture_->nextFrame();
+        this->animations_.getCurrentAnimation()->nextFrame();
+        if (this->dirtAnimations_.getCurrentAnimation() != nullptr) this->dirtAnimations_.getCurrentAnimation()->nextFrame();
     }
 
     void Lemming::draw(sf::RenderTarget& renderTarget)
     {
-        this->currentAnimatedTexture_->draw(renderTarget);
+        this->lemmingSpriteSheet->draw(renderTarget);
 
-        if (this->currentAnimatedDirtTexture_ != nullptr)
-            this->currentAnimatedDirtTexture_->draw(renderTarget);
+        if (this->dirtAnimations_.getCurrentAnimation() == nullptr)
+            this->dirtSpriteSheet->draw(renderTarget);
         
         sf::RectangleShape rectShape(sf::Vector2f(1.0f, 1.0f));
         rectShape.setFillColor(sf::Color::Green);
@@ -90,7 +89,7 @@ namespace Lemmings {
         renderTarget.draw(rectShape);
     }
 
-    const sf::Vector2i& Lemming::getPosition()
+    sf::Vector2i Lemming::getPosition() const
     {
         return this->position_;
     }
@@ -101,14 +100,10 @@ namespace Lemmings {
             this->die();
         
         this->position_ = newPos;
-        if (this->currentAnimatedTexture_ == nullptr)
-            return;
 
         const sf::Vector2i actualPos = this->getActualPos();
-        this->currentAnimatedTexture_->setPosition(actualPos.x, actualPos.y);
-
-        if (this->currentAnimatedDirtTexture_ != nullptr)
-            this->currentAnimatedDirtTexture_->setPosition(actualPos.x, actualPos.y);
+        this->lemmingSpriteSheet->setPosition(actualPos.x, actualPos.y);
+        this->dirtSpriteSheet->setPosition(actualPos.x, actualPos.y);
     }
 
     Map* Lemming::map()
@@ -116,37 +111,25 @@ namespace Lemmings {
         return this->map_;
     }
 
-    void Lemming::playAnimation(Job job)
+    void Lemming::initJob(Job job, sf::Vector2i offset)
     {
-        if (const auto itr = this->animations_.find(job); itr == this->animations_.end())
-            return;
+        this->currentJob_ = job;
+        
+        this->animations_.changeAnimation(job);
+        this->animations_.getCurrentAnimation()->resetAnimation();
 
-        sf::Vector2i currentPos = this->getActualPos();
-        this->currentAnimatedTexture_ = this->animations_[job];
-        this->currentAnimatedTexture_->init();
-        this->currentAnimatedTexture_->setFlipped(this->currentDir_);
-        this->currentAnimatedTexture_->setPosition(currentPos.x, currentPos.y);
+        this->dirtAnimations_.changeAnimation(job);
+        if (this->dirtAnimations_.getCurrentAnimation() != nullptr)
+            this->dirtAnimations_.getCurrentAnimation()->resetAnimation();
 
-        if (const auto itr = this->dirtAnimations_.find(job); itr == this->dirtAnimations_.end())
-        {
-            this->currentAnimatedDirtTexture_ = nullptr;
-            return;
-        }
-
-        this->currentAnimatedDirtTexture_ = this->dirtAnimations_[job];
-        this->currentAnimatedDirtTexture_->init();
-        this->currentAnimatedDirtTexture_->setFlipped(this->currentDir_);
-        this->currentAnimatedDirtTexture_->setPosition(currentPos.x, currentPos.y);
-    }
-
-    void Lemming::setAnimationOffset(sf::Vector2i offset)
-    {
-        this->currentAnimatedTexture_->setOffset(offset);
+        this->lemmingSpriteSheet->setOffset(offset);
+        this->dirtSpriteSheet->setOffset(offset);
     }
 
     void Lemming::flipSprite()
     {
-        this->currentAnimatedTexture_->flipSprite();
+        this->lemmingSpriteSheet->flipSprite();
+        this->dirtSpriteSheet->flipSprite();
         this->setPosition(this->position_);
     }
 
@@ -170,11 +153,6 @@ namespace Lemmings {
     sf::Vector2i Lemming::getSize()
     {
         return {static_cast<int>(TEXTURE_WIDTH), static_cast<int>(TEXTURE_HEIGHT)};
-    }
-    
-    void Lemming::forceUpdateNewJob(Job job)
-    {
-        this->currentJob_ = job;
     }
 
     Job Lemming::getCurrentJob() const
@@ -211,6 +189,19 @@ namespace Lemmings {
         return false;
     }
 
+    void Lemming::checkCollisionExit()
+    {
+        sf::Vector2i actualPos = this->position_;
+        sf::IntRect rect(actualPos.x, actualPos.y, 1, 1);
+        if (Exit::collisionArea.intersects(rect))
+            this->stateMachineManager_->changeState(std::make_unique<States::Winner>());
+    }
+
+    void Lemming::win()
+    {
+        this->winEvent.invoke(this);
+    }
+
     bool Lemming::checkCollision(const int x, const int y) const
     {
         if (x < 0 || x >= this->map_->width() ||
@@ -231,9 +222,4 @@ namespace Lemmings {
         this->map_->changeNode(index, false);
     }
 
-    void Lemming::destroyTextures()
-    {
-        lemmingTexture_ = nullptr;
-        dirtTexture_ = nullptr;
-    }
 } // Lemmings

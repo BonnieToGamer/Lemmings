@@ -9,8 +9,7 @@
 namespace Lemmings::States {
     void Digger::enter()
     {
-        this->parent_->playAnimation(Job::Digger);
-        this->parent_->forceUpdateNewJob(Job::Digger);
+        this->parent_->initJob(Job::Digger, {0, 2});
     }
 
     void Digger::exit()

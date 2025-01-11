@@ -16,12 +16,10 @@ namespace Lemmings::UI {
 
     void Button::init()
     {
-        if(!this->texture_.loadFromFile(ASSETS_PATH"buttons.png"))
-            throw std::runtime_error("Couldn't load texture!");
+        this->texture_ = Engine::Core::contentManager->getTexture("buttons");
 
-        this->sprite_.setTexture(this->texture_);
+        this->sprite_.setTexture(*this->texture_);
         this->sprite_.setTextureRect(sf::IntRect(this->BUTTON_WIDTH * this->index_, 0, this->BUTTON_WIDTH, this->BUTTON_HEIGHT));
-
     }
 
     void Button::update(float delta)

@@ -22,15 +22,19 @@ private:
     uint mouseHoverAmount;
     uint currentReleaseRate_;
     Job mouseHoverJob;
-    sf::Texture jobTextTexture_;
+    sf::Texture* jobTextTexture_;
     sf::Sprite jobTextSprite_;
     UI::DualNumericSprite* amountOfHoveredLemmings_;
     UI::TimeDisplay* time_;
     UI::LemmingInfoDisplay* lemmingStats_;
+    
+    uint amountOut = 0;
+    uint amountIn = 0;
 
     const uint JOB_NAME_TEXTURE_WIDTH = 150;
     const uint JOB_NAME_TEXTURE_HEIGHT = 15;
-    const std::function<void(uint)> SPAWN_EVENT_HANDLER = [this] (uint amount) { this->setAmountOut(amount); };
+    const std::function<void()> SPAWN_EVENT_HANDLER = [this] { this->setAmountOut(); };
+    const std::function<void()> LEMMING_WIN_HANDLER = [this]  { this->updateAmountIn(); };
     const std::function<void(Camera*)> CAMERA_MOVED_HANDLER = [this] (Camera* sender) { this->cameraMoved(sender); };
 
     template<typename ButtonType, typename... Args>
@@ -51,7 +55,8 @@ public:
     void decreaseCurrentJob();
     void setLemmingJobStat(uint amount, Job currentJob);
     bool canAssignCurrentJob();
-    void setAmountOut(uint amount);
+    void setAmountOut();
+    void updateAmountIn();
 };
     
 template<typename ButtonType, typename... Args>

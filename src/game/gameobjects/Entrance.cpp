@@ -6,8 +6,10 @@
 
 #include <stdexcept>
 
+#include "../../engine/asset/ContentManager.h"
+
 namespace Lemmings {
-    Engine::Event<uint> Entrance::spawnEvent;
+    Engine::Event<> Entrance::spawnEvent;
     
     float Entrance::calcSpawnRate() const
     {
@@ -29,15 +31,13 @@ namespace Lemmings {
     }
 
     void Entrance::init()
-    {
-        const auto texture = std::make_shared<sf::Texture>();
-        
-        if (!texture->loadFromFile(ASSETS_PATH"entrance.png"))
-            throw std::runtime_error("Couldn't load texture!");
-        
-        this->animatedTexture_ = std::make_unique<Engine::AnimatedTexture>(texture, sf::Vector2u(this->ENTRANCE_SPRITE_WIDTH, this->ENTRANCE_SPRITE_HEIGHT), true);
-        this->animatedTexture_->addSpriteSheetAnim(10, 0, {0, 0}, 0);
-        this->animatedTexture_->setPosition(this->position_.x, this->position_.y);
+    {        
+        this->texture_ = Engine::Core::contentManager->getTexture("entrance");
+        this->spriteSheet_ = std::make_unique<Engine::SpriteSheet>(sf::Vector2u(this->ENTRANCE_SPRITE_WIDTH, this->ENTRANCE_SPRITE_HEIGHT), this->texture_);
+        this->animation_ = std::make_unique<Engine::SpriteSheetAnimation>(this->spriteSheet_.get(), Engine::SpriteSheetAnimation::Right, NUMBER_OF_FRAMES + 1, sf::Vector2u(0, 0));
+
+        this->spriteSheet_->init();
+        this->spriteSheet_->setPosition(this->position_.x, this->position_.y);
 
         this->spawnTimer_->onTimerCompleteEvent += [this] { this->spawnTimerComplete(); };
         this->animationTimer_.onTimerCompleteEvent += [this] { this->animationTimerComplete(); };
@@ -51,7 +51,7 @@ namespace Lemmings {
 
     void Entrance::draw(sf::RenderTarget& renderTarget)
     {
-        this->animatedTexture_->draw(renderTarget);
+        this->spriteSheet_->draw(renderTarget);
     }
 
     void Entrance::spawnRateChanged(uint newSpawnRate)
@@ -67,7 +67,7 @@ namespace Lemmings {
 
         this->lemmingsHandler_->addLemming(SPAWN_POINT + this->position_);
         this->currentAmountOfLemmings_++;
-        spawnEvent.invoke(this->currentAmountOfLemmings_);
+        spawnEvent.invoke();
     }
 
     void Entrance::animationTimerComplete()
@@ -75,7 +75,7 @@ namespace Lemmings {
         if (this->currentAnimationFrame_ >= NUMBER_OF_FRAMES)
             return;
         
-        this->animatedTexture_->nextFrame();
+        this->animation_->nextFrame();
         this->currentAnimationFrame_++;
     }
 } // Lemmings

@@ -19,7 +19,6 @@ namespace Lemmings::Engine {
     void ModifiableTexture::updateTexture()
     {
         this->texture_.update(this->image_);
-        // this->sprite_.setTexture(this->texture_);
     }
 
     sf::Sprite& ModifiableTexture::getSprite()

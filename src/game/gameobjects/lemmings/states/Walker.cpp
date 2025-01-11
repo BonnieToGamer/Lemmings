@@ -11,8 +11,7 @@
 namespace Lemmings::States {
     void Walker::enter()
     {
-        this->parent_->playAnimation(Job::Walker);
-        this->parent_->forceUpdateNewJob(Job::Walker);
+        this->parent_->initJob(Job::Walker, {0, 0});
     }
 
     void Walker::exit() { }
@@ -48,6 +47,9 @@ namespace Lemmings::States {
             this->parent_->setDir(static_cast<Direction>(static_cast<int>(this->parent_->dir()) * -1));
             this->parent_->flipSprite();
         }
+
+        this->parent_->checkCollisionExit();
+        
         return nullptr;
     }
 

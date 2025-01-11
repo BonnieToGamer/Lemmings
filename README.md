@@ -19,6 +19,10 @@ save requirement
 amount of lemmings
 release rate
 amount climbers, floaters, bombers, blockers, builders, bashers, miners, diggers
+entranceX
+entranceY
+exitX
+exitY
 ```
 example level: fun1.lvl
 ```
@@ -31,6 +35,10 @@ map.png
 10
 50
 0,0,0,0,0,0,0,10
+200
+29
+400
+129
 ```
 ## Known mistakes
 These are some the mistakes I've realised I've done but it's too late to change.

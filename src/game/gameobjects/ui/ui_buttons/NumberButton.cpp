@@ -5,6 +5,8 @@
 #include "NumberButton.h"
 #include <stdexcept>
 
+#include "../../../../engine/Core.h"
+
 namespace Lemmings::UI {
     NumberButton::NumberButton(UI::UIButtonType buttonIndex, uint amount, bool held, float heldTimer, sf::Keyboard::Key shortCutKey) : Button(buttonIndex, held, heldTimer, shortCutKey), amount_(amount)
     {
@@ -14,11 +16,10 @@ namespace Lemmings::UI {
     {
         Button::init();
 
-        if (!this->numberTexture_.loadFromFile(ASSETS_PATH"numbers.png"))
-            throw std::runtime_error("Couldn't load texture!");
-
-        this->tensSprite_.setTexture(this->numberTexture_);
-        this->onesSprite_.setTexture(this->numberTexture_);
+        this->numberTexture_ = Engine::Core::contentManager->getTexture("numbers");
+        
+        this->tensSprite_.setTexture(*this->numberTexture_);
+        this->onesSprite_.setTexture(*this->numberTexture_);
     }
 
     void NumberButton::update(float delta)

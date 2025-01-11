@@ -12,6 +12,7 @@ namespace Lemmings::Engine
 {
     Core* Core::INSTANCE = nullptr;
     Event<> Core::windowSizeChangedEvent = Event<>();
+    std::unique_ptr<Asset::ContentManager> Core::contentManager = std::make_unique<Asset::ContentManager>();
     
     Core::Core() : sceneManager_(), renderTexture_(), renderSprite_()
     {
@@ -46,6 +47,7 @@ namespace Lemmings::Engine
         }
 
         this->sceneManager_.removeScene();
+        contentManager = nullptr;
     }
 
     void Core::update(const float delta)

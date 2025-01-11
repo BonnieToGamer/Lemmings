@@ -14,6 +14,7 @@
 #include "../gameobjects/GameUI.h"
 #include "../../engine/Core.h"
 #include "../gameobjects/Entrance.h"
+#include "../gameobjects/Exit.h"
 #include "../gameobjects/lemmings/LemmingsHandler.h"
 
 namespace Lemmings::Scene {
@@ -78,34 +79,56 @@ namespace Lemmings::Scene {
             case 6:
                 data->amountOfLemmings = std::strtol(line.c_str(), &endPtr, 10);
                 errorCheckStringToInt(line, endPtr);
+                break;
             case 7:
                 data->releaseRate = std::strtol(line.c_str(), &endPtr, 10);
                 errorCheckStringToInt(line, endPtr);
+                break;
             case 8: { // New case for the last line
-                    std::stringstream ss(line);
-                    std::string token;
-                    std::vector fields = {
-                        &data->climbers,
-                        &data->floaters,
-                        &data->bombers,
-                        &data->blockers,
-                        &data->builders,
-                        &data->bashers,
-                        &data->miners,
-                        &data->diggers
-                    };
+                std::stringstream ss(line);
+                std::string token;
+                std::vector fields = {
+                    &data->climbers,
+                    &data->floaters,
+                    &data->bombers,
+                    &data->blockers,
+                    &data->builders,
+                    &data->bashers,
+                    &data->miners,
+                    &data->diggers
+                };
 
-                    int fieldIndex = 0;
-                    while (std::getline(ss, token, ',')) {
-                        if (fieldIndex < fields.size()) {
-                            *fields[fieldIndex] = std::strtol(token.c_str(), &endPtr, 10);
-                            errorCheckStringToInt(token, endPtr);
-                            fieldIndex++;
-                        } else {
-                            throw std::runtime_error("Too many values in the last line.");
-                        }
+                int fieldIndex = 0;
+                while (std::getline(ss, token, ',')) {
+                    if (fieldIndex < fields.size()) {
+                        *fields[fieldIndex] = std::strtol(token.c_str(), &endPtr, 10);
+                        errorCheckStringToInt(token, endPtr);
+                        fieldIndex++;
+                    } else {
+                        throw std::runtime_error("Too many values in the last line.");
                     }
-                    break;
+                }
+                break;
+            }
+            case 9: {
+                data->spawnX = std::strtol(line.c_str(), &endPtr, 10);
+                errorCheckStringToInt(line, endPtr);
+                break;
+            }
+            case 10: {
+                data->spawnY = std::strtol(line.c_str(), &endPtr, 10);
+                errorCheckStringToInt(line, endPtr);
+                break;
+            }
+            case 11: {
+                data->exitX = std::strtol(line.c_str(), &endPtr, 10);
+                errorCheckStringToInt(line, endPtr);
+                break;
+            }
+            case 12: {
+                data->exitY = std::strtol(line.c_str(), &endPtr, 10);
+                errorCheckStringToInt(line, endPtr);
+                break;
             }
             default:
                 throw std::runtime_error("Unexpected line index: " + std::to_string(index));
@@ -122,20 +145,19 @@ namespace Lemmings::Scene {
         this->levelData_ = this->parseLevel();
         
         auto map = std::make_unique<Map>(ASSETS_PATH + this->levelData_->image);
-        auto lemmingHandler = std::make_unique<LemmingsHandler>(map.get());
+        auto lemmingHandler = std::make_unique<LemmingsHandler>(map.get(), this->levelData_.get());
         auto camera = std::make_unique<Camera>();
         auto ui = std::make_unique<GameUI>(this->levelData_.get());
-        auto entrance = std::make_unique<Entrance>(sf::Vector2i(200.0f, 29.0f), lemmingHandler.get(), this->levelData_->releaseRate, this->levelData_->amountOfLemmings);
+        auto entrance = std::make_unique<Entrance>(sf::Vector2i(this->levelData_->spawnX, this->levelData_->spawnY), lemmingHandler.get(), this->levelData_->releaseRate, this->levelData_->amountOfLemmings);
+        auto exit = std::make_unique<Exit>(this->levelData_.get());
         auto cursor = std::make_unique<Cursor>(lemmingHandler.get(), camera.get(), ui.get());
-        
-        // lemmingHandler->addLemming({225, 29});
-        // lemmingHandler->addLemming({315, 50});
 
         Camera* cam = camera.get();
         
         this->addGameObject(std::move(camera));
         this->addGameObject(std::move(map));
         this->addGameObject(std::move(entrance));
+        this->addGameObject(std::move(exit));
         this->addGameObject(std::move(lemmingHandler));
         this->addGameObject(std::move(ui));
         this->addGameObject(std::move(cursor));
@@ -164,7 +186,5 @@ namespace Lemmings::Scene {
 
     void Level::destroy()
     {
-        Lemming::destroyTextures();
-        UI::NumericSprite::destroyTextures();
     }
 } // Lemmings

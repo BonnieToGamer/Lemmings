@@ -6,18 +6,13 @@
 
 #include <stdexcept>
 
+#include "../../../engine/Core.h"
+
 namespace Lemmings::UI {
-    std::unique_ptr<sf::Texture> NumericSprite::texture_;
     
     void NumericSprite::init()
     {
-        if (texture_ == nullptr)
-        {
-            texture_ = std::make_unique<sf::Texture>();
-            if(!texture_->loadFromFile(ASSETS_PATH"numbers_big.png"))
-                throw std::runtime_error("Couldn't load numbers_big.png");
-        }
-
+        this->texture_ = Engine::Core::contentManager->getTexture("numbers_big");
         this->sprite_.setTexture(*texture_);
         this->setNumber(Zero);
     }
@@ -42,10 +37,5 @@ namespace Lemmings::UI {
     void NumericSprite::setNumber(Number number)
     {
         this->sprite_.setTextureRect(sf::IntRect(static_cast<int>(number) * this->NUMBER_WIDTH, 0, this->NUMBER_WIDTH, this->NUMBER_HEIGHT));
-    }
-
-    void NumericSprite::destroyTextures()
-    {
-        texture_ = nullptr;
     }
 } // Lemmings

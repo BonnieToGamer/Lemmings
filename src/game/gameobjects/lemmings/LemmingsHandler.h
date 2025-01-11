@@ -14,13 +14,20 @@ private:
     std::vector<std::unique_ptr<Lemming>> lemmings_;
     Engine::Timer fixedUpdateTimer_;
     Map* map_;
+    LevelData* data_;
+    std::queue<Lemming*> removalQueue_;
 
-    const std::function<void(Lemming*)> LEMMING_DEATH_HANDLER = [this] (Lemming* lemming) { this->onLemmingDeath(lemming); };
-    
     void onLemmingDeath(Lemming* lemming);
+    void onLemmingWin(Lemming* lemming);
+    void processRemovalQueue();
+    
+    const std::function<void(Lemming*)> LEMMING_DEATH_HANDLER = [this] (Lemming* lemming) { this->onLemmingDeath(lemming); };
+    const std::function<void(Lemming*)> LEMMING_WIN_HANDLER = [this] (Lemming* lemming) { this->onLemmingWin(lemming); };
     
 public:
-    explicit LemmingsHandler(Map* map);
+    static Engine::Event<> lemmingWinEvent;
+    
+    explicit LemmingsHandler(Map* map, LevelData* data);
     ~LemmingsHandler();
     void init() override;
     void update(float delta) override;

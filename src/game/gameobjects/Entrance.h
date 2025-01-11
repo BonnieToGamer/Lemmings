@@ -4,18 +4,19 @@
 
 #pragma once
 #include "GameUI.h"
-#include "../../engine/AnimatedTexture.h"
 #include "../../engine/GameObject.h"
 #include "../../engine/Timer.h"
 #include "lemmings/LemmingsHandler.h"
-#include "SFML/Graphics/Sprite.hpp"
 #include "SFML/Graphics/Texture.hpp"
 
 namespace Lemmings {
 
 class Entrance final : public Engine::GameObject {
 private:
-    std::unique_ptr<Engine::AnimatedTexture> animatedTexture_;
+    sf::Texture* texture_ = nullptr;
+    std::unique_ptr<Engine::SpriteSheet> spriteSheet_;
+    std::unique_ptr<Engine::SpriteSheetAnimation> animation_;
+    
     Engine::Timer animationTimer_ = Engine::Timer(0.0667f);
     std::unique_ptr<Engine::Timer> spawnTimer_;
     sf::Vector2i position_;
@@ -33,7 +34,7 @@ private:
 
     float calcSpawnRate() const;
 public:
-    static Engine::Event<uint> spawnEvent;
+    static Engine::Event<> spawnEvent;
     
     Entrance(sf::Vector2i position, LemmingsHandler* lemmingsHandler, uint spawnRate, uint amountOfLemmings);
     ~Entrance();

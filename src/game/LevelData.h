@@ -37,6 +37,10 @@ public:
     uint bashers;
     uint miners;
     uint diggers;
+    uint spawnX;
+    uint spawnY;
+    uint exitX;
+    uint exitY;
 
     inline static const std::map<DirtIndexColor, sf::Color> indexToColor = {
         {dirt, sf::Color(120, 77, 0)},

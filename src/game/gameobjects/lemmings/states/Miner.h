@@ -39,8 +39,8 @@ private:
     static constexpr int MINE_COUNTER_RESET_OFFSET_X_RIGHT = 4;
     static constexpr int MINE_COUNTER_RESET_OFFSET_Y = 2;
 
-    static constexpr int ANIMATION_OFFSET_X_LEFT = -2;
-    static constexpr int ANIMATION_OFFSET_X_RIGHT = 2;
+    static constexpr int ANIMATION_OFFSET_X_LEFT = -3;
+    static constexpr int ANIMATION_OFFSET_X_RIGHT = 3;
     static constexpr int ANIMATION_OFFSET_Y = 4;
 
 

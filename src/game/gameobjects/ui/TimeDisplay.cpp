@@ -6,6 +6,8 @@
 
 #include <stdexcept>
 
+#include "../../../engine/Core.h"
+
 namespace Lemmings::UI {
     TimeDisplay::TimeDisplay(sf::Vector2f position, uint time): currentTime_(time), position_(position)
     {
@@ -36,10 +38,9 @@ namespace Lemmings::UI {
         this->addChild(std::move(secondsOnes));
         
 
-        if (!this->timeWordTexture_.loadFromFile(ASSETS_PATH"reserved_words.png"))
-            throw std::runtime_error("Couldn't load reserved_words.png");
+        this->timeWordTexture_ = Engine::Core::contentManager->getTexture("reserved_words");
 
-        this->timeWordSprite_.setTexture(this->timeWordTexture_);
+        this->timeWordSprite_.setTexture(*this->timeWordTexture_);
         this->timeWordSprite_.setTextureRect({0, 32, 32, 15});
 
         this->timer_.onTimerCompleteEvent += [this] { this->onTimerComplete(); };

@@ -32,7 +32,7 @@ public:
 
 private:
     sf::Sprite sprite_;
-    static std::unique_ptr<sf::Texture> texture_;
+    sf::Texture* texture_ = nullptr;
     
 public:
     static constexpr uint NUMBER_WIDTH = 8;
@@ -44,7 +44,6 @@ public:
     void setPosition(sf::Vector2f pos);
     sf::Vector2f getPosition();
     void setNumber(Number number);
-    static void destroyTextures();
 };
 
 } // Lemmings

@@ -46,7 +46,6 @@ namespace Lemmings {
     sf::Vector2f Camera::position() const
     {
         return this->position_;
-        // return this->view_.getCenter() - HALF_SCREEN_SIZE;
     }
 
     void Camera::setPosition(sf::Vector2f newPos)

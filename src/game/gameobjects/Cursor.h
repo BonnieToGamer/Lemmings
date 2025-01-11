@@ -14,7 +14,7 @@ namespace Lemmings {
 
     class Cursor : public Engine::GameObject{
     private:
-        sf::Texture texture_;
+        sf::Texture* texture_;
         sf::Sprite sprite_;
         LemmingsHandler* lemmingsHandler_;
         Camera* camera_;

@@ -19,7 +19,6 @@ namespace Lemmings::Engine {
         void update(float delta);
     };
 
-    // Implementation of the template methods
     template <typename T>
     StateMachineManager<T>::StateMachineManager(std::unique_ptr<IState<T>> startingState, T* parent) : parent_(parent)
     {

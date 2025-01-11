@@ -28,12 +28,11 @@ namespace Lemmings {
         Camera::movedEvent += this->CAMERA_MOVED_HANDLER;
         this->buttons_.reserve(this->AMOUNT_OF_BUTTONS);
 
-        if (!jobTextTexture_.loadFromFile(ASSETS_PATH"job_names.png"))
-            throw std::runtime_error("Couldn't load job_names.png");
+        this->jobTextTexture_ = Engine::Core::contentManager->getTexture("job_names");
 
         float textY = Engine::Core::DESIGNED_RESOLUTION_HEIGHT - UI::Button::BUTTON_HEIGHT - JOB_NAME_TEXTURE_HEIGHT - 2.0f;
 
-        this->jobTextSprite_.setTexture(this->jobTextTexture_);
+        this->jobTextSprite_.setTexture(*this->jobTextTexture_);
         this->jobTextSprite_.setPosition(0, textY);
 
         float heldTimer = 0.1f;
@@ -72,6 +71,7 @@ namespace Lemmings {
         this->currentReleaseRate_ = this->levelData_->releaseRate;
 
         Entrance::spawnEvent += this->SPAWN_EVENT_HANDLER;
+        LemmingsHandler::lemmingWinEvent += this->LEMMING_WIN_HANDLER;
         GameObject::init();
     }
 
@@ -170,8 +170,14 @@ namespace Lemmings {
         return this->currentJobButton_->getAmount() > 0;
     }
 
-    void GameUI::setAmountOut(uint amount)
+    void GameUI::setAmountOut()
     {
-        this->lemmingStats_->setAmountOut(amount);
+        this->lemmingStats_->setAmountOut(++this->amountOut);
+    }
+
+    void GameUI::updateAmountIn()
+    {
+        this->lemmingStats_->setAmountIn(++this->amountIn);
+        this->lemmingStats_->setAmountOut(--this->amountOut);
     }
 } // Lemmings

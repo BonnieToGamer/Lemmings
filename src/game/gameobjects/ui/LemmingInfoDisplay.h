@@ -16,7 +16,7 @@ private:
     uint in_;
     uint max_;
     sf::Vector2f position_;
-    sf::Texture reservedWordsTexture_;
+    sf::Texture* reservedWordsTexture_;
     sf::Sprite outWordSprite_;
     sf::Sprite inWordSprite_;
 

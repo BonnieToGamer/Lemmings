@@ -16,7 +16,7 @@ private:
     Engine::Timer timer_ = Engine::Timer(1.0f);
     sf::Vector2f position_;
     
-    sf::Texture timeWordTexture_;
+    sf::Texture* timeWordTexture_;
     sf::Sprite timeWordSprite_;
 
     NumericSprite* minute_;

@@ -4,31 +4,50 @@
 
 #include "LemmingsHandler.h"
 
-#include <utility>
-
 namespace Lemmings {
+    Engine::Event<> LemmingsHandler::lemmingWinEvent;
+    
     void LemmingsHandler::onLemmingDeath(Lemming* lemming)
     {
-        auto it = std::remove_if(this->lemmings_.begin(), this->lemmings_.end(),
-        [lemming](const std::unique_ptr<Lemming>& ptr) {
-            return ptr.get() == lemming; // Compare the raw pointer
-        });
-
-        this->lemmings_.erase(it, this->lemmings_.end());
+        this->removalQueue_.push(lemming);
     }
 
-    LemmingsHandler::LemmingsHandler(Map* map): fixedUpdateTimer_(0.0667f), map_(map)
+    void LemmingsHandler::onLemmingWin(Lemming* lemming)
+    {
+        this->removalQueue_.push(lemming);
+        lemmingWinEvent.invoke();
+    }
+
+    void LemmingsHandler::processRemovalQueue()
+    {
+        while (!this->removalQueue_.empty())
+        {
+            auto lemming = this->removalQueue_.front();
+            this->removalQueue_.pop();
+            
+            auto it = std::remove_if(this->lemmings_.begin(), this->lemmings_.end(),
+            [lemming](const std::unique_ptr<Lemming>& ptr) {
+                return ptr.get() == lemming; // Compare the raw pointer
+            });
+
+            this->lemmings_.erase(it, this->lemmings_.end());
+        }
+    }
+
+    LemmingsHandler::LemmingsHandler(Map* map, LevelData* data): fixedUpdateTimer_(0.0667f), map_(map), data_(data)
     {
     }
 
     LemmingsHandler::~LemmingsHandler()
     {
         Lemming::deathEvent -= LEMMING_DEATH_HANDLER;
+        Lemming::winEvent -= LEMMING_WIN_HANDLER;
     }
 
     void LemmingsHandler::init()
     {
         Lemming::deathEvent += LEMMING_DEATH_HANDLER;
+        Lemming::winEvent += LEMMING_WIN_HANDLER;
         for (auto& lemming : this->lemmings_)
         {
             lemming->init();
@@ -38,12 +57,13 @@ namespace Lemmings {
     void LemmingsHandler::update(float delta)
     {
         const bool shouldUpdate = this->fixedUpdateTimer_.update(delta);
+        if (!shouldUpdate)
+            return;
         
         for (auto& lemming : this->lemmings_)
-        {            
-            if (shouldUpdate)
-                lemming->update(delta);
-        }
+            lemming->update(delta);
+
+        this->processRemovalQueue();
     }
 
     void LemmingsHandler::draw(sf::RenderTarget& renderTarget)
@@ -54,9 +74,9 @@ namespace Lemmings {
 
     void LemmingsHandler::addLemming(sf::Vector2i position)
     {
-        this->lemmings_.emplace_back(std::make_unique<Lemming>(this->map_));
-        this->lemmings_.back()->setPosition({position.x, position.y});
+        this->lemmings_.emplace_back(std::make_unique<Lemming>(this->map_, this->data_));
         this->lemmings_.back()->init();
+        this->lemmings_.back()->setPosition({position.x, position.y});
     }
 
     std::vector<Lemming*> LemmingsHandler::checkCollision(sf::FloatRect rect)

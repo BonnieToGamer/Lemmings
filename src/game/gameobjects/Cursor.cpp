@@ -18,10 +18,9 @@ namespace Lemmings {
 
     void Cursor::init()
     {
-        if(!this->texture_.loadFromFile(ASSETS_PATH"cursor.png"))
-            throw std::runtime_error("Couldn't load texture cursor.png");
-
-        this->sprite_.setTexture(this->texture_);
+        this->texture_ = Engine::Core::contentManager->getTexture("cursor");
+        
+        this->sprite_.setTexture(*this->texture_);
         this->sprite_.setTextureRect({0, 0, 16, 16});
 
         Engine::Core::Instance()->getWindow()->setMouseCursorVisible(false);

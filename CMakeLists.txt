@@ -39,8 +39,6 @@ add_executable(main src/main.cpp
         src/engine/Timer.h
         src/game/gameobjects/lemmings/states/Faller.cpp
         src/game/gameobjects/lemmings/states/Faller.h
-        src/engine/AnimatedTexture.cpp
-        src/engine/AnimatedTexture.h
         src/game/gameobjects/lemmings/LemmingsHandler.cpp
         src/game/gameobjects/lemmings/LemmingsHandler.h
         src/game/gameobjects/Camera.cpp
@@ -74,6 +72,18 @@ add_executable(main src/main.cpp
         src/game/gameobjects/ui/UIButtonType.h
         src/game/gameobjects/ui/DualNumericSprite.cpp
         src/game/gameobjects/ui/DualNumericSprite.h
+        src/engine/SpriteSheet.cpp
+        src/engine/SpriteSheet.h
+        src/engine/SpriteSheetAnimation.cpp
+        src/engine/SpriteSheetAnimation.h
+        src/engine/AnimationManager.h
+        src/engine/asset/ContentManager.cpp
+        src/engine/asset/ContentManager.h
+        src/engine/asset/GameAsset.h
+        src/engine/asset/TextureAsset.cpp
+        src/engine/asset/TextureAsset.h
+        src/game/gameobjects/lemmings/states/Winner.cpp
+        src/game/gameobjects/lemmings/states/Winner.h
 )
 target_link_libraries(main PRIVATE sfml-graphics)
 target_compile_features(main PRIVATE cxx_std_17)

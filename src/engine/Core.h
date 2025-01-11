@@ -8,6 +8,7 @@
 #include "Event.h"
 #include "SceneManager.h"
 #include "Timer.h"
+#include "asset/ContentManager.h"
 #include "SFML/Graphics.hpp"
 
 namespace Lemmings::Engine
@@ -27,6 +28,7 @@ namespace Lemmings::Engine
         static constexpr uint DESIGNED_RESOLUTION_WIDTH = 320;
         static constexpr uint DESIGNED_RESOLUTION_HEIGHT = 200;
         static Event<> windowSizeChangedEvent;
+        static std::unique_ptr<Asset::ContentManager> contentManager;
         
         static Core* Instance() { return INSTANCE; }
         
