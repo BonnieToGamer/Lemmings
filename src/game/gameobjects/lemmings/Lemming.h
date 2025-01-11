@@ -90,6 +90,7 @@ public:
     void checkCollisionExit();
     bool checkCollision(int x, int y) const;
     void tryDig(int x, int y) const;
+    void placeCell(int x, int y, sf::Color color) const;
 };
 
 } // Lemmings

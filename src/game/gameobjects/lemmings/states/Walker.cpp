@@ -24,22 +24,17 @@ namespace Lemmings::States {
             return std::make_unique<Faller>();
 
         bool walked = false;
-        for (int x = 0; x < SPEED; x++)
-        {
-            for (int y = -3; y < 4; y++)
-            {
-                bool nodeEnabled = this->checkWalk(x, y);
-                
-                if (!nodeEnabled)
-                {
-                    this->parent_->setPosition(sf::Vector2i(pos.x + this->parent_->dir(), pos.y - y));
-                    walked = true;
-                    break;
-                }
-            }
 
-            if (walked)
+        for (int y = -3; y < 4; y++)
+        {
+            bool nodeEnabled = this->checkWalk(0, y);
+            
+            if (!nodeEnabled)
+            {
+                this->parent_->setPosition(sf::Vector2i(pos.x + this->parent_->dir(), pos.y - y));
+                walked = true;
                 break;
+            }
         }
         
         if (!walked)

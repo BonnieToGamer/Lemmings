@@ -54,13 +54,10 @@ namespace Lemmings {
                 const uint index = this->accessedQueue_.front();
                 this->accessedQueue_.pop();
 
-                if (this->nodes_[index]->isEnabled())
-                    return;
-
                 const uint x = index % this->modifiableTexture_.width();
                 const uint y = index / this->modifiableTexture_.width();
                 
-                this->modifiableTexture_.setPixel(x, y, sf::Color::Transparent);
+                this->modifiableTexture_.setPixel(x, y, this->nodes_[index]->getColor());
             }
 
             this->modifiableTexture_.updateTexture();
@@ -72,10 +69,11 @@ namespace Lemmings {
         renderTarget.draw(this->modifiableTexture_.getSprite());
     }
 
-    void Map::changeNode(int index, bool value)
+    void Map::changeNode(int index, bool value, sf::Color color)
     {
         this->nodesAccessed_ = true;
         this->accessedQueue_.push(index);
         this->nodes_[index]->setEnabled(value);
+        this->nodes_[index]->setColor(color);
     }
 } // Lemmings

@@ -31,7 +31,7 @@ private:
     uint amountOut = 0;
     uint amountIn = 0;
 
-    const uint JOB_NAME_TEXTURE_WIDTH = 150;
+    const uint JOB_NAME_TEXTURE_WIDTH = 55;
     const uint JOB_NAME_TEXTURE_HEIGHT = 15;
     const std::function<void()> SPAWN_EVENT_HANDLER = [this] { this->setAmountOut(); };
     const std::function<void()> LEMMING_WIN_HANDLER = [this]  { this->updateAmountIn(); };

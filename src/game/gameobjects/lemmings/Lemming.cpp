@@ -7,6 +7,7 @@
 #include "../Exit.h"
 #include "../../../engine/Core.h"
 #include "SFML/Graphics/RectangleShape.hpp"
+#include "states/Blocker.h"
 #include "states/Digger.h"
 #include "states/Faller.h"
 #include "states/Miner.h"
@@ -64,6 +65,7 @@ namespace Lemmings {
         this->addAnimation(Digger, 15, {0, 2}, true);
         this->addAnimation(Miner, 25, {0, 3}, true);
         this->addAnimation(Winner, 8, {0, 4}, false);
+        this->addAnimation(Blocker, 16, {0, 5}, false);
 
         this->stateMachineManager_ =
             std::make_unique<Engine::StateMachineManager<Lemming>>(std::make_unique<States::Faller>(), this);
@@ -175,18 +177,19 @@ namespace Lemmings {
         case Miner:
             state = std::make_unique<States::Miner>();
             break;
+        case Blocker:
+            state = std::make_unique<States::Blocker>();
+            break;
         default:
             state = nullptr;
             break;
         }
 
-        if (state != nullptr)
-        {
-            this->stateMachineManager_->changeState(std::move(state));
-            return true;
-        }
+        if (state == nullptr)
+            return false;
         
-        return false;
+        this->stateMachineManager_->changeState(std::move(state));
+        return true;
     }
 
     void Lemming::checkCollisionExit()
@@ -222,4 +225,13 @@ namespace Lemmings {
         this->map_->changeNode(index, false);
     }
 
+    void Lemming::placeCell(int x, int y, sf::Color color) const
+    {
+        if (x < 0 || x >= this->map_->width() ||
+            y < 0 || y >= this->map_->height())
+        return;
+        
+        const int index = x + y * this->map_->width();
+        this->map_->changeNode(index, true, color);
+    }
 } // Lemmings
