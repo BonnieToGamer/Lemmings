@@ -10,6 +10,9 @@
 namespace Lemmings::States {
 
 class Blocker final : public Engine::IState<Lemming> {
+private:
+    std::vector<sf::Vector2i> placed_;
+    
 public:
     void enter() override;
     void exit() override;
