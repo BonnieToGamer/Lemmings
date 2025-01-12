@@ -13,9 +13,9 @@ class Miner final : public Engine::IState<Lemming> {
 private:
     uint mineCounter = 0;
 
-    void digStepOne(const sf::Vector2i& pos, Direction direction);
+    void digStepOne(const sf::Vector2i& pos, HorizontalDirection direction);
     bool shouldSkipFirstStep(int y, int x);
-    bool digStepTwo(const sf::Vector2i& pos, Direction direction);
+    bool digStepTwo(const sf::Vector2i& pos, HorizontalDirection direction);
     bool shouldSkipSecondStep(int y, int x);
     void resetMineCounter(const sf::Vector2i& pos);
 

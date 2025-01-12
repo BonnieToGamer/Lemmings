@@ -69,11 +69,12 @@ namespace Lemmings {
         renderTarget.draw(this->modifiableTexture_.getSprite());
     }
 
-    void Map::changeNode(int index, bool value, sf::Color color)
+    void Map::changeNode(int index, bool value, sf::Color color, HorizontalDirection oneWay)
     {
         this->nodesAccessed_ = true;
         this->accessedQueue_.push(index);
         this->nodes_[index]->setEnabled(value);
         this->nodes_[index]->setColor(color);
+        this->nodes_[index]->setOneWay(oneWay);
     }
 } // Lemmings

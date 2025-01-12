@@ -7,6 +7,7 @@
 #include <unordered_map>
 
 #include "../Map.h"
+#include "../../HorizontalDirection.h"
 #include "../../LevelData.h"
 #include "../../../engine/AnimationManager.h"
 #include "../../../engine/Event.h"
@@ -31,13 +32,8 @@ enum Job
     Miner = 8,
     Digger = 9,
     Nothing = 10,
-    Winner = 11
-};
-
-enum Direction
-{
-    Right = 1,
-    Left = -1,
+    Winner = 11,
+    Shrugger = 12 // DO NOT ASSIGN THIS AS A JOB. This is a substate of Builder. Only exists to make the animation work.
 };
     
 class Lemming : public Engine::GameObject {
@@ -53,7 +49,7 @@ private:
     
     std::unique_ptr<Engine::StateMachineManager<Lemming>> stateMachineManager_;
     
-    Direction currentDir_ = Right;
+    HorizontalDirection currentDir_ = Right;
     Job currentJob_ = Faller;
     
     const uint TEXTURE_WIDTH = 16;
@@ -79,18 +75,19 @@ public:
     Map* map();
     void initJob(Job job, sf::Vector2i offset);
     void flipSprite();
-    Direction dir() const;
-    void setDir(Direction newDir);
+    HorizontalDirection dir() const;
+    void setDir(HorizontalDirection newDir);
     sf::Vector2i getActualPos();
     sf::Vector2i getSize();
     Job getCurrentJob() const;
     bool tryAssignJob(Job job) const;
     void win();
+    void playShrugAnimation();
 
     void checkCollisionExit();
-    bool checkCollision(int x, int y) const;
+    bool checkCollision(int x, int y, HorizontalDirection direction = None) const;
     void tryDig(int x, int y) const;
-    void placeCell(int x, int y, sf::Color color) const;
+    void placeCell(int x, int y, sf::Color color, HorizontalDirection oneWay = None) const;
 };
 
 } // Lemmings

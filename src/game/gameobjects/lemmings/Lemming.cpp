@@ -4,10 +4,13 @@
 
 #include "Lemming.h"
 
+#include <iostream>
+
 #include "../Exit.h"
 #include "../../../engine/Core.h"
 #include "SFML/Graphics/RectangleShape.hpp"
 #include "states/Blocker.h"
+#include "states/Builder.h"
 #include "states/Digger.h"
 #include "states/Faller.h"
 #include "states/Miner.h"
@@ -64,6 +67,8 @@ namespace Lemmings {
         this->addAnimation(Miner, 24, {0, 3});
         this->addAnimation(Winner, 8, {0, 4});
         this->addAnimation(Blocker, 16, {0, 5});
+        this->addAnimation(Builder, 16, {0, 6});
+        this->addAnimation(Shrugger, 7, {0, 7});
 
         this->stateMachineManager_ =
             std::make_unique<Engine::StateMachineManager<Lemming>>(std::make_unique<States::Faller>(), this);
@@ -131,12 +136,12 @@ namespace Lemmings {
         this->setPosition(this->position_);
     }
 
-    Direction Lemming::dir() const
+    HorizontalDirection Lemming::dir() const
     {
         return this->currentDir_;
     }
 
-    void Lemming::setDir(const Direction newDir)
+    void Lemming::setDir(const HorizontalDirection newDir)
     {
         this->currentDir_ = newDir;
     }
@@ -176,6 +181,9 @@ namespace Lemmings {
         case Blocker:
             state = std::make_unique<States::Blocker>();
             break;
+        case Builder:
+            state = std::make_unique<States::Builder>();
+            break;
         default:
             state = nullptr;
             break;
@@ -201,14 +209,33 @@ namespace Lemmings {
         this->winEvent.invoke(this);
     }
 
-    bool Lemming::checkCollision(const int x, const int y) const
+    void Lemming::playShrugAnimation()
+    {
+        Job currentJob = this->getCurrentJob();
+        this->initJob(Shrugger, {0, 0});
+        this->currentJob_ = currentJob;
+    }
+
+    bool Lemming::checkCollision(const int x, const int y, const HorizontalDirection direction) const
     {
         if (x < 0 || x >= this->map_->width() ||
             y < 0 || y >= this->map_->height())
             return false;
 
         const int index = x + y * this->map_->width();
-        return (*this->map_)[index].isEnabled();
+        
+        const Node& node = (*this->map_)[index];
+        const HorizontalDirection nodeDir = node.oneWayDirection();
+
+        // defaults to true since every node starts off as non oneway
+        bool isOneWayAllowed = true; 
+        
+        // Check if a direction is specified and compare with node's direction.
+        if (direction != None && nodeDir != None) {
+            isOneWayAllowed = (nodeDir == direction);
+        }
+        
+        return node.isEnabled() && isOneWayAllowed;
     }
 
     void Lemming::tryDig(int x, int y) const
@@ -221,13 +248,13 @@ namespace Lemmings {
         this->map_->changeNode(index, false);
     }
 
-    void Lemming::placeCell(int x, int y, sf::Color color) const
+    void Lemming::placeCell(int x, int y, sf::Color color, HorizontalDirection oneWay) const
     {
         if (x < 0 || x >= this->map_->width() ||
             y < 0 || y >= this->map_->height())
         return;
         
         const int index = x + y * this->map_->width();
-        this->map_->changeNode(index, true, color);
+        this->map_->changeNode(index, true, color, oneWay);
     }
 } // Lemmings

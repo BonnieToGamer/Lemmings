@@ -7,7 +7,7 @@
 #include "Faller.h"
 
 namespace Lemmings::States {
-    void Miner::digStepOne(const sf::Vector2i& pos, Direction direction)
+    void Miner::digStepOne(const sf::Vector2i& pos, HorizontalDirection direction)
     {
         sf::Vector2i startPos(
             direction == Left ? pos.x + DIG_STEP_ONE_START_OFFSET_X_LEFT : pos.x + DIG_STEP_ONE_START_OFFSET_X_RIGHT,
@@ -32,7 +32,7 @@ namespace Lemmings::States {
         return (y == 0 && x > 2) || (y == 1 && x > 3);
     }
 
-    bool Miner::digStepTwo(const sf::Vector2i& pos, Direction direction)
+    bool Miner::digStepTwo(const sf::Vector2i& pos, HorizontalDirection direction)
     {
         sf::Vector2i startPos(
             direction == Left ? pos.x + DIG_STEP_TWO_START_OFFSET_X_LEFT : pos.x + DIG_STEP_TWO_START_OFFSET_X_RIGHT,

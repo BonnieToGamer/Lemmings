@@ -28,7 +28,7 @@ public:
     void init() override;
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;
-    void changeNode(int index, bool value, sf::Color color = sf::Color::Transparent);
+    void changeNode(int index, bool value, sf::Color color = sf::Color::Transparent, HorizontalDirection oneWay = None);
 };
 
 } // Lemmings

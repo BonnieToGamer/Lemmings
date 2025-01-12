@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include "../HorizontalDirection.h"
 #include "SFML/Graphics/Color.hpp"
 #include "SFML/System/Vector2.hpp"
 
@@ -13,13 +14,17 @@ private:
     sf::Vector2i position_;
     bool enabled_;
     sf::Color color_ = sf::Color::Transparent;
+    bool oneWay_;
+    HorizontalDirection oneWayDir_ = None;
 
 public:
     Node(sf::Vector2i position, bool enabled);
     bool isEnabled() const;
+    HorizontalDirection oneWayDirection() const;
     void setEnabled(bool value);
     sf::Color getColor();
     void setColor(sf::Color color);
+    void setOneWay(HorizontalDirection direction);
 };
 
 } // Lemmings

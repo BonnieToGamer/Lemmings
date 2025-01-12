@@ -25,7 +25,7 @@ namespace Lemmings::States {
 
         bool walked = false;
 
-        for (int y = -3; y < 4; y++)
+        for (int y = 0; y > -4; y--)
         {
             bool nodeEnabled = this->checkWalk(0, y);
             
@@ -33,13 +33,30 @@ namespace Lemmings::States {
             {
                 this->parent_->setPosition(sf::Vector2i(pos.x + this->parent_->dir(), pos.y - y));
                 walked = true;
-                break;
+                continue;
+            }
+            
+            break;
+        }
+
+        if (!walked)
+        {
+            for (int y = 0; y < 4; y++)
+            {            
+                bool nodeEnabled = this->checkWalk(0, y);
+            
+                if (!nodeEnabled)
+                {
+                    this->parent_->setPosition(sf::Vector2i(pos.x + this->parent_->dir(), pos.y - y));
+                    walked = true;
+                    break;
+                }
             }
         }
         
         if (!walked)
         {
-            this->parent_->setDir(static_cast<Direction>(static_cast<int>(this->parent_->dir()) * -1));
+            this->parent_->setDir(static_cast<HorizontalDirection>(static_cast<int>(this->parent_->dir()) * -1));
             this->parent_->flipSprite();
         }
 
@@ -56,7 +73,10 @@ namespace Lemmings::States {
         for (int y = 0; y > -4; y--)
         {
             if (this->parent_->checkCollision(pos.x + xOffset, pos.y - y))
+            {
                 falling = false;
+                break;
+            }
         }
 
         return falling;
@@ -65,7 +85,7 @@ namespace Lemmings::States {
     bool Walker::checkWalk(const float xOffset, const float yOffset) const
     {
         sf::Vector2i pos = this->parent_->getPosition();
-        bool nodeEnabled = this->parent_->checkCollision(pos.x + this->parent_->dir() + xOffset, pos.y - yOffset);
+        bool nodeEnabled = this->parent_->checkCollision(pos.x + this->parent_->dir() + xOffset, pos.y - yOffset, this->parent_->dir());
         
         return nodeEnabled;
     }

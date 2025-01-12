@@ -86,6 +86,9 @@ add_executable(main src/main.cpp
         src/game/gameobjects/lemmings/states/Winner.h
         src/game/gameobjects/lemmings/states/Blocker.cpp
         src/game/gameobjects/lemmings/states/Blocker.h
+        src/game/gameobjects/lemmings/states/Builder.cpp
+        src/game/gameobjects/lemmings/states/Builder.h
+        src/game/HorizontalDirection.h
 )
 target_link_libraries(main PRIVATE sfml-graphics)
 target_compile_features(main PRIVATE cxx_std_17)
