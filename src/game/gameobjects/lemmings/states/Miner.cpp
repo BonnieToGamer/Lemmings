@@ -73,7 +73,8 @@ namespace Lemmings::States {
 
     void Miner::enter()
     {
-        this->parent_->initJob(Job::Miner, this->parent_->dir() == Left ? 
+        this->parent_->initJob(Job::Miner);
+        this->parent_->playAnimation(LemmingAnimations::Mine, this->parent_->dir() == Left ? 
             sf::Vector2i(ANIMATION_OFFSET_X_LEFT, ANIMATION_OFFSET_Y) : 
             sf::Vector2i(ANIMATION_OFFSET_X_RIGHT, ANIMATION_OFFSET_Y));
     }

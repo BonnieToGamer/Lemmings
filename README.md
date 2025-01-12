@@ -14,6 +14,7 @@ level number
 level name
 level image
 dirt index
+exit index
 time limit (seconds)
 save requirement
 amount of lemmings
@@ -23,6 +24,8 @@ entranceX
 entranceY
 exitX
 exitY
+cameraX
+cameraY
 ```
 example level: fun1.lvl
 ```
@@ -39,6 +42,8 @@ map.png
 29
 400
 129
+69
+0
 ```
 ## Known mistakes
 These are some the mistakes I've realised I've done but it's too late to change.

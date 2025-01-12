@@ -27,7 +27,7 @@ namespace Lemmings {
     {
         this->texture_ = Engine::Core::contentManager->getTexture("exit");
         auto spriteSheet = std::make_unique<Engine::SpriteSheet>(sf::Vector2u(TEXTURE_WIDTH, TEXTURE_HEIGHT), this->texture_);
-        this->animation_ = std::make_unique<Engine::SpriteSheetAnimation>(spriteSheet.get(), Engine::SpriteSheetAnimation::Right, 6, sf::Vector2u(0, 0));
+        this->animation_ = std::make_unique<Engine::SpriteSheetAnimation>(spriteSheet.get(), Engine::SpriteSheetAnimation::Right, 6, sf::Vector2u(0, this->data_->exitIndex ));
         spriteSheet->setPosition(this->data_->exitX, this->data_->exitY);
 
         this->addChild(std::move(spriteSheet));

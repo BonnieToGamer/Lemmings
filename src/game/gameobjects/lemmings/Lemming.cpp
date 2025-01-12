@@ -13,6 +13,7 @@
 #include "states/Builder.h"
 #include "states/Digger.h"
 #include "states/Faller.h"
+#include "states/Floater.h"
 #include "states/Miner.h"
 #include "states/Walker.h"
 #include "states/Winner.h"
@@ -21,7 +22,7 @@ namespace Lemmings {
     Engine::Event<Lemming*> Lemming::deathEvent;
     Engine::Event<Lemming*> Lemming::winEvent;
 
-    void Lemming::addAnimation(Job job, uint amountOfFrames, const sf::Vector2u& offset)
+    void Lemming::addAnimation(LemmingAnimations jobAnimation, uint amountOfFrames, const sf::Vector2u& offset)
     {
         auto animation = std::make_unique<Engine::SpriteSheetAnimation>(
             this->lemmingSpriteSheet.get(),
@@ -30,7 +31,7 @@ namespace Lemmings {
             sf::Vector2u(offset.x, offset.y)
         );
         
-        this->animations_.addAnimation(job, std::move(animation));
+        this->animations_.addAnimation(jobAnimation, std::move(animation));
 
         animation = std::make_unique<Engine::SpriteSheetAnimation>(
             this->dirtSpriteSheet.get(),
@@ -39,7 +40,7 @@ namespace Lemmings {
             sf::Vector2u(offset.x,offset.y)
         );
         
-        this->dirtAnimations_.addAnimation(job, std::move(animation));
+        this->dirtAnimations_.addAnimation(jobAnimation, std::move(animation));
     }
 
     void Lemming::die()
@@ -61,14 +62,16 @@ namespace Lemmings {
         this->lemmingSpriteSheet->init();
         this->dirtSpriteSheet->init();
 
-        this->addAnimation(Walker, 8, {0, 0});
-        this->addAnimation(Faller, 4, {0, 1});
-        this->addAnimation(Digger, 15, {0, 2});
-        this->addAnimation(Miner, 24, {0, 3});
-        this->addAnimation(Winner, 8, {0, 4});
-        this->addAnimation(Blocker, 16, {0, 5});
-        this->addAnimation(Builder, 16, {0, 6});
-        this->addAnimation(Shrugger, 7, {0, 7});
+        this->addAnimation(Walk, 8, {0, 0});
+        this->addAnimation(Fall, 4, {0, 1});
+        this->addAnimation(Dig, 15, {0, 2});
+        this->addAnimation(Mine, 24, {0, 3});
+        this->addAnimation(Win, 8, {0, 4});
+        this->addAnimation(Block, 16, {0, 5});
+        this->addAnimation(Build, 16, {0, 6});
+        this->addAnimation(Shrug, 7, {0, 7});
+        this->addAnimation(ParachuteOpen, 4, {0, 8});
+        this->addAnimation(ParachuteHang, 6, {0, 9});
 
         this->stateMachineManager_ =
             std::make_unique<Engine::StateMachineManager<Lemming>>(std::make_unique<States::Faller>(), this);
@@ -114,20 +117,28 @@ namespace Lemmings {
         return this->map_;
     }
 
-    void Lemming::initJob(Job job, sf::Vector2i offset)
+    void Lemming::initJob(Job job)
     {
         this->currentJob_ = job;
-        
-        this->animations_.changeAnimation(job);
+    }
+
+    void Lemming::playAnimation(LemmingAnimations animation, sf::Vector2i offset)
+    {
+        this->animations_.changeAnimation(animation);
         this->animations_.getCurrentAnimation()->resetAnimation();
         this->lemmingSpriteSheet->setOffset(offset);
         this->lemmingSpriteSheet->setFlipped(this->currentDir_);
 
-        this->dirtAnimations_.changeAnimation(job);
+        this->dirtAnimations_.changeAnimation(animation);
         this->dirtAnimations_.getCurrentAnimation()->resetAnimation();
         this->dirtSpriteSheet->setOffset(offset);
         this->dirtSpriteSheet->setFlipped(this->currentDir_);
     }
+
+    // void Lemming::setJobTitle(Job job)
+    // {
+    //     this->currentJob_ = job;
+    // }
 
     void Lemming::flipSprite()
     {
@@ -165,24 +176,29 @@ namespace Lemmings {
 
     bool Lemming::tryAssignJob(const Job job) const
     {
-        if (this->currentJob_ != Job::Walker)
-            return false;
-        
         std::unique_ptr<Engine::IState<Lemming>> state;
 
         switch (job)
         {
         case Digger:
+            if (this->currentJob_ != Walker) return false;
             state = std::make_unique<States::Digger>();
             break;
         case Miner:
+            if (this->currentJob_ != Walker) return false;
             state = std::make_unique<States::Miner>();
             break;
         case Blocker:
+            if (this->currentJob_ != Walker) return false;
             state = std::make_unique<States::Blocker>();
             break;
         case Builder:
+            if (this->currentJob_ != Walker) return false;
             state = std::make_unique<States::Builder>();
+            break;
+        case Floater:
+            if (this->currentJob_ != Walker && this->currentJob_ != Faller) return false;
+            state = std::make_unique<States::Floater>();
             break;
         default:
             state = nullptr;
@@ -209,12 +225,12 @@ namespace Lemmings {
         this->winEvent.invoke(this);
     }
 
-    void Lemming::playShrugAnimation()
-    {
-        Job currentJob = this->getCurrentJob();
-        this->initJob(Shrugger, {0, 0});
-        this->currentJob_ = currentJob;
-    }
+    // void Lemming::initSubJob(Job job)
+    // {
+    //     const Job currentJob = this->getCurrentJob();
+    //     this->initJob(job, this->lemmingSpriteSheet->getOffset());
+    //     this->currentJob_ = currentJob;
+    // }
 
     bool Lemming::checkCollision(const int x, const int y, const HorizontalDirection direction) const
     {

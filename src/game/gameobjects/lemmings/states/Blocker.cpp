@@ -7,7 +7,8 @@
 namespace Lemmings::States {
     void Blocker::enter()
     {
-        this->parent_->initJob(Job::Blocker, {0, 0});
+        this->parent_->initJob(Job::Blocker);
+        this->parent_->playAnimation(Block, {0, 0});
         sf::Vector2i pos = this->parent_->getPosition();
 
         for (int i = -4; i < 10; i++)

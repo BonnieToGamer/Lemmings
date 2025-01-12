@@ -33,7 +33,7 @@ namespace Lemmings::Engine
         if (!this->renderTexture_.create(DESIGNED_RESOLUTION_WIDTH, DESIGNED_RESOLUTION_HEIGHT))
             throw std::runtime_error("Couldn't create render texture");
         
-        this->sceneManager_.addScene(std::make_unique<Scene::Level>("fun1"));
+        this->sceneManager_.addScene(std::make_unique<Scene::Level>("fun2"));
     }
 
     void Core::run()

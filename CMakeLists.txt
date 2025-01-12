@@ -89,6 +89,10 @@ add_executable(main src/main.cpp
         src/game/gameobjects/lemmings/states/Builder.cpp
         src/game/gameobjects/lemmings/states/Builder.h
         src/game/HorizontalDirection.h
+        src/game/gameobjects/lemmings/states/Floater.cpp
+        src/game/gameobjects/lemmings/states/Floater.h
+        src/game/scenes/LevelLoader.cpp
+        src/game/scenes/LevelLoader.h
 )
 target_link_libraries(main PRIVATE sfml-graphics)
 target_compile_features(main PRIVATE cxx_std_17)

@@ -59,6 +59,11 @@ namespace Lemmings::Engine {
         this->offset_ = offset;
     }
 
+    sf::Vector2i SpriteSheet::getOffset() const
+    {
+        return this->offset_;
+    }
+
     void SpriteSheet::setColor(sf::Color color)
     {
         this->sprite_.setColor(color);

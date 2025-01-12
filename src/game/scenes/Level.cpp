@@ -69,22 +69,25 @@ namespace Lemmings::Scene {
                 data->dirtIndex = std::strtol(line.c_str(), &endPtr, 10);
                 errorCheckStringToInt(line, endPtr);
             case 4:
+                data->exitIndex = std::strtol(line.c_str(), &endPtr, 10);
+                errorCheckStringToInt(line, endPtr);
+            case 5:
                 data->timeLimit = std::strtol(line.c_str(), &endPtr, 10);
                 errorCheckStringToInt(line, endPtr);
                 break;
-            case 5:
+            case 6:
                 data->saveRequirement = std::strtol(line.c_str(), &endPtr, 10);
                 errorCheckStringToInt(line, endPtr);
                 break;
-            case 6:
+            case 7:
                 data->amountOfLemmings = std::strtol(line.c_str(), &endPtr, 10);
                 errorCheckStringToInt(line, endPtr);
                 break;
-            case 7:
+            case 8:
                 data->releaseRate = std::strtol(line.c_str(), &endPtr, 10);
                 errorCheckStringToInt(line, endPtr);
                 break;
-            case 8: { // New case for the last line
+            case 9: { // New case for the last line
                 std::stringstream ss(line);
                 std::string token;
                 std::vector fields = {
@@ -110,25 +113,35 @@ namespace Lemmings::Scene {
                 }
                 break;
             }
-            case 9: {
+            case 10: {
                 data->spawnX = std::strtol(line.c_str(), &endPtr, 10);
                 errorCheckStringToInt(line, endPtr);
                 break;
             }
-            case 10: {
+            case 11: {
                 data->spawnY = std::strtol(line.c_str(), &endPtr, 10);
                 errorCheckStringToInt(line, endPtr);
                 break;
             }
-            case 11: {
+            case 12: {
                 data->exitX = std::strtol(line.c_str(), &endPtr, 10);
                 errorCheckStringToInt(line, endPtr);
                 break;
             }
-            case 12: {
+            case 13: {
                 data->exitY = std::strtol(line.c_str(), &endPtr, 10);
                 errorCheckStringToInt(line, endPtr);
                 break;
+            }
+            case 14: {
+                    data->cameraX = std::strtol(line.c_str(), &endPtr, 10);
+                    errorCheckStringToInt(line, endPtr);
+                    break;
+            }
+            case 15: {
+                    data->cameraY = std::strtol(line.c_str(), &endPtr, 10);
+                    errorCheckStringToInt(line, endPtr);
+                    break;
             }
             default:
                 throw std::runtime_error("Unexpected line index: " + std::to_string(index));
@@ -165,7 +178,7 @@ namespace Lemmings::Scene {
         IScene::init();
         
         cam->activate();
-        cam->setPosition({69, 0});
+        cam->setPosition(sf::Vector2f(this->levelData_->cameraX, this->levelData_->cameraY));
     }
 
     void Level::update(float delta)

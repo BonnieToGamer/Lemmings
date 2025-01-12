@@ -25,6 +25,7 @@ public:
     std::string name;
     std::string image;
     uint dirtIndex;
+    uint exitIndex;
     uint timeLimit;
     uint saveRequirement;
     uint amountOfLemmings;
@@ -41,6 +42,8 @@ public:
     uint spawnY;
     uint exitX;
     uint exitY;
+    uint cameraX;
+    uint cameraY;
 
     inline static const std::map<DirtIndexColor, sf::Color> indexToColor = {
         {dirt, sf::Color(120, 77, 0)},

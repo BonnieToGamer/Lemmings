@@ -9,7 +9,8 @@
 namespace Lemmings::States {
     void Builder::enter()
     {
-        this->parent_->initJob(Job::Builder, {0, 0});
+        this->parent_->initJob(Job::Builder);
+        this->parent_->playAnimation(Build, {0, 0});
     }
 
     void Builder::exit()
@@ -50,7 +51,7 @@ namespace Lemmings::States {
         if (this->placedTiles >= AMOUNT_OF_TILES)
         {
             this->frameCounter = 0;
-            this->parent_->playShrugAnimation();
+            this->parent_->playAnimation(Shrug, {0,0});
             this->shrugState = true;
         }
         

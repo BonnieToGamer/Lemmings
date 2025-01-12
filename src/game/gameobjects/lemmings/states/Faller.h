@@ -8,7 +8,7 @@
 
 namespace Lemmings::States {
 
-class Faller final : public Engine::IState<Lemming> {
+class Faller : public Engine::IState<Lemming> {
 public:
     void enter() override;
     void exit() override;

@@ -33,7 +33,24 @@ enum Job
     Digger = 9,
     Nothing = 10,
     Winner = 11,
-    Shrugger = 12 // DO NOT ASSIGN THIS AS A JOB. This is a substate of Builder. Only exists to make the animation work.
+};
+
+enum LemmingAnimations
+{
+    Walk,
+    Fall,
+    Climb,
+    Float,
+    Bomb,
+    Block,
+    Build,
+    Bash,
+    Mine,
+    Dig,
+    Win,
+    Shrug,
+    ParachuteOpen,
+    ParachuteHang
 };
     
 class Lemming : public Engine::GameObject {
@@ -42,8 +59,8 @@ private:
     LevelData* data_;
     sf::Vector2i position_;
     
-    Engine::AnimationManager<Job> animations_;
-    Engine::AnimationManager<Job> dirtAnimations_;
+    Engine::AnimationManager<LemmingAnimations> animations_;
+    Engine::AnimationManager<LemmingAnimations> dirtAnimations_;
     std::unique_ptr<Engine::SpriteSheet> lemmingSpriteSheet;
     std::unique_ptr<Engine::SpriteSheet> dirtSpriteSheet;
     
@@ -58,7 +75,7 @@ private:
     sf::Texture* lemmingTexture_;
     sf::Texture* dirtTexture_;
 
-    void addAnimation(Job job, uint amountOfFrames, const sf::Vector2u& offset);
+    void addAnimation(LemmingAnimations jobAnimation, uint amountOfFrames, const sf::Vector2u& offset);
     void die();
     
 public:
@@ -73,7 +90,8 @@ public:
     sf::Vector2i getPosition() const;
     void setPosition(const sf::Vector2i& newPos);
     Map* map();
-    void initJob(Job job, sf::Vector2i offset);
+    void initJob(Job job);
+    void playAnimation(LemmingAnimations animation, sf::Vector2i offset);
     void flipSprite();
     HorizontalDirection dir() const;
     void setDir(HorizontalDirection newDir);
@@ -82,7 +100,7 @@ public:
     Job getCurrentJob() const;
     bool tryAssignJob(Job job) const;
     void win();
-    void playShrugAnimation();
+    // void initSubJob(Job job);
 
     void checkCollisionExit();
     bool checkCollision(int x, int y, HorizontalDirection direction = None) const;

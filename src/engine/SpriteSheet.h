@@ -32,6 +32,7 @@ public:
     void setFlipped(int dir);
     void setScale(float scaleX, float scaleY);
     void setOffset(sf::Vector2i offset);
+    sf::Vector2i getOffset() const;
     void setColor(sf::Color color);
 };
 

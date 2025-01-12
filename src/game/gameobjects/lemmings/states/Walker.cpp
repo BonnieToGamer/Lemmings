@@ -11,7 +11,8 @@
 namespace Lemmings::States {
     void Walker::enter()
     {
-        this->parent_->initJob(Job::Walker, {0, 0});
+        this->parent_->initJob(Job::Walker);
+        this->parent_->playAnimation(LemmingAnimations::Walk, {0, 0});
     }
 
     void Walker::exit() { }
@@ -20,7 +21,7 @@ namespace Lemmings::States {
     {        
         sf::Vector2i pos = this->parent_->getPosition();
 
-        if (this->checkFall(0))
+        if (this->checkFall(this->parent_->dir()))
             return std::make_unique<Faller>();
 
         bool walked = false;
@@ -78,6 +79,9 @@ namespace Lemmings::States {
                 break;
             }
         }
+
+        if (falling)
+            this->parent_->setPosition({pos.x + xOffset, pos.y});
 
         return falling;
     }

@@ -9,7 +9,8 @@
 namespace Lemmings::States {
     void Faller::enter()
     {
-        this->parent_->initJob(Job::Faller, {0, 0});
+        this->parent_->initJob(Job::Faller);
+        this->parent_->playAnimation(Fall, {0, 0});
     }
 
     void Faller::exit()
@@ -20,11 +21,14 @@ namespace Lemmings::States {
     {
         sf::Vector2i pos = this->parent_->getPosition();
 
-        if (this->parent_->checkCollision(pos.x, pos.y + 1))
-            return std::make_unique<Walker>();
+        for (int i = 1; i <= 4; i++)
+        {
+            if (this->parent_->checkCollision(pos.x, pos.y + i))
+                return std::make_unique<Walker>();
 
-        this->parent_->setPosition(sf::Vector2i(pos.x, pos.y + 1));
-
+            this->parent_->setPosition(sf::Vector2i(pos.x, pos.y + i));
+        }
+        
         return nullptr;
     }
 } // Lemmings
