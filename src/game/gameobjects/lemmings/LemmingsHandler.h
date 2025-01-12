@@ -28,13 +28,14 @@ public:
     static Engine::Event<> lemmingWinEvent;
     
     explicit LemmingsHandler(Map* map, LevelData* data);
-    ~LemmingsHandler();
+    ~LemmingsHandler() override;
     void init() override;
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;
 
     void addLemming(sf::Vector2i position);
     std::vector<Lemming*> checkCollision(sf::FloatRect rect);
+    uint getAmountOfLemmings();
 };
 
 } // Lemmings

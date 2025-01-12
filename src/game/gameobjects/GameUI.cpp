@@ -21,6 +21,7 @@ namespace Lemmings {
     {
         Camera::movedEvent -= this->CAMERA_MOVED_HANDLER;
         Entrance::spawnEvent -= this->SPAWN_EVENT_HANDLER;
+        LemmingsHandler::lemmingWinEvent -= this->LEMMING_WIN_HANDLER;
     }
 
     void GameUI::init()

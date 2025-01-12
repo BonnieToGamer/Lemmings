@@ -94,4 +94,9 @@ namespace Lemmings {
 
         return collidingLemmings;
     }
+
+    uint LemmingsHandler::getAmountOfLemmings()
+    {
+        return this->lemmings_.size();
+    }
 } // Lemmings

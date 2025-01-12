@@ -3,24 +3,19 @@
 //
 
 #pragma once
-#include <sys/types.h>
-
-#include "../../engine/Event.h"
 #include "../../engine/IScene.h"
+#include "SFML/Graphics/Text.hpp"
 
-namespace Lemmings::Scene {
-
-class LevelLoader final : public Engine::IScene{
+namespace Lemmings::Scene
+{
+class EndScene : public Engine::IScene {
 private:
-    uint currentLevelIndex = 1;
-
-public:
-    static Engine::Event<uint> changeLevelEvent;
+    sf::Text text_;
     
+public:
     inline void init() override;
     inline void update(float delta) override;
     inline void draw(sf::RenderTarget& renderTarget) override;
     void destroy() override;
 };
-
-} // Lemmings
+}

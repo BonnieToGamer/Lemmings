@@ -21,8 +21,13 @@ namespace Lemmings::Engine
         sf::Sprite renderSprite_;
         const float DESIGNED_RESOLUTION_ASPECT_RATIO = static_cast<float>(DESIGNED_RESOLUTION_WIDTH) / static_cast<float>(DESIGNED_RESOLUTION_HEIGHT);
         Timer slowTimer_ = Timer(0.30f);
+        std::unordered_map<uint, std::string> levels_;
 
         static Core* INSTANCE;
+        const std::function<void(uint)> CHANGE_LEVEL_EVENT = [this](uint levelIndex) { this->loadNewLevel(levelIndex); };
+
+        void loadNewLevel(uint levelIndex);
+        void loadLevelIndices();
         
     public:
         static constexpr uint DESIGNED_RESOLUTION_WIDTH = 320;
@@ -33,9 +38,11 @@ namespace Lemmings::Engine
         static Core* Instance() { return INSTANCE; }
         
         Core();
+        ~Core();
         void run();
         void update(float delta);
         void draw();
+        void removeCurrentScene();
         sf::RenderWindow* getWindow();
     };
 }

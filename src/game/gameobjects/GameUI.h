@@ -43,7 +43,7 @@ public:
     static Engine::Event<uint> spawnRateChangedEvent;
     
     explicit GameUI(LevelData* levelData);
-    ~GameUI();
+    ~GameUI() override;
     void init() override;
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;

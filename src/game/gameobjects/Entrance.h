@@ -44,6 +44,7 @@ public:
     void spawnRateChanged(uint newSpawnRate);
     void spawnTimerComplete();
     void animationTimerComplete();
+    uint getAmountOut();
 };
 
 } // Lemmings

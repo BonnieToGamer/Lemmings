@@ -11,7 +11,7 @@ template <typename T>
 class IState {
 
 protected:
-    T* parent_;
+    T* parent_ = nullptr;
 
 public:
     void setParent(T* parent) { this->parent_ = parent; }

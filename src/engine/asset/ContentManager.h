@@ -7,6 +7,7 @@
 #include <unordered_map>
 
 #include "GameAsset.h"
+#include "SFML/Graphics/Font.hpp"
 #include "SFML/Graphics/Texture.hpp"
 
 namespace Lemmings::Engine::Asset {
@@ -19,6 +20,7 @@ public:
     ~ContentManager();
     
     sf::Texture* getTexture(const std::string& fileName);
+    sf::Font* getFont(const std::string& fileName);
 };
 
 } // Lemmings

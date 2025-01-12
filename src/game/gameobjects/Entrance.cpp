@@ -78,4 +78,9 @@ namespace Lemmings {
         this->animation_->nextFrame();
         this->currentAnimationFrame_++;
     }
+
+    uint Entrance::getAmountOut()
+    {
+        return this->currentAmountOfLemmings_;
+    }
 } // Lemmings

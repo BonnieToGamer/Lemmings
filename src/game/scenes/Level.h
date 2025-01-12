@@ -6,7 +6,7 @@
 #include "../LevelData.h"
 #include "../../engine/IScene.h"
 #include "../../engine/ModifiableTexture.h"
-#include "SFML/Graphics/Text.hpp"
+#include "../gameobjects/Entrance.h"
 
 namespace Lemmings::Scene {
 
@@ -14,6 +14,8 @@ class Level : public Engine::IScene {
 private:
     std::string levelName_;
     std::unique_ptr<LevelData> levelData_;
+    Entrance* entrance_ = nullptr;
+    LemmingsHandler* lemmingHandler_ = nullptr;
     
 public:
     Level(const std::string& levelName);

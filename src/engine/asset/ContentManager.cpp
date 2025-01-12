@@ -4,6 +4,7 @@
 
 #include "ContentManager.h"
 
+#include "FontAsset.h"
 #include "TextureAsset.h"
 
 namespace Lemmings::Engine::Asset {
@@ -24,5 +25,18 @@ namespace Lemmings::Engine::Asset {
 
         auto asset = std::dynamic_pointer_cast<TextureAsset>(this->assets_[fileName]);
         return asset ? asset->getTexture() : nullptr;
+    }
+
+    sf::Font* ContentManager::getFont(const std::string& fileName)
+    {
+        if (this->assets_.find(fileName) == this->assets_.end())
+        {
+            auto asset = std::make_shared<FontAsset>(fileName);
+            this->assets_[fileName] = asset;
+            return asset->getFont();
+        }
+
+        auto asset = std::dynamic_pointer_cast<FontAsset>(this->assets_[fileName]);
+        return asset ? asset->getFont() : nullptr;
     }
 } // Lemmings

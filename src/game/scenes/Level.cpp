@@ -25,7 +25,7 @@ namespace Lemmings::Scene {
 
     std::unique_ptr<LevelData> Level::parseLevel() const
     {
-        std::ifstream file(ASSETS_PATH"levels/" + this->levelName_ + ".lvl");
+        std::ifstream file(this->levelName_);
 
         if (!file.is_open())
             throw std::runtime_error("Couldn't open level file: " + this->levelName_);
@@ -164,7 +164,9 @@ namespace Lemmings::Scene {
         auto entrance = std::make_unique<Entrance>(sf::Vector2i(this->levelData_->spawnX, this->levelData_->spawnY), lemmingHandler.get(), this->levelData_->releaseRate, this->levelData_->amountOfLemmings);
         auto exit = std::make_unique<Exit>(this->levelData_.get());
         auto cursor = std::make_unique<Cursor>(lemmingHandler.get(), camera.get(), ui.get());
-
+        
+        this->entrance_ = entrance.get();
+        this->lemmingHandler_ = lemmingHandler.get();
         Camera* cam = camera.get();
         
         this->addGameObject(std::move(camera));
@@ -186,6 +188,12 @@ namespace Lemmings::Scene {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
         {
             Engine::Core::Instance()->getWindow()->close();
+            return;
+        }
+
+        if (this->entrance_->getAmountOut() > 0 && this->lemmingHandler_->getAmountOfLemmings() == 0)
+        {
+            Engine::Core::Instance()->removeCurrentScene();
             return;
         }
         

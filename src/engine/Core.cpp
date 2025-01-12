@@ -4,16 +4,64 @@
 
 #include "Core.h"
 
-#include <sys/stat.h>
+#include <iostream>
+#include <filesystem>
+#include <fstream>
+#include <regex>
 
+#include "../game/scenes/EndScene.h"
 #include "../game/scenes/Level.h"
+#include "../game/scenes/LevelLoader.h"
 
 namespace Lemmings::Engine
 {
     Core* Core::INSTANCE = nullptr;
     Event<> Core::windowSizeChangedEvent = Event<>();
     std::unique_ptr<Asset::ContentManager> Core::contentManager = std::make_unique<Asset::ContentManager>();
-    
+
+    void Core::loadNewLevel(uint levelIndex)
+    {
+        if (levelIndex > this->levels_.size())
+        {
+            this->sceneManager_.addScene(std::make_unique<Scene::EndScene>());
+            return;
+        }
+        
+        std::string levelPath = this->levels_[levelIndex];
+        this->sceneManager_.addScene(std::make_unique<Scene::Level>(levelPath));
+    }
+
+    void Core::loadLevelIndices()
+    {
+        for (const auto & entry : std::filesystem::directory_iterator(ASSETS_PATH"levels/"))
+        {
+            std::string path = entry.path();
+            
+            std::ifstream file(path);
+            std::string line;
+            char* endPtr;
+            
+            std::getline(file, line);
+
+            uint index = std::strtol(line.c_str(), &endPtr, 10);
+
+            if (endPtr == line.c_str()) {
+                // No conversion was performed
+                throw std::runtime_error("No digits were found in the input string.");
+            }
+            if (errno == ERANGE) {
+                // The value is out of range for long
+                throw std::runtime_error("The number is out of range.");
+            }
+            if (*endPtr != '\0') {
+                // There are leftover characters after the number
+                throw std::runtime_error("Additional characters after number: " + std::string(endPtr));
+            }
+
+            this->levels_[index] = path;
+        }
+    }
+
     Core::Core() : sceneManager_(), renderTexture_(), renderSprite_()
     {
         INSTANCE = this;
@@ -32,8 +80,16 @@ namespace Lemmings::Engine
 
         if (!this->renderTexture_.create(DESIGNED_RESOLUTION_WIDTH, DESIGNED_RESOLUTION_HEIGHT))
             throw std::runtime_error("Couldn't create render texture");
-        
-        this->sceneManager_.addScene(std::make_unique<Scene::Level>("fun2"));
+
+        this->loadLevelIndices();
+
+        Scene::LevelLoader::changeLevelEvent += CHANGE_LEVEL_EVENT;
+        this->sceneManager_.addScene(std::make_unique<Scene::LevelLoader>());
+    }
+
+    Core::~Core()
+    {
+        Scene::LevelLoader::changeLevelEvent -= CHANGE_LEVEL_EVENT;
     }
 
     void Core::run()
@@ -59,9 +115,7 @@ namespace Lemmings::Engine
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-        {
-                return;
-        }
+            return;
         
         
         for (auto event = sf::Event(); renderWindow_->pollEvent(event);)
@@ -78,17 +132,16 @@ namespace Lemmings::Engine
 
     void Core::draw()
     {
-        // this->renderTexture_.clear(sf::Color::White);
-        // renderWindow_->clear(sf::Color(100, 149, 237));
         renderWindow_->clear(sf::Color::Black);
         if (IScene* scene = this->sceneManager_.getCurrentScene())
             scene->draw(*this->renderWindow_);
-        // this->renderTexture_.display();
-
-        // this->renderSprite_.setTexture(this->renderTexture_.getTexture());
         
-        // this->renderWindow_->draw(this->renderSprite_);
         renderWindow_->display();
+    }
+
+    void Core::removeCurrentScene()
+    {
+        this->sceneManager_.removeScene();
     }
 
     sf::RenderWindow* Core::getWindow()
