@@ -22,6 +22,6 @@ public:
     void setSelected(bool selected);
     Job getJob() const;
     void decreaseAmount();
-    uint getAmount();
+    uint getAmount() const;
 };
 } // Lemmings

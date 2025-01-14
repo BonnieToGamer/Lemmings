@@ -8,6 +8,10 @@
 
 namespace Lemmings::States
 {
+    // this class could do with less magic numbers and a StateMachineManager,
+    // but I didn't have the time to implement it.
+
+    
     void Floater::enter()
     {
         this->walker_.setParent(this->parent_);

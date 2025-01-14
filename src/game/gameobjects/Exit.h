@@ -21,7 +21,7 @@ private:
     static constexpr uint TEXTURE_WIDTH = 44;
     static constexpr uint TEXTURE_HEIGHT = 52;
 
-    void animationTimerFinished();
+    void animationTimerFinished() const;
     
 public:
     static constexpr uint COLLIDER_WIDTH = 7;

@@ -29,7 +29,7 @@ namespace Lemmings::UI {
         this->sprite_.setPosition(pos.x, pos.y);
     }
 
-    sf::Vector2f NumericSprite::getPosition()
+    sf::Vector2f NumericSprite::getPosition() const
     {
         return this->sprite_.getPosition();
     }

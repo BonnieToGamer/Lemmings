@@ -34,7 +34,7 @@ namespace Lemmings {
         const sf::Vector2f mousePos = this->updateCursor();
         const sf::FloatRect mouseRect = this->createMouseRect(mousePos);
 
-        std::vector<Lemming*> lemmings = this->lemmingsHandler_->checkCollision(mouseRect);
+        const std::vector<Lemming*> lemmings = this->lemmingsHandler_->checkCollision(mouseRect);
 
         this->updateSpriteTexture(mouseRect, lemmings.size() > 0);
         this->updateCameraPosition(mousePos);
@@ -49,7 +49,7 @@ namespace Lemmings {
 
     sf::Vector2f Cursor::updateCursor()
     {
-        sf::RenderWindow* window = Engine::Core::Instance()->getWindow();
+        const sf::RenderWindow* window = Engine::Core::Instance()->getWindow();
         sf::Vector2f mousePos = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
         mousePos.x = std::round(mousePos.x);
         mousePos.y = std::round(mousePos.y);
@@ -58,7 +58,7 @@ namespace Lemmings {
         return mousePos;
     }
     
-    sf::FloatRect Cursor::createMouseRect(sf::Vector2f mousePos)
+    sf::FloatRect Cursor::createMouseRect(sf::Vector2f mousePos) const
     {
         return {
             mousePos.x - TEXTURE_WIDTH / 2,
@@ -95,7 +95,7 @@ namespace Lemmings {
 
         this->wasMouseHeldLastFrame = true;
 
-        Job job = this->ui_->getCurrentJob();
+        const Job job = this->ui_->getCurrentJob();
 
         if (job == Job::Nothing || !this->ui_->canAssignCurrentJob())
             return;
@@ -111,15 +111,15 @@ namespace Lemmings {
             this->ui_->decreaseCurrentJob();
     }
 
-    void Cursor::showCurrentLemmingStats(const std::vector<Lemming*>& lemmings)
+    void Cursor::showCurrentLemmingStats(const std::vector<Lemming*>& lemmings) const
     {
-        uint amount = lemmings.size();
-        Job firstJob = lemmings.empty() ? Job::Nothing : lemmings.front()->getCurrentJob();
+        const uint amount = lemmings.size();
+        const Job firstJob = lemmings.empty() ? Job::Nothing : lemmings.front()->getCurrentJob();
 
         this->ui_->setLemmingJobStat(amount, firstJob);
     }
 
-    bool Cursor::isMouseNearLeftBoundary(sf::Vector2f mousePos, sf::Vector2f cameraPos)
+    bool Cursor::isMouseNearLeftBoundary(sf::Vector2f mousePos, sf::Vector2f cameraPos) const
     {
         return mousePos.x - cameraPos.x <= this->CAMERA_MOVE_BOUNDARY &&
            mousePos.x > cameraPos.x &&
@@ -127,7 +127,7 @@ namespace Lemmings {
            mousePos.y < cameraPos.y + Engine::Core::DESIGNED_RESOLUTION_HEIGHT;
     }
 
-    bool Cursor::isMouseNearRightBoundary(sf::Vector2f mousePos, sf::Vector2f cameraPos)
+    bool Cursor::isMouseNearRightBoundary(sf::Vector2f mousePos, sf::Vector2f cameraPos) const
     {
         return mousePos.x >= cameraPos.x + Engine::Core::DESIGNED_RESOLUTION_WIDTH - this->CAMERA_MOVE_BOUNDARY &&
            mousePos.x < cameraPos.x + Engine::Core::DESIGNED_RESOLUTION_WIDTH &&

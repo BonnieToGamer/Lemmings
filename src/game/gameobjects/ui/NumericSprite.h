@@ -42,7 +42,7 @@ public:
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;
     void setPosition(sf::Vector2f pos);
-    sf::Vector2f getPosition();
+    sf::Vector2f getPosition() const;
     void setNumber(Number number);
 };
 

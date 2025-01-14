@@ -8,7 +8,7 @@
 
 namespace Lemmings::Engine {
 
-class SpriteSheet : public GameObject {
+class SpriteSheet final : public GameObject {
 private:
     sf::Vector2u spriteSize_;
 

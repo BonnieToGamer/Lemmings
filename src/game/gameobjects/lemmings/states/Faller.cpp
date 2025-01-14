@@ -19,7 +19,7 @@ namespace Lemmings::States {
 
     std::unique_ptr<Engine::IState<Lemming>> Faller::update(float delta)
     {
-        sf::Vector2i pos = this->parent_->getPosition();
+        const sf::Vector2i pos = this->parent_->getPosition();
 
         for (int i = 1; i <= 4; i++)
         {

@@ -15,7 +15,7 @@ private:
 public:
     void enter() override;
     void exit() override;
-    std::unique_ptr<IState> digDown();
+    std::unique_ptr<IState> digDown() const;
     std::unique_ptr<IState> update(float delta) override;
 };
 }// Lemmings

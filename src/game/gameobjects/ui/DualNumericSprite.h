@@ -7,7 +7,7 @@
 
 namespace Lemmings::UI {
 
-class DualNumericSprite : public Engine::GameObject {
+class DualNumericSprite final : public Engine::GameObject {
 private:
     NumericSprite tens_;
     NumericSprite ones_;

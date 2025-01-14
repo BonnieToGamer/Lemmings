@@ -8,7 +8,7 @@
 
 namespace Lemmings::Scene
 {
-class EndScene : public Engine::IScene {
+class EndScene final : public Engine::IScene {
 private:
     sf::Text text_;
     

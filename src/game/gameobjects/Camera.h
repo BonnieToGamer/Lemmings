@@ -9,7 +9,7 @@
 
 namespace Lemmings {
 
-class Camera : public Engine::GameObject{
+class Camera final : public Engine::GameObject{
 private:
     sf::View view_;
     sf::Vector2f position_;

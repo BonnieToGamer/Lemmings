@@ -54,7 +54,7 @@ namespace Lemmings::UI {
         this->timer_.update(delta);
         this->minute_->setNumber(static_cast<NumericSprite::Number>(this->currentTime_ / 60));
 
-        uint seconds = this->currentTime_ % 60;
+        const uint seconds = this->currentTime_ % 60;
         this->secondsTens_->setNumber(static_cast<NumericSprite::Number>(seconds / 10));
         this->secondsOnes_->setNumber(static_cast<NumericSprite::Number>(seconds % 10));
         GameObject::update(delta);

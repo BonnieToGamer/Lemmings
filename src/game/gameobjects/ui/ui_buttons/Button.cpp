@@ -62,7 +62,7 @@ namespace Lemmings::UI {
         this->sprite_.setPosition(pos);
     }
 
-    uint Button::getIndex()
+    uint Button::getIndex() const
     {
         return this->index_;
     }

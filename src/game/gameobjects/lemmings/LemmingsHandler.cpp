@@ -48,7 +48,7 @@ namespace Lemmings {
     {
         Lemming::deathEvent += LEMMING_DEATH_HANDLER;
         Lemming::winEvent += LEMMING_WIN_HANDLER;
-        for (auto& lemming : this->lemmings_)
+        for (const auto& lemming : this->lemmings_)
         {
             lemming->init();
         }
@@ -60,7 +60,7 @@ namespace Lemmings {
         if (!shouldUpdate)
             return;
         
-        for (auto& lemming : this->lemmings_)
+        for (const auto& lemming : this->lemmings_)
             lemming->update(delta);
 
         this->processRemovalQueue();
@@ -68,7 +68,7 @@ namespace Lemmings {
 
     void LemmingsHandler::draw(sf::RenderTarget& renderTarget)
     {
-        for (auto& lemming : this->lemmings_)
+        for (const auto& lemming : this->lemmings_)
             lemming->draw(renderTarget);
     }
 
@@ -79,23 +79,22 @@ namespace Lemmings {
         this->lemmings_.back()->setPosition({position.x, position.y});
     }
 
-    std::vector<Lemming*> LemmingsHandler::checkCollision(sf::FloatRect rect)
+    std::vector<Lemming*> LemmingsHandler::checkCollision(sf::FloatRect rect) const
     {
         std::vector<Lemming*> collidingLemmings;
         for (auto& lemming : lemmings_)
         {
-            sf::Vector2i lemmingPos = lemming->getActualPos();
-            sf::Vector2i lemmingSize = lemming->getSize();
-            sf::FloatRect lemmingRect = sf::FloatRect(lemmingPos.x, lemmingPos.y, lemmingSize.x, lemmingSize.y);
+            const sf::Vector2i lemmingPos = lemming->getActualPos();
+            const sf::Vector2i lemmingSize = lemming->getSize();
 
-            if (lemmingRect.intersects(rect))
+            if (auto lemmingRect = sf::FloatRect(lemmingPos.x, lemmingPos.y, lemmingSize.x, lemmingSize.y); lemmingRect.intersects(rect))
                 collidingLemmings.push_back(lemming.get());
         }
 
         return collidingLemmings;
     }
 
-    uint LemmingsHandler::getAmountOfLemmings()
+    uint LemmingsHandler::getAmountOfLemmings() const
     {
         return this->lemmings_.size();
     }

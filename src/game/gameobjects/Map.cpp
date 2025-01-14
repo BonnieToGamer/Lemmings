@@ -10,7 +10,7 @@
 namespace Lemmings {
     Map::Map(const std::string& mapName) : modifiableTexture_(mapName), nodes_()
     {
-        int size = this->modifiableTexture_.width() * this->modifiableTexture_.height();
+        const int size = this->modifiableTexture_.width() * this->modifiableTexture_.height();
         this->nodes_.reserve(size);
         
         for (int y = 0; y < this->modifiableTexture_.height(); y++)
@@ -36,7 +36,7 @@ namespace Lemmings {
         return this->modifiableTexture_.height();
     }
 
-    const Node& Map::operator[](int index)
+    const Node& Map::operator[](int index) const
     {
         return *this->nodes_[index];
     }

@@ -7,8 +7,8 @@
 namespace Lemmings {
     void States::Winner::enter()
     {
-        this->parent_->initJob(Job::Walker);
-        this->parent_->playAnimation(LemmingAnimations::Win, {0, 0});
+        this->parent_->initJob(Job::Winner);
+        this->parent_->playAnimation(Win, {0, 0});
 
     }
 

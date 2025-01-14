@@ -17,13 +17,13 @@ namespace Lemmings::States {
     {
     }
 
-    std::unique_ptr<Engine::IState<Lemming>> Digger::digDown()
+    std::unique_ptr<Engine::IState<Lemming>> Digger::digDown() const
     {
         sf::Vector2i pos = this->parent_->getPosition();
-        int digStartY = -1;
-        int digStopY = 2;
-        int digStartX = this->parent_->dir() == Right ? -3 : -5;
-        int digStopX = this->parent_->dir() == Right ? 6 : 4;
+        const int digStartY = -1;
+        const int digStopY = 2;
+        const int digStartX = this->parent_->dir() == Right ? -3 : -5;
+        const int digStopX = this->parent_->dir() == Right ? 6 : 4;
         
         for (int yOffset = digStartY; yOffset < digStopY; yOffset++)
         {

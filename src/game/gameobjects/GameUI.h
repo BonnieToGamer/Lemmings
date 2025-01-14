@@ -42,19 +42,19 @@ private:
 public:
     static Engine::Event<uint> spawnRateChangedEvent;
     
-    explicit GameUI(LevelData* levelData);
+    explicit GameUI(const LevelData* levelData);
     ~GameUI() override;
     void init() override;
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;
-    void cameraMoved(Camera* camera);
+    void cameraMoved(const Camera* camera);
     void buttonClicked(UI::UIButtonType index);
     void jobButtonClicked(UI::UIButtonType index);
     void releaseRateButtonClicked(UI::UIButtonType index);
-    Job getCurrentJob();
-    void decreaseCurrentJob();
+    Job getCurrentJob() const;
+    void decreaseCurrentJob() const;
     void setLemmingJobStat(uint amount, Job currentJob);
-    bool canAssignCurrentJob();
+    bool canAssignCurrentJob() const;
     void setAmountOut();
     void updateAmountIn();
 };

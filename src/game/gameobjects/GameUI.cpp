@@ -13,7 +13,7 @@
 namespace Lemmings {
     Engine::Event<uint> GameUI::spawnRateChangedEvent;
     
-    GameUI::GameUI(LevelData* levelData) : levelData_(levelData)
+    GameUI::GameUI(const LevelData* levelData) : levelData_(levelData)
     {
     }
 
@@ -78,28 +78,23 @@ namespace Lemmings {
 
     void GameUI::update(float delta)
     {
-        // this->time_->update(delta);
-        // this->lemmingStats_->update(delta);
         GameObject::update(delta);
     }
 
     void GameUI::draw(sf::RenderTarget& renderTarget)
     {
         renderTarget.draw(this->jobTextSprite_);
-        // this->time_->draw(renderTarget);
-        // this->lemmingStats_->draw(renderTarget);
-        // this->amountOfHoveredLemmings_->draw(renderTarget);
         GameObject::draw(renderTarget);
     }
 
-    void GameUI::cameraMoved(Camera* camera)
+    void GameUI::cameraMoved(const Camera* camera)
     {
         this->jobTextSprite_.setPosition(camera->position().x, this->jobTextSprite_.getPosition().y);
         this->time_->setPosition(sf::Vector2f(camera->position().x + Engine::Core::DESIGNED_RESOLUTION_WIDTH - UI::TimeDisplay::WIDTH, this->time_->getPosition().y));
         this->lemmingStats_->setPosition(sf::Vector2f(camera->position().x + 111, this->lemmingStats_->getPosition().y));
         this->amountOfHoveredLemmings_->setPosition(sf::Vector2f(camera->position().x + UI::NumericSprite::NUMBER_WIDTH * 9, this->amountOfHoveredLemmings_->getPosition().y));
 
-        for (auto& button : this->buttons_)
+        for (const auto& button : this->buttons_)
             button->setPosition({camera->position().x + button->getIndex() * button->BUTTON_WIDTH, static_cast<float>(Engine::Core::DESIGNED_RESOLUTION_HEIGHT - button->BUTTON_HEIGHT)});
     }
 
@@ -142,13 +137,13 @@ namespace Lemmings {
         }
     }
 
-    Job GameUI::getCurrentJob()
+    Job GameUI::getCurrentJob() const
     {
         if (this->currentJobButton_ == nullptr) return Job::Nothing;
         return this->currentJobButton_->getJob();
     }
 
-    void GameUI::decreaseCurrentJob()
+    void GameUI::decreaseCurrentJob() const
     {
         this->currentJobButton_->decreaseAmount();
     }
@@ -166,7 +161,7 @@ namespace Lemmings {
             this->amountOfHoveredLemmings_->setEmpty();
     }
 
-    bool GameUI::canAssignCurrentJob()
+    bool GameUI::canAssignCurrentJob() const
     {
         return this->currentJobButton_->getAmount() > 0;
     }

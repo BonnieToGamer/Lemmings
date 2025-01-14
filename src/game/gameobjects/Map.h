@@ -24,7 +24,7 @@ public:
     uint width();
     uint height();
     
-    const Node& operator[](int index);
+    const Node& operator[](int index) const;
     void init() override;
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;

@@ -112,7 +112,7 @@ namespace Lemmings {
         this->dirtSpriteSheet->setPosition(actualPos.x, actualPos.y);
     }
 
-    Map* Lemming::map()
+    Map* Lemming::map() const
     {
         return this->map_;
     }
@@ -135,11 +135,6 @@ namespace Lemmings {
         this->dirtSpriteSheet->setFlipped(this->currentDir_);
     }
 
-    // void Lemming::setJobTitle(Job job)
-    // {
-    //     this->currentJob_ = job;
-    // }
-
     void Lemming::flipSprite()
     {
         this->lemmingSpriteSheet->flipSprite();
@@ -157,14 +152,14 @@ namespace Lemmings {
         this->currentDir_ = newDir;
     }
 
-    sf::Vector2i Lemming::getActualPos()
+    sf::Vector2i Lemming::getActualPos() const
     {
         return {
             static_cast<int>(this->position_.x - TEXTURE_WIDTH / 2 + (this->currentDir_ == 1 ? 1 : 0)),
             static_cast<int>(this->position_.y - TEXTURE_HEIGHT + 1)};
     }
 
-    sf::Vector2i Lemming::getSize()
+    sf::Vector2i Lemming::getSize() const
     {
         return {static_cast<int>(TEXTURE_WIDTH), static_cast<int>(TEXTURE_HEIGHT)};
     }
@@ -212,11 +207,10 @@ namespace Lemmings {
         return true;
     }
 
-    void Lemming::checkCollisionExit()
+    void Lemming::checkCollisionExit() const
     {
-        sf::Vector2i actualPos = this->position_;
-        sf::IntRect rect(actualPos.x, actualPos.y, 1, 1);
-        if (Exit::collisionArea.intersects(rect))
+        const sf::Vector2i actualPos = this->position_;
+        if (sf::IntRect rect(actualPos.x, actualPos.y, 1, 1); Exit::collisionArea.intersects(rect))
             this->stateMachineManager_->changeState(std::make_unique<States::Winner>());
     }
 
@@ -224,13 +218,6 @@ namespace Lemmings {
     {
         this->winEvent.invoke(this);
     }
-
-    // void Lemming::initSubJob(Job job)
-    // {
-    //     const Job currentJob = this->getCurrentJob();
-    //     this->initJob(job, this->lemmingSpriteSheet->getOffset());
-    //     this->currentJob_ = currentJob;
-    // }
 
     bool Lemming::checkCollision(const int x, const int y, const HorizontalDirection direction) const
     {

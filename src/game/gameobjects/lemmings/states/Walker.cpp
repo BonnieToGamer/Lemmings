@@ -18,8 +18,8 @@ namespace Lemmings::States {
     void Walker::exit() { }
 
     std::unique_ptr<Engine::IState<Lemming>> Walker::update(float delta)
-    {        
-        sf::Vector2i pos = this->parent_->getPosition();
+    {
+        const sf::Vector2i pos = this->parent_->getPosition();
 
         if (this->checkFall(this->parent_->dir()))
             return std::make_unique<Faller>();
@@ -28,9 +28,7 @@ namespace Lemmings::States {
 
         for (int y = 0; y > -4; y--)
         {
-            bool nodeEnabled = this->checkWalk(0, y);
-            
-            if (!nodeEnabled)
+            if (bool nodeEnabled = this->checkWalk(0, y); !nodeEnabled)
             {
                 this->parent_->setPosition(sf::Vector2i(pos.x + this->parent_->dir(), pos.y - y));
                 walked = true;
@@ -81,15 +79,15 @@ namespace Lemmings::States {
         }
 
         if (falling)
-            this->parent_->setPosition({pos.x + xOffset, pos.y});
+            this->parent_->setPosition({static_cast<int>(pos.x + xOffset), pos.y});
 
         return falling;
     }
 
     bool Walker::checkWalk(const float xOffset, const float yOffset) const
     {
-        sf::Vector2i pos = this->parent_->getPosition();
-        bool nodeEnabled = this->parent_->checkCollision(pos.x + this->parent_->dir() + xOffset, pos.y - yOffset, this->parent_->dir());
+        const sf::Vector2i pos = this->parent_->getPosition();
+        const bool nodeEnabled = this->parent_->checkCollision(pos.x + this->parent_->dir() + xOffset, pos.y - yOffset, this->parent_->dir());
         
         return nodeEnabled;
     }

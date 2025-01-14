@@ -20,10 +20,10 @@ public:
     explicit ModifiableTexture(const std::string& fileName);
     void updateTexture();
     sf::Sprite& getSprite();
-    sf::Color getPixel(uint x, uint y);
+    sf::Color getPixel(uint x, uint y) const;
     void setPixel(uint x, uint y, const sf::Color& color);
-    uint width();
-    uint height();
+    uint width() const;
+    uint height() const;
 };
 
 } // Lemmings

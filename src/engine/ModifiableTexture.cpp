@@ -26,7 +26,7 @@ namespace Lemmings::Engine {
         return this->sprite_;
     }
 
-    sf::Color ModifiableTexture::getPixel(const uint x, const uint y)
+    sf::Color ModifiableTexture::getPixel(const uint x, const uint y) const
     {
         return this->image_.getPixel(x, y);
     }
@@ -36,12 +36,12 @@ namespace Lemmings::Engine {
         this->image_.setPixel(x, y, color);
     }
 
-    uint ModifiableTexture::width()
+    uint ModifiableTexture::width() const
     {
         return this->texture_.getSize().x;
     }
 
-    uint ModifiableTexture::height()
+    uint ModifiableTexture::height() const
     {
         return this->texture_.getSize().y;
     }

@@ -9,7 +9,7 @@
 namespace Lemmings {
     sf::IntRect Exit::collisionArea;
     
-    void Exit::animationTimerFinished()
+    void Exit::animationTimerFinished() const
     {
         this->animation_->nextFrame();
     }
@@ -46,14 +46,5 @@ namespace Lemmings {
     void Exit::draw(sf::RenderTarget& renderTarget)
     {
         GameObject::draw(renderTarget);
-        // sf::RectangleShape rect({8, 8});
-        // rect.setPosition(this->data_->exitX + 18, this->data_->exitY + 44);
-        // rect.setFillColor(sf::Color::Green);
-        // renderTarget.draw(rect);
-        //
-        // sf::RectangleShape rect2({1, 1});
-        // rect2.setPosition(this->data_->exitX, this->data_->exitY);
-        // rect2.setFillColor(sf::Color::Green);
-        // renderTarget.draw(rect2);
     }
 } // Lemmings

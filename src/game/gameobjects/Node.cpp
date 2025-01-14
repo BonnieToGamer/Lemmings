@@ -25,7 +25,7 @@ namespace Lemmings {
         this->enabled_ = value;
     }
 
-    sf::Color Node::getColor()
+    sf::Color Node::getColor() const
     {
         return this->color_;
     }

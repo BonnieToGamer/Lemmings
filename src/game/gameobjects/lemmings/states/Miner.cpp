@@ -9,19 +9,19 @@
 namespace Lemmings::States {
     void Miner::digStepOne(const sf::Vector2i& pos, HorizontalDirection direction)
     {
-        sf::Vector2i startPos(
+        const sf::Vector2i startPos(
             direction == Left ? pos.x + DIG_STEP_ONE_START_OFFSET_X_LEFT : pos.x + DIG_STEP_ONE_START_OFFSET_X_RIGHT,
             pos.y + DIG_STEP_ONE_START_OFFSET_Y
         );
         
         for (int y = 0; y < DIG_STEP_ONE_HEIGHT; y++) {
             for (int x = 0; x < DIG_STEP_ONE_WIDTH; x++) {
-                int xOffset = direction == Left ? DIG_STEP_ONE_WIDTH - 1 - x : x;
+                const int xOffset = direction == Left ? DIG_STEP_ONE_WIDTH - 1 - x : x;
                 if (shouldSkipFirstStep(y, xOffset)) {
                     continue;
                 }
-                
-                int digX = direction == Left ? startPos.x - xOffset : startPos.x + xOffset;
+
+                const int digX = direction == Left ? startPos.x - xOffset : startPos.x + xOffset;
                 this->parent_->tryDig(digX, startPos.y + y);
             }
         }
@@ -34,18 +34,18 @@ namespace Lemmings::States {
 
     bool Miner::digStepTwo(const sf::Vector2i& pos, HorizontalDirection direction)
     {
-        sf::Vector2i startPos(
+        const sf::Vector2i startPos(
             direction == Left ? pos.x + DIG_STEP_TWO_START_OFFSET_X_LEFT : pos.x + DIG_STEP_TWO_START_OFFSET_X_RIGHT,
             pos.y + DIG_STEP_TWO_START_OFFSET_Y
         );
         
         for (int y = 0; y < DIG_STEP_TWO_HEIGHT; y++) {
             for (int x = 0; x < DIG_STEP_TWO_WIDTH; x++) {
-                int xOffset = direction == Left ? DIG_STEP_TWO_WIDTH - 1 - x : x;
+                const int xOffset = direction == Left ? DIG_STEP_TWO_WIDTH - 1 - x : x;
                 if (shouldSkipSecondStep(y, xOffset)) {
                     continue;
                 }
-                int digX = direction == Left ? startPos.x - xOffset : startPos.x + xOffset;
+                const int digX = direction == Left ? startPos.x - xOffset : startPos.x + xOffset;
                 this->parent_->tryDig(digX, startPos.y + y);
             }
         }
@@ -63,7 +63,7 @@ namespace Lemmings::States {
 
     void Miner::resetMineCounter(const sf::Vector2i& pos)
     {
-        sf::Vector2i offset = this->parent_->dir() == Left ? 
+        const sf::Vector2i offset = this->parent_->dir() == Left ? 
             sf::Vector2i(MINE_COUNTER_RESET_OFFSET_X_LEFT, MINE_COUNTER_RESET_OFFSET_Y) : 
             sf::Vector2i(MINE_COUNTER_RESET_OFFSET_X_RIGHT, MINE_COUNTER_RESET_OFFSET_Y);
         
@@ -86,7 +86,7 @@ namespace Lemmings::States {
     std::unique_ptr<Engine::IState<Lemming>> Miner::update(float delta)
     {
         this->mineCounter++;
-        sf::Vector2i pos = this->parent_->getPosition();
+        const sf::Vector2i pos = this->parent_->getPosition();
 
         if (this->mineCounter == MINE_COUNTER_STEP_ONE) {
             digStepOne(pos, this->parent_->dir());

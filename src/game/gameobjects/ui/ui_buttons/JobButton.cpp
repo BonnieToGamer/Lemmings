@@ -56,7 +56,7 @@ namespace Lemmings::UI {
         this->amount_--;
     }
 
-    uint JobButton::getAmount()
+    uint JobButton::getAmount() const
     {
         return this->amount_;
     }

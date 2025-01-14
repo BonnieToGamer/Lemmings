@@ -33,19 +33,19 @@ inline void IScene::addGameObject(std::unique_ptr<GameObject> gameObject)
 
 inline void IScene::init()
 {
-    for (auto& gameObject : this->gameObjects_)
+    for (const auto& gameObject : this->gameObjects_)
         gameObject->init();
 }
 
 inline void IScene::update(float delta)
 {
-    for (auto& gameObject : this->gameObjects_)
+    for (const auto& gameObject : this->gameObjects_)
         gameObject->update(delta);
 }
 
 inline void IScene::draw(sf::RenderTarget& renderTarget)
 {
-    for (auto& gameObject : this->gameObjects_)
+    for (const auto& gameObject : this->gameObjects_)
         gameObject->draw(renderTarget);
 }
 } // Lemmings

@@ -8,7 +8,7 @@
 
 namespace Lemmings::States {
 
-class Walker : public Engine::IState<Lemming> {
+class Walker final : public Engine::IState<Lemming> {
 private:
     const float SPEED = 2;
     

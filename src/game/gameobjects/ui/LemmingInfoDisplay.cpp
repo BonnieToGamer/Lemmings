@@ -51,7 +51,7 @@ namespace Lemmings::UI {
         this->inSprite_.setPosition(this->position_ + sf::Vector2f(NumericSprite::NUMBER_WIDTH * 12, 0));
     }
 
-    sf::Vector2f LemmingInfoDisplay::getPosition()
+    sf::Vector2f LemmingInfoDisplay::getPosition() const
     {
         return this->position_;
     }

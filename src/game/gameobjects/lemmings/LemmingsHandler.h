@@ -34,8 +34,8 @@ public:
     void draw(sf::RenderTarget& renderTarget) override;
 
     void addLemming(sf::Vector2i position);
-    std::vector<Lemming*> checkCollision(sf::FloatRect rect);
-    uint getAmountOfLemmings();
+    std::vector<Lemming*> checkCollision(sf::FloatRect rect) const;
+    uint getAmountOfLemmings() const;
 };
 
 } // Lemmings

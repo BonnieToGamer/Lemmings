@@ -18,12 +18,12 @@ namespace Lemmings::Engine::Asset {
     {
         if (this->assets_.find(fileName) == this->assets_.end())
         {
-            auto asset = std::make_shared<TextureAsset>(fileName);
+            const auto asset = std::make_shared<TextureAsset>(fileName);
             this->assets_[fileName] = asset;
             return asset->getTexture();
         }
 
-        auto asset = std::dynamic_pointer_cast<TextureAsset>(this->assets_[fileName]);
+        const auto asset = std::dynamic_pointer_cast<TextureAsset>(this->assets_[fileName]);
         return asset ? asset->getTexture() : nullptr;
     }
 
@@ -31,12 +31,12 @@ namespace Lemmings::Engine::Asset {
     {
         if (this->assets_.find(fileName) == this->assets_.end())
         {
-            auto asset = std::make_shared<FontAsset>(fileName);
+            const auto asset = std::make_shared<FontAsset>(fileName);
             this->assets_[fileName] = asset;
             return asset->getFont();
         }
 
-        auto asset = std::dynamic_pointer_cast<FontAsset>(this->assets_[fileName]);
+        const auto asset = std::dynamic_pointer_cast<FontAsset>(this->assets_[fileName]);
         return asset ? asset->getFont() : nullptr;
     }
 } // Lemmings

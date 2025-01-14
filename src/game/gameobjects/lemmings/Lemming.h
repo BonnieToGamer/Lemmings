@@ -53,7 +53,7 @@ enum LemmingAnimations
     ParachuteHang
 };
     
-class Lemming : public Engine::GameObject {
+class Lemming final : public Engine::GameObject {
 private:
     Map* map_;
     LevelData* data_;
@@ -89,20 +89,19 @@ public:
     void draw(sf::RenderTarget& renderTarget) override;
     sf::Vector2i getPosition() const;
     void setPosition(const sf::Vector2i& newPos);
-    Map* map();
+    Map* map() const;
     void initJob(Job job);
     void playAnimation(LemmingAnimations animation, sf::Vector2i offset);
     void flipSprite();
     HorizontalDirection dir() const;
     void setDir(HorizontalDirection newDir);
-    sf::Vector2i getActualPos();
-    sf::Vector2i getSize();
+    sf::Vector2i getActualPos() const;
+    sf::Vector2i getSize() const;
     Job getCurrentJob() const;
     bool tryAssignJob(Job job) const;
     void win();
-    // void initSubJob(Job job);
 
-    void checkCollisionExit();
+    void checkCollisionExit() const;
     bool checkCollision(int x, int y, HorizontalDirection direction = None) const;
     void tryDig(int x, int y) const;
     void placeCell(int x, int y, sf::Color color, HorizontalDirection oneWay = None) const;

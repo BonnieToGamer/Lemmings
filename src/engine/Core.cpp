@@ -65,13 +65,13 @@ namespace Lemmings::Engine
     Core::Core() : sceneManager_(), renderTexture_(), renderSprite_()
     {
         INSTANCE = this;
-        uint width = DESIGNED_RESOLUTION_WIDTH * 4;
-        uint height = DESIGNED_RESOLUTION_HEIGHT * 4;
+        const uint width = DESIGNED_RESOLUTION_WIDTH * 4;
+        const uint height = DESIGNED_RESOLUTION_HEIGHT * 4;
         this->renderWindow_ = std::make_unique<sf::RenderWindow>(sf::VideoMode{width, height}, "CMake SFML Project", sf::Style::Titlebar | sf::Style::Close);
         this->renderWindow_->setFramerateLimit(60);
-    
-        uint displayWidth = sf::VideoMode::getDesktopMode().width;
-        uint displayHeight = sf::VideoMode::getDesktopMode().height;
+
+        const uint displayWidth = sf::VideoMode::getDesktopMode().width;
+        const uint displayHeight = sf::VideoMode::getDesktopMode().height;
         this->renderWindow_->setPosition(sf::Vector2i(
             static_cast<int>((displayWidth - width) / 2),
             static_cast<int>((displayHeight - height) / 2))
@@ -144,7 +144,7 @@ namespace Lemmings::Engine
         this->sceneManager_.removeScene();
     }
 
-    sf::RenderWindow* Core::getWindow()
+    sf::RenderWindow* Core::getWindow() const
     {
         return this->renderWindow_.get();
     }

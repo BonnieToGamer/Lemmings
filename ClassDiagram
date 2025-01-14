@@ -1,0 +1,546 @@
+%%{init: {'theme': 'dark', 'themeVariables': {'lineType': 'straight'}}}%%
+classDiagram
+    class ContentManager {
+        - assets_ : std::unordered_map~std::string¸std::shared_ptr~GameAsset~~
+        
+        + void ~ContentManager() 
+        + sf::Texture* getTexture(const std::string& fileName)
+        + sf::Font* getFont(fileName : const std::string&)
+    }
+
+    class FontAsset {
+        - asset : sf::Font
+        
+        + FontAsset(const std::string& fileName)
+        + sf::Font* getFont()
+    }
+
+    class GameAsset {
+        + GameAsset(const std::string& fileName)
+        + ~GameAsset()
+    }
+
+    class TextureAsset {
+        - asset : sf::Texture
+        
+        + TextureAsset(const std::string& fileName)
+        + sf::Texture* getTexture()
+    }
+
+    class Core {
+        - renderWindow_ : std::unique_ptr~sf::RenderWindow~
+        - sceneManager_ : SceneManager
+        - renderTexture_ : sf::RenderTexture
+        - renderSprite_ : sf::Sprite
+        - const float DESIGNED_RESOLUTION_ASPECT_RATIO;
+        - slowTimer_ : Timer
+        - levels_ : std::unordered_map~uint¸std::string~
+        - INSTANCE : CORE*$
+        - CHANGE_LEVEL_EVENT : const std::function~void(uint)~
+
+        - void loadNewLevel(uint levelIndex);
+        - void loadLevelIndices();
+
+        + DESIGNED_RESOLUTION_WIDTH : constexpr uint$
+        + DESIGNED_RESOLUTION_HEIGHT : constexpr uint$
+        + windowSizeChangedEvent : Event~~$;
+        + contentManager : std::unique_ptr~Asset::ContentManager~$;
+
+        + Core* Instance()$
+        + Core()
+        + void run()
+        + void update(float delta)
+        + void draw()
+        + void removeCurrentScene()
+        + sf::RenderWindow* getWindow();
+    }
+
+    class AnimationManager {
+        - animations_ : std::unordered_map~T¸std::unique_ptr~SpriteSheetAnimation~~
+        - currentSpriteSheetAnimation_ : SpriteSheetAnimation*
+
+        +AnimationManager();
+
+        + void addAnimation(T key, std::unique_ptr~SpriteSheetAnimation~ animation);
+        + void changeAnimation(T key);
+        + SpriteSheetAnimation* getCurrentAnimation() const;
+    }
+    
+    class GameObject {
+        <<abstract>>
+        - children_ : std::vector~std::unique_ptr~GameObject~~
+
+        + virtual ~GameObject() = default*
+        + virtual void init() = 0*
+        + virtual void update(float delta) = 0*;
+        + virtual void draw(sf::RenderTexture& renderTexture) = 0*
+
+        + void addChild(std::unique_ptr~GameObject~ child);
+        + void removeChild(std::unique_ptr~GameObject~ child);
+    }
+
+    class IScene {
+        <<abstract>>
+        - gameObjects : std::vector~std::shared_ptr~GameObject~~
+        
+        # void addGameObject(const std::shared_ptr~GameObject~& gameObject);
+
+        + virtual ~IScene() = default*
+        + virtual void init()*
+        + virtual void destroy() = 0*;
+        + virtual void update(float delta)*
+        + virtual void draw(sf::RenderTexture& renderTexture)*
+    }
+
+    class IState {
+        <<abstract>>
+        template ~typename T~
+        # parent_ : std::shared_ptr~T~
+
+        + void setParent(std::shared_ptr~T~ parent)
+        + virtual ~IState() = default
+        + virtual void enter() = 0
+        + virtual void exit() = 0
+        + virtual std::shared_ptr~IState~T~~ update(float delta) = 0
+    }
+
+    class ModifiableTexture {
+        - texture_ : sf::Texture
+        - image_ : sf::Image
+        - sprite_ : sf::Sprite
+
+        + explicit ModifiableTexture(const std::string& fileName)
+        + void updateTexture()
+        + sf::Sprite& getSprite()
+        + sf::Color getPixel(uint x, uint y)
+        + void setPixel(uint x, uint y, const sf::Color& color)
+        + uint width()
+        + uint height()
+    }
+
+    class SceneManager {
+        - sceneStack : std::stack~std::shared_ptr~IScene~~
+        
+        + SceneManager()
+        + void addScene(const std::shared_ptr~IScene~& scene)
+        + void removeScene()
+        + std::shared_ptr~IScene~ getCurrentScene()
+    }
+
+    class SpriteSheet {
+        - spriteSize_ : sf::Vector2u;
+        - texture_ : sf::Texture*;
+        - sprite_ : sf::Sprite;
+        - textureName_ : std::string;
+        - flipOffset_ : float;
+        - position : sf::Vector2f;
+        - offset_ : sf::Vector2i;
+
+        + SpriteSheet(sf::Vector2u spriteSize, sf::Texture* texture)
+        + void init() override
+        + void update(float delta) override
+        + void draw(sf::RenderTarget& renderTarget) override
+        + void setCurrentSprite(uint x, uint y)
+        + void setPosition(int x, int y)
+        + void flipSprite()
+        + void setFlipped(int dir)
+        + void setScale(float scaleX, float scaleY)
+        + void setOffset(sf::Vector2i offset)
+        + sf::Vector2i getOffset() const
+        + void setColor(sf::Color color)
+    }
+
+    class AnimationDirection {
+        <<Enumeration>>
+        Down
+        Right
+    }
+
+    class SpriteSheetAnimation {
+        - spriteSheet_ : SpriteSheet* 
+        - animationDir_ : AnimationDirection
+        - maxFrames_ : uint
+        - currentFrame_ : uint
+        - offset_ : sf::Vector2u
+
+        + SpriteSheetAnimation(SpriteSheet* spriteSheet, AnimationDirection dir, uint amountOfFrames, sf::Vector2u offset)
+        + void nextFrame()
+        + void resetAnimation()
+    }
+
+    class StateMachineManager {
+        <<abstract>>
+        template ~typename T~
+        - currentState_ : std::shared_ptr~IScene~T~~
+        - parent_ : std::shared_ptr~T~
+
+        + StateMachineManager(std::shared_ptr~IState~T~~ startingState, std::shared_ptr~T~ parent)
+        + void changeState(std::shared_ptr~IState~~ state)
+        + void update(float delta)
+    }
+
+    class Timer {
+        - elapsed_ : float
+        - stopTime_ : float
+
+        + Timer(float stopTime)
+        + bool update(float delta)
+    }
+
+    class Level {
+        - levelName : std::string
+        - levelData : std::unique_ptr~LevelData~
+        - entrance : Entrance*
+        - lemmingHandler : LemmingsHandler*
+
+        + Level(levelName : std::string)
+        + std::unique_ptr~LevelData~ parseLevel()
+        + void init()
+        + void update(float delta)
+        + void draw(sf::RenderTarget& renderTarget)
+        + void destroy()
+    }
+
+    class Map {
+        - modifiableTexture_ Engine::ModifiableTexture
+        - nodes_ : std::vector~Node~
+        - nodesAccessed_ : bool
+        - accessedQueue_ : std::queue~int~ 
+
+        + explicit Map(const std::string& mapName)
+        + uint width()
+        + uint height()
+        + const Node& operator[](int index)
+        + void init() override
+        + void update(float delta) override
+        + void draw(sf::RenderTexture& renderTexture) override
+        + void changeNode(int index, bool value, sf::Color color, HorizontalDirection)
+    }
+
+    class Node {
+        - position_ : sf::Vector2i
+        - enabled_ : bool
+        - color_ : sf::Color
+        - oneWay_ : bool
+        - oneWayDir_ : HorizontalDirection
+
+        + Node(sf::Vector2i position, bool enabled)
+        + bool isEnabled() const
+        + HorizontalDirection oneWayDirection() const;
+        + void setEnabled(bool value);
+        + sf::Color getColor();
+        + void setColor(sf::Color color);
+        + void setOneWay(HorizontalDirection direction);
+    }
+
+    class Lemming {
+        - map : Map*
+        - data : LevelData*
+        - position : sf::Vector2i
+        - animations : Engine::AnimationManager~LemmingAnimations~
+        - dirtAnimations : Engine::AnimationManager~LemmingAnimations~
+        - lemmingSpriteSheet : std::unique_ptr~Engine::SpriteSheet~
+        - dirtSpriteSheet : std::unique_ptr~Engine::SpriteSheet~
+        - stateMachineManager : std::unique_ptr~Engine::StateMachineManager~Lemming~~
+        - currentDir : HorizontalDirection
+        - currentJob : Job
+        - TEXTURE_WIDTH : const uint
+        - TEXTURE_HEIGHT : const uint
+        - lemmingTexture : sf::Texture*
+        - dirtTexture : sf::Texture*
+        - void addAnimation(LemmingAnimations jobAnimation, uint amountOfFrames, const sf::Vector2u& offset);
+        - void die();
+
+        + static deathEvent : Engine::Event~Lemming*~
+        + static winEvent : Engine::Event~Lemming*~
+
+        + explicit Lemming(Map* map, LevelData* data);
+        + void init() override;
+        + void update(float delta) override;
+        + void draw(sf::RenderTarget& renderTarget) override;
+        + sf::Vector2i getPosition() const;
+        + void setPosition(const sf::Vector2i& newPos);
+        + Map* map();
+        + void initJob(Job job);
+        + void playAnimation(LemmingAnimations animation, sf::Vector2i offset);
+        + void flipSprite();
+        + HorizontalDirection dir() const;
+        + void setDir(HorizontalDirection newDir);
+        + sf::Vector2i getActualPos();
+        + sf::Vector2i getSize();
+        + Job getCurrentJob() const;
+        + bool tryAssignJob(Job job) const;
+        + void win();
+        + void checkCollisionExit();
+        + bool checkCollision(int x, int y, HorizontalDirection direction) const;
+        + void tryDig(int x, int y) const;
+        + void placeCell(int x, int y, sf::Color color, HorizontalDirection oneWay) const;
+    }
+
+    class Job {
+        <<Enumeration>>
+        Walker = 0,
+        Faller = 1,
+        Climber = 2,
+        Floater = 3,
+        Bomber = 4,
+        Blocker = 5,
+        Builder = 6,
+        Basher = 7,
+        Miner = 8,
+        Digger = 9,
+        Nothing = 10,
+        Winner = 11,
+    }
+
+    class LemmingAnimations {
+        <<Enumeration>>
+        Walk,
+        Fall,
+        Climb,
+        Float,
+        Bomb,
+        Block,
+        Build,
+        Bash,
+        Mine,
+        Dig,
+        Win,
+        Shrug,
+        ParachuteOpen,
+        ParachuteHang
+    }
+
+    class Camera {
+        - view_ : sf::View
+        - position_ : sf::Vector2f
+        - HALF_SCREEN_SIZE : const sf::Vector2f
+        - WINDOW_RESIZED_HANDLER : const std::function~void()~
+        
+        + static movedEvent : Engine::Event~Camera*~
+        + ~Camera() override;
+        + void init() override;
+        + void update(float delta) override;
+        + void draw(sf::RenderTarget& renderTarget) override;
+        + void activate() const;
+        + sf::Vector2f position() const;
+        + void setPosition(sf::Vector2f newPos);
+        + void windowResized();
+        + void updateView(int windowWidth, int windowHeight);
+    }
+
+    class Entrance {
+        - texture_ : sf::Texture*
+        - spriteSheet_ : std::unique_ptr~Engine::SpriteSheet~
+        - animation_ : std::unique_ptr~Engine::SpriteSheetAnimation~
+        - animationTimer_ : Engine::Timer
+        - spawnTimer_ : std::unique_ptr~Engine::Timer~
+        - position_ : sf::Vector2i
+        - lemmingsHandler_ : LemmingsHandler*
+        - currentAnimationFrame_ : uint
+        - spawnRate_ : uint
+        - amountOfLemmings_ : uint
+        - currentAmountOfLemmings_ : uint
+        - SPAWN_POINT : const sf::Vector2i
+        - ENTRANCE_SPRITE_WIDTH : const uint
+        - ENTRANCE_SPRITE_HEIGHT : const uint
+        - NUMBER_OF_FRAMES : const uint
+        - SPAWN_RATE_CHANGED_HANDLER : const std::function~void(uint)~
+        
+        + static spawnEvent : Engine::Event~~
+
+        + Entrance(sf::Vector2i position, LemmingsHandler* lemmingsHandler, uint spawnRate, uint amountOfLemmings);
+        + ~Entrance();
+        + void init() override;
+        + void update(float delta) override;
+        + void draw(sf::RenderTarget& renderTarget) override;
+        + void spawnRateChanged(uint newSpawnRate);
+        + void spawnTimerComplete();
+        + void animationTimerComplete();
+        + uint getAmountOut();
+    }
+
+    class Exit {
+        - data_ : LevelData*
+        - texture_ : sf::Texture*
+        - animation_ : std::unique_ptr~Engine::SpriteSheetAnimation~
+        - animationTimer_ : Engine::Timer
+        - TEXTURE_WIDTH : static constexpr uint
+        - TEXTURE_HEIGHT : static constexpr uint
+        - COLLIDER_WIDTH : static constexpr uint
+        - COLLIDER_HEIGHT : static constexpr uint
+        - collisionArea : static sf::IntRect
+
+        + explicit Exit(LevelData* data);
+        + ~Exit() override;
+        + void init() override;
+        + void update(float delta) override;
+        + void draw(sf::RenderTarget& renderTarget) override;
+    }
+
+    class GameUI {
+        - AMOUNT_OF_BUTTONS : static constexpr uint
+        - buttons_ : std::vector~UI::Button*~
+        - currentJobButton_ : UI::JobButton*
+        - levelData_ : const LevelData*
+        - mouseHoverAmount : uint
+        - currentReleaseRate_ : uint
+        - mouseHoverJob : Job
+        - jobTextTexture_ : sf::Texture*
+        - jobTextSprite_ : sf::Sprite
+        - amountOfHoveredLemmings_ : UI::DualNumericSprite*
+        - time_ : UI::TimeDisplay*
+        - lemmingStats_ : UI::LemmingInfoDisplay*
+        - amountOut : uint
+        - amountIn : uin
+        - JOB_NAME_TEXTURE_WIDTH : const uint
+        - JOB_NAME_TEXTURE_HEIGHT : const uint
+        - SPAWN_EVENT_HANDLER : const std::function~void()~
+        - LEMMING_WIN_HANDLER : const std::function~void()~
+        - CAMERA_MOVED_HANDLER : const std::function~void(Camera*)~
+    
+        - setAmountOut() : void
+        - updateAmountIn() : void
+        - cameraMoved(sender : Camera*) : void
+        - createButton(UI::UIButtonType ButtonType, Args&&... args) : void
+
+        + static spawnRateChangedEvent : Engine::Event~uint~
+        + explicit GameUI(LevelData* levelData);
+        + ~GameUI() override;
+        + void init() override;
+        + void update(float delta) override;
+        + void draw(sf::RenderTarget& renderTarget) override;
+        + void cameraMoved(Camera* camera);
+        + void buttonClicked(UI::UIButtonType index);
+        + void jobButtonClicked(UI::UIButtonType index);
+        + void releaseRateButtonClicked(UI::UIButtonType index);
+        + Job getCurrentJob();
+        + void decreaseCurrentJob();
+        + void setLemmingJobStat(uint amount, Job currentJob);
+        + bool canAssignCurrentJob();
+        + void setAmountOut();
+        + void updateAmountIn();
+    }
+
+    class Cursor {
+        - texture : sf::Texture*
+        - sprite : sf::Sprite
+        - lemmingsHandler : LemmingsHandler*
+        - camera : Camera*
+        - ui : GameUI*
+        - wasMouseHeldLastFrame : bool
+        - CAMERA_MOVE_SPEED : const uint
+        - CAMERA_MOVE_BOUNDARY : const uint
+        - TEXTURE_WIDTH : const uint
+        - TEXTURE_HEIGHT : const uint
+        - sf::Vector2f updateCursor();
+        - sf::FloatRect createMouseRect(sf::Vector2f mousePos);
+        - void updateSpriteTexture(sf::FloatRect mouseRect, bool collidedWithLemming);
+        - void updateCameraPosition(sf::Vector2f mousePos);
+        - void checkAssignJob(const std::vector~Lemming*~& lemmings);
+        - void showCurrentLemmingStats(const std::vector~Lemming*~& lemmings);
+        - bool isMouseNearLeftBoundary(sf::Vector2f mousePos, sf::Vector2f cameraPos);
+        - bool isMouseNearRightBoundary(sf::Vector2f mousePos, sf::Vector2f cameraPos);
+        + explicit Cursor(LemmingsHandler* lemmingHandler, Camera* cam, GameUI* ui);
+        + void init() override;
+        + void update(float delta) override;
+        + void draw(sf::RenderTarget& renderTarget) override;
+    }
+
+    class LemmingsHandler {
+        - lemmings : std::vector~std::unique_ptr~Lemming~~
+        - fixedUpdateTimer : Engine::Timer
+        - map : Map*
+        - data : LevelData*
+        - removalQueue : std::queue~Lemming*~
+        - LEMMING_DEATH_HANDLER : const std::function~void(Lemming*)~
+        - LEMMING_WIN_HANDLER : const std::function~void(Lemming*)~
+        
+        + lemmingWinEvent : Engine::Event~~$
+    
+        + explicit LemmingsHandler(Map* map, LevelData* data);
+        + ~LemmingsHandler() override;
+        + void init() override;
+        + void update(float delta) override;
+        + void draw(sf::RenderTarget& renderTarget) override;
+        + void addLemming(sf::Vector2i position);
+        + std::vector~Lemming*~ checkCollision(sf::FloatRect rect);
+        + uint getAmountOfLemmings();
+    }
+
+    class Walker {
+        - dir : int
+        - SPEED : const float
+
+        + void enter() override
+        + void exit() override
+        + std::shared_ptr~IState~Lemming~~ update(float delta) override
+    }
+
+    class Faller {
+        + void enter() override
+        + void exit() override
+        + std::shared_ptr~IState~Lemming~~ update(float delta) override
+    }
+
+    FontAsset <|-- GameAsset
+    TextureAsset <|-- GameAsset
+    ContentManager *-- GameAsset : 0..
+
+    AnimationManager *-- SpriteSheetAnimation : 0..
+
+    Core *-- SceneManager
+    Core *-- Timer
+    Core *-- Event
+
+    IScene *-- GameObject : 0..
+
+    SceneManager *-- IScene : 0..
+
+    SpriteSheetAnimation <-- SpriteSheet
+    SpriteSheetAnimation *-- AnimationDirection
+
+    StateMachineManager *-- IState
+
+    Lemming <-- Map
+    Lemming <-- LevelData
+    Lemming *-- AnimationManager
+    Lemming *-- SpriteSheet
+    Lemming *-- StateMachineManager
+    Lemming *-- HorizontalDirection
+    Lemming *-- Job
+    Lemming <-- LemmingAnimations
+
+    LemmingHandler <-- Map
+    LemmingHandler <-- LevelData
+    LemmingHandler *-- Lemming : 0..
+    LemmingHandler *-- Timer
+
+    Cursor <-- Camera
+    Cursor <-- GameUI
+    Cursor <-- LemmingHandler
+    
+    Entrance *-- SpriteSheetAnimation
+    Entrance *-- SpriteSheet
+    Entrance *-- Timer
+    Entrance <-- LemmingsHandler
+
+    Exit *-- Timer
+    Exit *-- SpriteSheetAnimation
+    Exit <-- LevelData
+
+    GameUI *-- Button : 0..
+    GameUI *-- Job
+    GameUI <-- DualNumericSprite
+    GameUI <-- TimeDisplay
+    GameUI <-- LemmingInfoDisplay
+    GameUI <-- JobButton
+    GameUI <-- LevelData
+
+    Map *-- ModifiableTexture
+    Map *-- Node : 0..
+
+    Node *-- Horizontal Direction
+
+    Level <-- Entrance
+    Level <-- LemmingsHandler

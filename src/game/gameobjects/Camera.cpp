@@ -70,8 +70,8 @@ namespace Lemmings {
         // and sets the view's viewport accordingly in order to achieve a letterbox effect.
         // A new view (with a new viewport set) is returned.
 
-        float windowRatio = (float) windowWidth / (float) windowHeight;
-        float viewRatio = this->view_.getSize().x / (float) this->view_.getSize().y;
+        float windowRatio = static_cast<float>(windowWidth) / static_cast<float>(windowHeight);
+        float viewRatio = this->view_.getSize().x / static_cast<float>(this->view_.getSize().y);
         float sizeX = 1;
         float sizeY = 1;
         float posX = 0;

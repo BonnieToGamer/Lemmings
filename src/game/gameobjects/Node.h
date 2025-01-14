@@ -22,7 +22,7 @@ public:
     bool isEnabled() const;
     HorizontalDirection oneWayDirection() const;
     void setEnabled(bool value);
-    sf::Color getColor();
+    sf::Color getColor() const;
     void setColor(sf::Color color);
     void setOneWay(HorizontalDirection direction);
 };
