@@ -88,11 +88,6 @@ namespace Lemmings {
     {
         this->lemmingSpriteSheet->draw(renderTarget);
         this->dirtSpriteSheet->draw(renderTarget);
-        
-        sf::RectangleShape rectShape(sf::Vector2f(1.0f, 1.0f));
-        rectShape.setFillColor(sf::Color::Green);
-        rectShape.setPosition(this->position_.x, this->position_.y);
-        renderTarget.draw(rectShape);
     }
 
     sf::Vector2i Lemming::getPosition() const
