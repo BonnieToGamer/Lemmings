@@ -52,6 +52,7 @@ classDiagram
         + void update(float delta)
         + void draw()
         + void removeCurrentScene()
+        + void resetCurrentScene();
         + sf::RenderWindow* getWindow();
     }
 
@@ -124,6 +125,7 @@ classDiagram
         + SceneManager()
         + void addScene(const std::shared_ptr~IScene~& scene)
         + void removeScene()
+        + void resetScene()
         + std::shared_ptr~IScene~ getCurrentScene()
     }
 
@@ -185,6 +187,7 @@ classDiagram
 
         + Timer(float stopTime)
         + bool update(float delta)
+        + float getElapsed()
     }
 
     class Level {
@@ -244,12 +247,15 @@ classDiagram
         - stateMachineManager : std::unique_ptr~Engine::StateMachineManager~Lemming~~
         - currentDir : HorizontalDirection
         - currentJob : Job
+        - nukeStarted : bool
+        - nukeTimer : Engine::Timer
+        - nukeSprite : std::unique_ptr~UI::Numeric::Sprite~
         - TEXTURE_WIDTH : const uint
         - TEXTURE_HEIGHT : const uint
+        - NUKE_TIME_OFFSET = 17
         - lemmingTexture : sf::Texture*
         - dirtTexture : sf::Texture*
         - void addAnimation(LemmingAnimations jobAnimation, uint amountOfFrames, const sf::Vector2u& offset);
-        - void die();
 
         + static deathEvent : Engine::Event~Lemming*~
         + static winEvent : Engine::Event~Lemming*~
@@ -258,6 +264,7 @@ classDiagram
         + void init() override;
         + void update(float delta) override;
         + void draw(sf::RenderTarget& renderTarget) override;
+        + void die();
         + sf::Vector2i getPosition() const;
         + void setPosition(const sf::Vector2i& newPos);
         + Map* map();
@@ -275,6 +282,7 @@ classDiagram
         + bool checkCollision(int x, int y, HorizontalDirection direction) const;
         + void tryDig(int x, int y) const;
         + void placeCell(int x, int y, sf::Color color, HorizontalDirection oneWay) const;
+        + void startNuke();
     }
 
     class Job {
@@ -379,7 +387,7 @@ classDiagram
     }
 
     class GameUI {
-        - AMOUNT_OF_BUTTONS : static constexpr uint
+        - AMOUNT_OF_BUTTONS : constexpr uint$
         - buttons_ : std::vector~UI::Button*~
         - currentJobButton_ : UI::JobButton*
         - levelData_ : const LevelData*
@@ -404,14 +412,16 @@ classDiagram
         - cameraMoved(sender : Camera*) : void
         - createButton(UI::UIButtonType ButtonType, Args&&... args) : void
 
-        + static spawnRateChangedEvent : Engine::Event~uint~
+        + spawnRateChangedEvent : Engine::Event~uint~$
+        + nukeEvent : Engine::Event~~$
+        + pauseEvent : Engine::Event~~$
         + explicit GameUI(LevelData* levelData);
         + ~GameUI() override;
         + void init() override;
         + void update(float delta) override;
         + void draw(sf::RenderTarget& renderTarget) override;
         + void cameraMoved(Camera* camera);
-        + void buttonClicked(UI::UIButtonType index);
+        + void buttonClicked(UI::UIButtonType index) const;
         + void jobButtonClicked(UI::UIButtonType index);
         + void releaseRateButtonClicked(UI::UIButtonType index);
         + Job getCurrentJob();
@@ -455,17 +465,29 @@ classDiagram
         - removalQueue : std::queue~Lemming*~
         - LEMMING_DEATH_HANDLER : const std::function~void(Lemming*)~
         - LEMMING_WIN_HANDLER : const std::function~void(Lemming*)~
+        - NUKE_HANDLER : const std::function~void()~
+        - PAUSE_HANDLER : const std::function~void()~
+        - nukeIndex : uint
+        - nukeStarted : bool
+        - paused : bool
+        - amountWon : uint
+        
+        - void onLemmingDeath(Lemming* lemming)
+        - void onLemmingWin(Lemming* lemming)
+        - void pause()
+        - void nuke()
         
         + lemmingWinEvent : Engine::Event~~$
     
-        + explicit LemmingsHandler(Map* map, LevelData* data);
-        + ~LemmingsHandler() override;
-        + void init() override;
-        + void update(float delta) override;
-        + void draw(sf::RenderTarget& renderTarget) override;
-        + void addLemming(sf::Vector2i position);
-        + std::vector~Lemming*~ checkCollision(sf::FloatRect rect);
-        + uint getAmountOfLemmings();
+        + explicit LemmingsHandler(Map* map, LevelData* data)
+        + ~LemmingsHandler() override
+        + void init() override
+        + void update(float delta) override
+        + void draw(sf::RenderTarget& renderTarget) override
+        + void addLemming(sf::Vector2i position)
+        + std::vector~Lemming*~ checkCollision(sf::FloatRect rect)
+        + uint getAmountOfLemmings()
+        + uint getAmountWon()
     }
 
     class Walker {
