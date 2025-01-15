@@ -21,7 +21,7 @@ protected:
 public:
     virtual ~IScene() = default;
     virtual void init();
-    virtual void destroy() = 0;
+    virtual void destroy();
     virtual void update(float delta);
     virtual void draw(sf::RenderTarget& renderTarget);
 };
@@ -35,6 +35,11 @@ inline void IScene::init()
 {
     for (const auto& gameObject : this->gameObjects_)
         gameObject->init();
+}
+
+inline void IScene::destroy()
+{
+    gameObjects_.clear();
 }
 
 inline void IScene::update(float delta)

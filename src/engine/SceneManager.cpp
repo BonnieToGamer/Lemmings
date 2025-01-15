@@ -23,6 +23,12 @@ namespace Lemmings::Engine
         this->sceneStack_.pop();
     }
 
+    void SceneManager::resetScene()
+    {
+        this->sceneStack_.top()->destroy();
+        this->sceneStack_.top()->init();
+    }
+
     IScene* SceneManager::getCurrentScene()
     {
         if (this->sceneStack_.empty())

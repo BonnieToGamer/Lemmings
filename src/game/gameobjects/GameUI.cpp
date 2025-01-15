@@ -12,6 +12,8 @@
 
 namespace Lemmings {
     Engine::Event<uint> GameUI::spawnRateChangedEvent;
+    Engine::Event<> GameUI::nukeEvent;
+    Engine::Event<> GameUI::pauseEvent;
     
     GameUI::GameUI(const LevelData* levelData) : levelData_(levelData)
     {
@@ -35,6 +37,8 @@ namespace Lemmings {
 
         this->jobTextSprite_.setTexture(*this->jobTextTexture_);
         this->jobTextSprite_.setPosition(0, textY);
+        this->jobTextSprite_.setTextureRect({0, static_cast<int>(static_cast<int>(Nothing) * JOB_NAME_TEXTURE_HEIGHT), static_cast<int>(JOB_NAME_TEXTURE_WIDTH), static_cast<int>(JOB_NAME_TEXTURE_HEIGHT)});
+
 
         float heldTimer = 0.1f;
 
@@ -92,15 +96,19 @@ namespace Lemmings {
         this->jobTextSprite_.setPosition(camera->position().x, this->jobTextSprite_.getPosition().y);
         this->time_->setPosition(sf::Vector2f(camera->position().x + Engine::Core::DESIGNED_RESOLUTION_WIDTH - UI::TimeDisplay::WIDTH, this->time_->getPosition().y));
         this->lemmingStats_->setPosition(sf::Vector2f(camera->position().x + 111, this->lemmingStats_->getPosition().y));
-        this->amountOfHoveredLemmings_->setPosition(sf::Vector2f(camera->position().x + UI::NumericSprite::NUMBER_WIDTH * 9, this->amountOfHoveredLemmings_->getPosition().y));
+        this->amountOfHoveredLemmings_->setPosition(sf::Vector2f(camera->position().x + UI::NumericSprite::NUMBER_BIG_WIDTH * 9, this->amountOfHoveredLemmings_->getPosition().y));
 
         for (const auto& button : this->buttons_)
             button->setPosition({camera->position().x + button->getIndex() * button->BUTTON_WIDTH, static_cast<float>(Engine::Core::DESIGNED_RESOLUTION_HEIGHT - button->BUTTON_HEIGHT)});
     }
 
-    void GameUI::buttonClicked(UI::UIButtonType index)
+    void GameUI::buttonClicked(UI::UIButtonType index) const
     {
-        std::cout << index << " clicked!" << std::endl;
+        if (index == UI::Nuke)
+            nukeEvent.invoke();
+
+        else if (index == UI::Pause)
+            pauseEvent.invoke();
     }
 
     void GameUI::jobButtonClicked(UI::UIButtonType index)
@@ -108,7 +116,6 @@ namespace Lemmings {
         if (this->currentJobButton_ != nullptr)
             this->currentJobButton_->setSelected(false);
         
-        std::cout << index << " job clicked!" << std::endl;
         this->currentJobButton_ = dynamic_cast<UI::JobButton*>(this->buttons_[index]);
         this->currentJobButton_->setSelected(true);
     }

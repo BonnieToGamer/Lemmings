@@ -44,7 +44,7 @@ namespace Lemmings::UI {
     void DualNumericSprite::setPosition(sf::Vector2f pos)
     {
         this->tens_.setPosition(pos);
-        this->ones_.setPosition(pos + sf::Vector2f(NumericSprite::NUMBER_WIDTH, 0));
+        this->ones_.setPosition(pos + sf::Vector2f(NumericSprite::NUMBER_BIG_WIDTH, 0));
     }
 
     sf::Vector2f DualNumericSprite::getPosition()

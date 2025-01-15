@@ -25,7 +25,7 @@ private:
     NumericSprite* secondsOnes_;
 
 public:
-    static constexpr uint WIDTH = NumericSprite::NUMBER_WIDTH * 9;
+    static constexpr uint WIDTH = NumericSprite::NUMBER_BIG_WIDTH * 9;
     
     TimeDisplay(sf::Vector2f position, uint time);
     void init() override;

@@ -9,10 +9,13 @@
 #include "../../../engine/Core.h"
 
 namespace Lemmings::UI {
-    
+    NumericSprite::NumericSprite(NumberType type) : type_(type)
+    {
+    }
+
     void NumericSprite::init()
     {
-        this->texture_ = Engine::Core::contentManager->getTexture("numbers_big");
+        this->texture_ = Engine::Core::contentManager->getTexture(this->type_ == Big ? "numbers_big" : "numbers");
         this->sprite_.setTexture(*texture_);
         this->setNumber(Zero);
     }
@@ -36,6 +39,9 @@ namespace Lemmings::UI {
 
     void NumericSprite::setNumber(Number number)
     {
-        this->sprite_.setTextureRect(sf::IntRect(static_cast<int>(number) * this->NUMBER_WIDTH, 0, this->NUMBER_WIDTH, this->NUMBER_HEIGHT));
+        if (this->type_ == Big)
+            this->sprite_.setTextureRect(sf::IntRect(static_cast<int>(number) * this->NUMBER_BIG_WIDTH, 0, this->NUMBER_BIG_WIDTH, this->NUMBER_BIG_HEIGHT));
+        else if (this->type_ == Small)
+            this->sprite_.setTextureRect(sf::IntRect(static_cast<int>(number) * this->NUMBER_SMALL_WIDTH, 0, this->NUMBER_SMALL_WIDTH, this->NUMBER_SMALL_HEIGHT));
     }
 } // Lemmings

@@ -38,10 +38,10 @@ public:
     uint bashers;
     uint miners;
     uint diggers;
-    uint spawnX;
-    uint spawnY;
-    uint exitX;
-    uint exitY;
+    int spawnX;
+    int spawnY;
+    int exitX;
+    int exitY;
     uint cameraX;
     uint cameraY;
 

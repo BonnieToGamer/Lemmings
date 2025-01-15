@@ -13,10 +13,7 @@ namespace Lemmings {
     
     float Entrance::calcSpawnRate() const
     {
-        // A really rough interpretation of lemmings spawn rate system.
-        // I counted frames between spawn rates 50 and 100 which equaled
-        // 121 and 16 frames respectively on a 60 fps video
-        return -0.035066f * static_cast<float>(this->spawnRate_ - 50) + 2.02;
+        return static_cast<float>(100 - this->spawnRate_) / 20;
     }
 
     Entrance::Entrance(sf::Vector2i position, LemmingsHandler* lemmingsHandler, uint spawnRate, uint amountOfLemmings) : spawnTimer_(nullptr), position_(position), currentAnimationFrame_(0), lemmingsHandler_(lemmingsHandler), spawnRate_(spawnRate), amountOfLemmings_(amountOfLemmings)

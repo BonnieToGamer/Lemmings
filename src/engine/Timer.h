@@ -19,6 +19,7 @@ public:
     explicit Timer(float stopTime);
     bool update(float delta);
     void changeStopTime(float newTime);
+    float getElapsed() const;
 };
 
 } // Lemmings

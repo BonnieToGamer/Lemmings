@@ -76,10 +76,10 @@ namespace Lemmings::UI {
         this->position_ = position;
         
         this->timeWordSprite_.setPosition(this->position_);
-        this->minute_->setPosition(this->position_ + sf::Vector2f(NumericSprite::NUMBER_WIDTH * 5, 0));
-        this->dash_->setPosition(this->position_ + sf::Vector2f(NumericSprite::NUMBER_WIDTH * 6, 0));
-        this->secondsTens_->setPosition(this->position_ + sf::Vector2f(NumericSprite::NUMBER_WIDTH * 7, 0));
-        this->secondsOnes_->setPosition(this->position_ + sf::Vector2f(NumericSprite::NUMBER_WIDTH * 8, 0));
+        this->minute_->setPosition(this->position_ + sf::Vector2f(NumericSprite::NUMBER_BIG_WIDTH * 5, 0));
+        this->dash_->setPosition(this->position_ + sf::Vector2f(NumericSprite::NUMBER_BIG_WIDTH * 6, 0));
+        this->secondsTens_->setPosition(this->position_ + sf::Vector2f(NumericSprite::NUMBER_BIG_WIDTH * 7, 0));
+        this->secondsOnes_->setPosition(this->position_ + sf::Vector2f(NumericSprite::NUMBER_BIG_WIDTH * 8, 0));
         
     }
 

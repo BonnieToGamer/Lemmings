@@ -144,6 +144,11 @@ namespace Lemmings::Engine
         this->sceneManager_.removeScene();
     }
 
+    void Core::resetCurrentScene()
+    {
+        this->sceneManager_.resetScene();
+    }
+
     sf::RenderWindow* Core::getWindow() const
     {
         return this->renderWindow_.get();

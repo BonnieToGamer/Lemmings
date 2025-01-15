@@ -30,14 +30,24 @@ public:
         Empty = 12
     };
 
+    enum NumberType
+    {
+        Big,
+        Small
+    };
+
 private:
     sf::Sprite sprite_;
     sf::Texture* texture_ = nullptr;
+    NumberType type_;
     
 public:
-    static constexpr uint NUMBER_WIDTH = 8;
-    static constexpr uint NUMBER_HEIGHT = 16;
-    
+    static constexpr uint NUMBER_BIG_WIDTH = 8;
+    static constexpr uint NUMBER_BIG_HEIGHT = 16;
+    static constexpr uint NUMBER_SMALL_WIDTH = 4;
+    static constexpr uint NUMBER_SMALL_HEIGHT = 8;
+
+    NumericSprite(NumberType type = Big);
     void init() override;
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;

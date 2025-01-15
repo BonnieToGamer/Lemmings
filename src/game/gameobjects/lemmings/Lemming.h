@@ -14,6 +14,8 @@
 #include "../../../engine/GameObject.h"
 #include "../../../engine/SpriteSheetAnimation.h"
 #include "../../../engine/StateMachineManager.h"
+#include "../../../engine/Timer.h"
+#include "../ui/NumericSprite.h"
 #include "SFML/Graphics/Sprite.hpp"
 #include "SFML/Graphics/Texture.hpp"
 
@@ -33,6 +35,7 @@ enum Job
     Digger = 9,
     Nothing = 10,
     Winner = 11,
+    Nuker = 12
 };
 
 enum LemmingAnimations
@@ -50,7 +53,10 @@ enum LemmingAnimations
     Win,
     Shrug,
     ParachuteOpen,
-    ParachuteHang
+    ParachuteHang,
+    Nuke,
+    Explosion,
+    Vault
 };
     
 class Lemming final : public Engine::GameObject {
@@ -61,22 +67,27 @@ private:
     
     Engine::AnimationManager<LemmingAnimations> animations_;
     Engine::AnimationManager<LemmingAnimations> dirtAnimations_;
-    std::unique_ptr<Engine::SpriteSheet> lemmingSpriteSheet;
-    std::unique_ptr<Engine::SpriteSheet> dirtSpriteSheet;
+    std::unique_ptr<Engine::SpriteSheet> lemmingSpriteSheet_;
+    std::unique_ptr<Engine::SpriteSheet> dirtSpriteSheet_;
     
     std::unique_ptr<Engine::StateMachineManager<Lemming>> stateMachineManager_;
     
     HorizontalDirection currentDir_ = Right;
     Job currentJob_ = Faller;
+
+    bool nukeStarted = false;
+    Engine::Timer nukeTimer_;
+    std::unique_ptr<UI::NumericSprite> nukeSprite_;
     
     const uint TEXTURE_WIDTH = 16;
     const uint TEXTURE_HEIGHT = 16;
+
+    const uint NUKE_TIME_OFFSET = 17;
 
     sf::Texture* lemmingTexture_;
     sf::Texture* dirtTexture_;
 
     void addAnimation(LemmingAnimations jobAnimation, uint amountOfFrames, const sf::Vector2u& offset);
-    void die();
     
 public:
     static Engine::Event<Lemming*> deathEvent; 
@@ -87,6 +98,7 @@ public:
     void init() override;
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;
+    void die();
     sf::Vector2i getPosition() const;
     void setPosition(const sf::Vector2i& newPos);
     Map* map() const;
@@ -105,6 +117,7 @@ public:
     bool checkCollision(int x, int y, HorizontalDirection direction = None) const;
     void tryDig(int x, int y) const;
     void placeCell(int x, int y, sf::Color color, HorizontalDirection oneWay = None) const;
+    void startNuke();
 };
 
 } // Lemmings

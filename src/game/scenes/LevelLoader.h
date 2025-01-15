@@ -12,7 +12,7 @@ namespace Lemmings::Scene {
 
 class LevelLoader final : public Engine::IScene{
 private:
-    uint currentLevelIndex = 1;
+    uint currentLevelIndex = 4;
 
 public:
     static Engine::Event<uint> changeLevelEvent;

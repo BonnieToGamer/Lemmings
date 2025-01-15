@@ -4,6 +4,8 @@
 
 #include "LemmingsHandler.h"
 
+#include "../GameUI.h"
+
 namespace Lemmings {
     Engine::Event<> LemmingsHandler::lemmingWinEvent;
     
@@ -16,6 +18,7 @@ namespace Lemmings {
     {
         this->removalQueue_.push(lemming);
         lemmingWinEvent.invoke();
+        this->amountWon++;
     }
 
     void LemmingsHandler::processRemovalQueue()
@@ -34,6 +37,17 @@ namespace Lemmings {
         }
     }
 
+    void LemmingsHandler::pause()
+    {
+        this->paused_ = !this->paused_;
+    }
+
+    void LemmingsHandler::nuke()
+    {
+        this->nukeStarted_ = true;
+        this->nukeIndex_ = 0;
+    }
+
     LemmingsHandler::LemmingsHandler(Map* map, LevelData* data): fixedUpdateTimer_(0.0667f), map_(map), data_(data)
     {
     }
@@ -42,12 +56,16 @@ namespace Lemmings {
     {
         Lemming::deathEvent -= LEMMING_DEATH_HANDLER;
         Lemming::winEvent -= LEMMING_WIN_HANDLER;
+        GameUI::nukeEvent -= NUKE_HANDLER;
+        GameUI::pauseEvent -= PAUSE_HANDLER;
     }
 
     void LemmingsHandler::init()
     {
         Lemming::deathEvent += LEMMING_DEATH_HANDLER;
         Lemming::winEvent += LEMMING_WIN_HANDLER;
+        GameUI::nukeEvent += NUKE_HANDLER;
+        GameUI::pauseEvent += PAUSE_HANDLER;
         for (const auto& lemming : this->lemmings_)
         {
             lemming->init();
@@ -56,12 +74,23 @@ namespace Lemmings {
 
     void LemmingsHandler::update(float delta)
     {
+        if (this->paused_)
+            return;
+        
         const bool shouldUpdate = this->fixedUpdateTimer_.update(delta);
         if (!shouldUpdate)
             return;
+
+        if (this->nukeStarted_ && this->lemmings_.size() > 0)
+        {
+            this->lemmings_[this->nukeIndex_]->startNuke();
+            this->nukeIndex_++;
+            if (nukeIndex_ >= this->lemmings_.size())
+                this->nukeStarted_ = false;
+        }
         
         for (const auto& lemming : this->lemmings_)
-            lemming->update(delta);
+            lemming->update(0.0667f);
 
         this->processRemovalQueue();
     }
@@ -92,6 +121,11 @@ namespace Lemmings {
         }
 
         return collidingLemmings;
+    }
+
+    uint LemmingsHandler::getAmountWon() const
+    {
+        return this->amountWon;
     }
 
     uint LemmingsHandler::getAmountOfLemmings() const

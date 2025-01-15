@@ -46,9 +46,9 @@ namespace Lemmings::UI {
         this->position_ = pos;
 
         this->outWordSprite_.setPosition(this->position_);
-        this->outSprite_.setPosition(this->position_ + sf::Vector2f(NumericSprite::NUMBER_WIDTH * 4, 0));
-        this->inWordSprite_.setPosition(this->position_ + sf::Vector2f(NumericSprite::NUMBER_WIDTH * 9, 0));
-        this->inSprite_.setPosition(this->position_ + sf::Vector2f(NumericSprite::NUMBER_WIDTH * 12, 0));
+        this->outSprite_.setPosition(this->position_ + sf::Vector2f(NumericSprite::NUMBER_BIG_WIDTH * 4, 0));
+        this->inWordSprite_.setPosition(this->position_ + sf::Vector2f(NumericSprite::NUMBER_BIG_WIDTH * 9, 0));
+        this->inSprite_.setPosition(this->position_ + sf::Vector2f(NumericSprite::NUMBER_BIG_WIDTH * 12, 0));
     }
 
     sf::Vector2f LemmingInfoDisplay::getPosition() const

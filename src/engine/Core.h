@@ -43,6 +43,7 @@ namespace Lemmings::Engine
         void update(float delta);
         void draw();
         void removeCurrentScene();
+        void resetCurrentScene();
         sf::RenderWindow* getWindow() const;
     };
 }

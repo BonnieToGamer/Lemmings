@@ -41,6 +41,8 @@ private:
     void createButton(UI::UIButtonType id, Args&&... args);
 public:
     static Engine::Event<uint> spawnRateChangedEvent;
+    static Engine::Event<> nukeEvent;
+    static Engine::Event<> pauseEvent;
     
     explicit GameUI(const LevelData* levelData);
     ~GameUI() override;
@@ -48,7 +50,7 @@ public:
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;
     void cameraMoved(const Camera* camera);
-    void buttonClicked(UI::UIButtonType index);
+    void buttonClicked(UI::UIButtonType index) const;
     void jobButtonClicked(UI::UIButtonType index);
     void releaseRateButtonClicked(UI::UIButtonType index);
     Job getCurrentJob() const;

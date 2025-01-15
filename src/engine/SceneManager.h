@@ -20,6 +20,7 @@ namespace Lemmings::Engine
 
         void addScene(std::unique_ptr<IScene> scene);
         void removeScene();
+        void resetScene();
         IScene* getCurrentScene();
     };
 }

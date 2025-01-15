@@ -176,6 +176,7 @@ namespace Lemmings::Scene {
         this->addGameObject(std::move(lemmingHandler));
         this->addGameObject(std::move(ui));
         this->addGameObject(std::move(cursor));
+
         
         IScene::init();
         
@@ -191,9 +192,15 @@ namespace Lemmings::Scene {
             return;
         }
 
-        if (this->entrance_->getAmountOut() > 0 && this->lemmingHandler_->getAmountOfLemmings() == 0)
+        if (this->entrance_->getAmountOut() == this->levelData_->amountOfLemmings && this->lemmingHandler_->getAmountWon() >= this->levelData_->saveRequirement && this->lemmingHandler_->getAmountOfLemmings() == 0)
         {
             Engine::Core::Instance()->removeCurrentScene();
+            return;
+        }
+
+        if (this->entrance_->getAmountOut() == this->levelData_->amountOfLemmings && this->lemmingHandler_->getAmountOfLemmings() == 0)
+        {
+            Engine::Core::Instance()->resetCurrentScene();
             return;
         }
         
@@ -207,5 +214,6 @@ namespace Lemmings::Scene {
 
     void Level::destroy()
     {
+        IScene::destroy();
     }
 } // Lemmings

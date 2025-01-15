@@ -25,4 +25,9 @@ namespace Lemmings {
     {
         this->stopTime_ = newTime;
     }
+
+    float Engine::Timer::getElapsed() const
+    {
+        return this->elapsed_;
+    }
 } // Lemmings
