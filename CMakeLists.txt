@@ -91,16 +91,16 @@ add_executable(main src/main.cpp
         src/game/HorizontalDirection.h
         src/game/gameobjects/lemmings/states/Floater.cpp
         src/game/gameobjects/lemmings/states/Floater.h
-        src/game/scenes/LevelLoader.cpp
-        src/game/scenes/LevelLoader.h
-        src/engine/asset/FontAsset.cpp
-        src/engine/asset/FontAsset.h
-        src/game/scenes/EndScene.cpp
-        src/game/scenes/EndScene.h
         src/game/gameobjects/lemmings/states/Nuker.cpp
         src/game/gameobjects/lemmings/states/Nuker.h
         src/game/gameobjects/lemmings/states/Climber.cpp
         src/game/gameobjects/lemmings/states/Climber.h
+        src/game/scenes/LevelLoader.cpp
+        src/game/scenes/LevelLoader.h
+        src/engine/asset/FontAsset.cpp
+        src/engine/asset/FontAsset.h
+        src/game/scenes/EndScene.h
+        src/game/scenes/EndScene.cpp
 )
 target_link_libraries(main PRIVATE sfml-graphics)
 target_compile_features(main PRIVATE cxx_std_17)
