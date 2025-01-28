@@ -79,15 +79,15 @@ private:
     Engine::Timer nukeTimer_;
     std::unique_ptr<UI::NumericSprite> nukeSprite_;
     
-    const uint TEXTURE_WIDTH = 16;
-    const uint TEXTURE_HEIGHT = 16;
+    const unsigned int TEXTURE_WIDTH = 16;
+    const unsigned int TEXTURE_HEIGHT = 16;
 
-    const uint NUKE_TIME_OFFSET = 17;
+    const unsigned int NUKE_TIME_OFFSET = 17;
 
     sf::Texture* lemmingTexture_;
     sf::Texture* dirtTexture_;
 
-    void addAnimation(LemmingAnimations jobAnimation, uint amountOfFrames, const sf::Vector2u& offset);
+    void addAnimation(LemmingAnimations jobAnimation, unsigned int amountOfFrames, const sf::Vector2u& offset);
     
 public:
     static Engine::Event<Lemming*> deathEvent; 

@@ -26,12 +26,12 @@ namespace Lemmings {
         }
     }
 
-    uint Map::width()
+    unsigned int Map::width()
     {
         return this->modifiableTexture_.width();
     }
 
-    uint Map::height()
+    unsigned int Map::height()
     {
         return this->modifiableTexture_.height();
     }
@@ -51,11 +51,11 @@ namespace Lemmings {
         {
             while (!this->accessedQueue_.empty())
             {
-                const uint index = this->accessedQueue_.front();
+                const unsigned int index = this->accessedQueue_.front();
                 this->accessedQueue_.pop();
 
-                const uint x = index % this->modifiableTexture_.width();
-                const uint y = index / this->modifiableTexture_.width();
+                const unsigned int x = index % this->modifiableTexture_.width();
+                const unsigned int y = index / this->modifiableTexture_.width();
                 
                 this->modifiableTexture_.setPixel(x, y, this->nodes_[index]->getColor());
             }

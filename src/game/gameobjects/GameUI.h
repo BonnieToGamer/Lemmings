@@ -15,12 +15,12 @@ namespace Lemmings {
 
 class GameUI final : public Engine::GameObject {
 private:
-    static constexpr uint AMOUNT_OF_BUTTONS = 13;
+    static constexpr unsigned int AMOUNT_OF_BUTTONS = 13;
     std::vector<UI::Button*> buttons_;
     UI::JobButton* currentJobButton_ = nullptr;
     const LevelData* levelData_;
-    uint mouseHoverAmount;
-    uint currentReleaseRate_;
+    unsigned int mouseHoverAmount;
+    unsigned int currentReleaseRate_;
     Job mouseHoverJob;
     sf::Texture* jobTextTexture_;
     sf::Sprite jobTextSprite_;
@@ -28,11 +28,11 @@ private:
     UI::TimeDisplay* time_;
     UI::LemmingInfoDisplay* lemmingStats_;
     
-    uint amountOut = 0;
-    uint amountIn = 0;
+    unsigned int amountOut = 0;
+    unsigned int amountIn = 0;
 
-    const uint JOB_NAME_TEXTURE_WIDTH = 55;
-    const uint JOB_NAME_TEXTURE_HEIGHT = 15;
+    const unsigned int JOB_NAME_TEXTURE_WIDTH = 55;
+    const unsigned int JOB_NAME_TEXTURE_HEIGHT = 15;
     const std::function<void()> SPAWN_EVENT_HANDLER = [this] { this->setAmountOut(); };
     const std::function<void()> LEMMING_WIN_HANDLER = [this]  { this->updateAmountIn(); };
     const std::function<void(Camera*)> CAMERA_MOVED_HANDLER = [this] (Camera* sender) { this->cameraMoved(sender); };
@@ -40,7 +40,7 @@ private:
     template<typename ButtonType, typename... Args>
     void createButton(UI::UIButtonType id, Args&&... args);
 public:
-    static Engine::Event<uint> spawnRateChangedEvent;
+    static Engine::Event<unsigned int> spawnRateChangedEvent;
     static Engine::Event<> nukeEvent;
     static Engine::Event<> pauseEvent;
     
@@ -55,7 +55,7 @@ public:
     void releaseRateButtonClicked(UI::UIButtonType index);
     Job getCurrentJob() const;
     void decreaseCurrentJob() const;
-    void setLemmingJobStat(uint amount, Job currentJob);
+    void setLemmingJobStat(unsigned int amount, Job currentJob);
     bool canAssignCurrentJob() const;
     void setAmountOut();
     void updateAmountIn();

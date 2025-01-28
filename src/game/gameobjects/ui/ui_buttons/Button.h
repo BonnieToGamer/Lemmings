@@ -26,8 +26,8 @@ protected:
     static constexpr sf::Keyboard::Key IGNORE_KEY = sf::Keyboard::Apostrophe;
     
 public:
-    static const uint BUTTON_WIDTH = 16;
-    static const uint BUTTON_HEIGHT = 23;
+    static const unsigned int BUTTON_WIDTH = 16;
+    static const unsigned int BUTTON_HEIGHT = 23;
     
     Engine::Event<UI::UIButtonType> buttonClickEvent;
 
@@ -36,7 +36,7 @@ public:
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;
     virtual void setPosition(sf::Vector2f pos);
-    uint getIndex() const;
+    unsigned int getIndex() const;
 };
 
 } // Lemmings

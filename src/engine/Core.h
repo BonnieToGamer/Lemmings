@@ -21,17 +21,17 @@ namespace Lemmings::Engine
         sf::Sprite renderSprite_;
         const float DESIGNED_RESOLUTION_ASPECT_RATIO = static_cast<float>(DESIGNED_RESOLUTION_WIDTH) / static_cast<float>(DESIGNED_RESOLUTION_HEIGHT);
         Timer slowTimer_ = Timer(0.30f);
-        std::unordered_map<uint, std::string> levels_;
+        std::unordered_map<unsigned int, std::string> levels_;
 
         static Core* INSTANCE;
-        const std::function<void(uint)> CHANGE_LEVEL_EVENT = [this](uint levelIndex) { this->loadNewLevel(levelIndex); };
+        const std::function<void(unsigned int)> CHANGE_LEVEL_EVENT = [this](unsigned int levelIndex) { this->loadNewLevel(levelIndex); };
 
-        void loadNewLevel(uint levelIndex);
+        void loadNewLevel(unsigned int levelIndex);
         void loadLevelIndices();
         
     public:
-        static constexpr uint DESIGNED_RESOLUTION_WIDTH = 320;
-        static constexpr uint DESIGNED_RESOLUTION_HEIGHT = 200;
+        static constexpr unsigned int DESIGNED_RESOLUTION_WIDTH = 320;
+        static constexpr unsigned int DESIGNED_RESOLUTION_HEIGHT = 200;
         static Event<> windowSizeChangedEvent;
         static std::unique_ptr<Asset::ContentManager> contentManager;
         

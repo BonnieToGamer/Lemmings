@@ -9,7 +9,7 @@
 #include "../../../engine/Core.h"
 
 namespace Lemmings::UI {
-    LemmingInfoDisplay::LemmingInfoDisplay(uint max) : out_(0), in_(0), max_(max)
+    LemmingInfoDisplay::LemmingInfoDisplay(unsigned int max) : out_(0), in_(0), max_(max)
     {
     }
 
@@ -56,12 +56,12 @@ namespace Lemmings::UI {
         return this->position_;
     }
 
-    void LemmingInfoDisplay::setAmountOut(uint out)
+    void LemmingInfoDisplay::setAmountOut(unsigned int out)
     {
         this->out_ = out;
     }
 
-    void LemmingInfoDisplay::setAmountIn(uint in)
+    void LemmingInfoDisplay::setAmountIn(unsigned int in)
     {
         this->in_ = in;
     }

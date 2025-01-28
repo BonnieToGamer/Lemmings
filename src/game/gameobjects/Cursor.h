@@ -21,10 +21,10 @@ namespace Lemmings {
         GameUI* ui_;
         bool wasMouseHeldLastFrame = false;
 
-        const uint CAMERA_MOVE_SPEED = 5;
-        const uint CAMERA_MOVE_BOUNDARY = 5;
-        const uint TEXTURE_WIDTH = 14;
-        const uint TEXTURE_HEIGHT = 14;
+        const unsigned int CAMERA_MOVE_SPEED = 5;
+        const unsigned int CAMERA_MOVE_BOUNDARY = 5;
+        const unsigned int TEXTURE_WIDTH = 14;
+        const unsigned int TEXTURE_HEIGHT = 14;
         
         sf::Vector2f updateCursor();
         sf::FloatRect createMouseRect(sf::Vector2f mousePos) const;

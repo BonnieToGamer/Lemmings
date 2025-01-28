@@ -113,7 +113,7 @@ namespace Lemmings {
 
     void Cursor::showCurrentLemmingStats(const std::vector<Lemming*>& lemmings) const
     {
-        const uint amount = lemmings.size();
+        const unsigned int amount = lemmings.size();
         const Job firstJob = lemmings.empty() ? Job::Nothing : lemmings.front()->getCurrentJob();
 
         this->ui_->setLemmingJobStat(amount, firstJob);

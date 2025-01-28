@@ -24,7 +24,7 @@ namespace Lemmings::Engine {
         renderTarget.draw(this->sprite_);
     }
 
-    void SpriteSheet::setCurrentSprite(uint x, uint y)
+    void SpriteSheet::setCurrentSprite(unsigned int x, unsigned int y)
     {
         this->sprite_.setTextureRect(sf::IntRect(x * this->spriteSize_.x, y * this->spriteSize_.y, this->spriteSize_.x, this->spriteSize_.y));
     }

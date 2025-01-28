@@ -21,8 +21,8 @@ private:
 public:
     explicit Map(const std::string& mapName);
 
-    uint width();
-    uint height();
+    unsigned int width();
+    unsigned int height();
     
     const Node& operator[](int index) const;
     void init() override;

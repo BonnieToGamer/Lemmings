@@ -13,9 +13,9 @@ private:
     sf::Text text_;
     
 public:
-    inline void init() override;
-    inline void update(float delta) override;
-    inline void draw(sf::RenderTarget& renderTarget) override;
+    void init() override;
+    void update(float delta) override;
+    void draw(sf::RenderTarget& renderTarget) override;
     void destroy() override;
 };
 }

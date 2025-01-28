@@ -7,7 +7,7 @@
 #include "SFML/Graphics/RectangleShape.hpp"
 
 namespace Lemmings::UI {
-    JobButton::JobButton(UI::UIButtonType buttonIndex, uint amount, bool held, Job job, float heldTimer, sf::Keyboard::Key shortCutKey) : NumberButton(buttonIndex, amount, held, heldTimer, shortCutKey), job_(job), selected_(false)
+    JobButton::JobButton(UI::UIButtonType buttonIndex, unsigned int amount, bool held, Job job, float heldTimer, sf::Keyboard::Key shortCutKey) : NumberButton(buttonIndex, amount, held, heldTimer, shortCutKey), job_(job), selected_(false)
     {
     }
 
@@ -56,7 +56,7 @@ namespace Lemmings::UI {
         this->amount_--;
     }
 
-    uint JobButton::getAmount() const
+    unsigned int JobButton::getAmount() const
     {
         return this->amount_;
     }

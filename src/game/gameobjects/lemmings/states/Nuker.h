@@ -12,7 +12,7 @@ namespace Lemmings::States {
 class Nuker  final : public Engine::IState<Lemming> {
 private:
     Job prevJob_;
-    uint animationIndex_ = 0;
+    unsigned int animationIndex_ = 0;
     bool exploded = false;
     
 public:

@@ -12,9 +12,9 @@ namespace Lemmings::UI {
 
 class LemmingInfoDisplay final : public Engine::GameObject {
 private:
-    uint out_;
-    uint in_;
-    uint max_;
+    unsigned int out_;
+    unsigned int in_;
+    unsigned int max_;
     sf::Vector2f position_;
     sf::Texture* reservedWordsTexture_;
     sf::Sprite outWordSprite_;
@@ -24,14 +24,14 @@ private:
     DualNumericSprite inSprite_;
 
 public:
-    LemmingInfoDisplay(uint max);
+    LemmingInfoDisplay(unsigned int max);
     void init() override;
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;
     void setPosition(sf::Vector2f pos);
     sf::Vector2f getPosition() const;
-    void setAmountOut(uint out);
-    void setAmountIn(uint in);
+    void setAmountOut(unsigned int out);
+    void setAmountIn(unsigned int in);
 };
 
 } // Lemmings

@@ -14,7 +14,7 @@ private:
     bool selected_;
     
 public:
-    JobButton(UI::UIButtonType buttonIndex, uint amount, bool held, Job job, float heldTimer = 0.0f, sf::Keyboard::Key shortCutKey = IGNORE_KEY);
+    JobButton(UI::UIButtonType buttonIndex, unsigned int amount, bool held, Job job, float heldTimer = 0.0f, sf::Keyboard::Key shortCutKey = IGNORE_KEY);
     void init() override;
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;
@@ -22,6 +22,6 @@ public:
     void setSelected(bool selected);
     Job getJob() const;
     void decreaseAmount();
-    uint getAmount() const;
+    unsigned int getAmount() const;
 };
 } // Lemmings

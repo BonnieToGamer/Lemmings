@@ -42,10 +42,10 @@ private:
     NumberType type_;
     
 public:
-    static constexpr uint NUMBER_BIG_WIDTH = 8;
-    static constexpr uint NUMBER_BIG_HEIGHT = 16;
-    static constexpr uint NUMBER_SMALL_WIDTH = 4;
-    static constexpr uint NUMBER_SMALL_HEIGHT = 8;
+    static constexpr unsigned int NUMBER_BIG_WIDTH = 8;
+    static constexpr unsigned int NUMBER_BIG_HEIGHT = 16;
+    static constexpr unsigned int NUMBER_SMALL_WIDTH = 4;
+    static constexpr unsigned int NUMBER_SMALL_HEIGHT = 8;
 
     NumericSprite(NumberType type = Big);
     void init() override;

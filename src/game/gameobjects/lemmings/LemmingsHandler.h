@@ -16,10 +16,10 @@ private:
     Map* map_;
     LevelData* data_;
     std::queue<Lemming*> removalQueue_;
-    uint nukeIndex_ = 0;
+    unsigned int nukeIndex_ = 0;
     bool nukeStarted_ = false;
     bool paused_ = false;
-    uint amountWon = 0;
+    unsigned int amountWon = 0;
 
     void onLemmingDeath(Lemming* lemming);
     void onLemmingWin(Lemming* lemming);
@@ -43,8 +43,8 @@ public:
 
     void addLemming(sf::Vector2i position);
     std::vector<Lemming*> checkCollision(sf::FloatRect rect) const;
-    uint getAmountWon() const;
-    uint getAmountOfLemmings() const;
+    unsigned int getAmountWon() const;
+    unsigned int getAmountOfLemmings() const;
 };
 
 } // Lemmings

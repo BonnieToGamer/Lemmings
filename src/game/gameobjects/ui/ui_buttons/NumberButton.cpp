@@ -8,7 +8,7 @@
 #include "../../../../engine/Core.h"
 
 namespace Lemmings::UI {
-    NumberButton::NumberButton(UI::UIButtonType buttonIndex, uint amount, bool held, float heldTimer, sf::Keyboard::Key shortCutKey) : Button(buttonIndex, held, heldTimer, shortCutKey), amount_(amount)
+    NumberButton::NumberButton(UI::UIButtonType buttonIndex, unsigned int amount, bool held, float heldTimer, sf::Keyboard::Key shortCutKey) : Button(buttonIndex, held, heldTimer, shortCutKey), amount_(amount)
     {
     }
 
@@ -26,8 +26,8 @@ namespace Lemmings::UI {
     {
         Button::update(delta);
 
-        const uint tens = this->amount_ > 0 ? this->amount_ / 10 : 10; // 10 is blank
-        const uint ones = this->amount_ > 0 ? this->amount_ % 10 : 10;
+        const unsigned int tens = this->amount_ > 0 ? this->amount_ / 10 : 10; // 10 is blank
+        const unsigned int ones = this->amount_ > 0 ? this->amount_ % 10 : 10;
         this->tensSprite_.setTextureRect({
             static_cast<int>(tens * this->NUMBER_TEXTURE_WIDTH),
             0,
@@ -60,7 +60,7 @@ namespace Lemmings::UI {
         this->onesSprite_.setPosition(spritePos + this->NUMBER_OFFSET + sf::Vector2f(this->NUMBER_TEXTURE_WIDTH, 0));
     }
 
-    void NumberButton::setAmount(uint amount)
+    void NumberButton::setAmount(unsigned int amount)
     {
         this->amount_ = amount;
     }

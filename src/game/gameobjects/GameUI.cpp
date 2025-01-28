@@ -11,7 +11,7 @@
 #include "../../engine/Core.h"
 
 namespace Lemmings {
-    Engine::Event<uint> GameUI::spawnRateChangedEvent;
+    Engine::Event<unsigned int> GameUI::spawnRateChangedEvent;
     Engine::Event<> GameUI::nukeEvent;
     Engine::Event<> GameUI::pauseEvent;
     
@@ -155,7 +155,7 @@ namespace Lemmings {
         this->currentJobButton_->decreaseAmount();
     }
 
-    void GameUI::setLemmingJobStat(uint amount, Job currentJob)
+    void GameUI::setLemmingJobStat(unsigned int amount, Job currentJob)
     {
         this->mouseHoverAmount = amount;
         this->mouseHoverJob = currentJob;

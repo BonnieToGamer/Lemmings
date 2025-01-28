@@ -16,7 +16,7 @@ namespace Lemmings {
         return static_cast<float>(100 - this->spawnRate_) / 20;
     }
 
-    Entrance::Entrance(sf::Vector2i position, LemmingsHandler* lemmingsHandler, uint spawnRate, uint amountOfLemmings) : spawnTimer_(nullptr), position_(position), currentAnimationFrame_(0), lemmingsHandler_(lemmingsHandler), spawnRate_(spawnRate), amountOfLemmings_(amountOfLemmings)
+    Entrance::Entrance(sf::Vector2i position, LemmingsHandler* lemmingsHandler, unsigned int spawnRate, unsigned int amountOfLemmings) : spawnTimer_(nullptr), position_(position), currentAnimationFrame_(0), lemmingsHandler_(lemmingsHandler), spawnRate_(spawnRate), amountOfLemmings_(amountOfLemmings)
     {
         GameUI::spawnRateChangedEvent += this->SPAWN_RATE_CHANGED_HANDLER;
         this->spawnTimer_ = std::make_unique<Engine::Timer>(this->calcSpawnRate());
@@ -51,7 +51,7 @@ namespace Lemmings {
         this->spriteSheet_->draw(renderTarget);
     }
 
-    void Entrance::spawnRateChanged(uint newSpawnRate)
+    void Entrance::spawnRateChanged(unsigned int newSpawnRate)
     {
         this->spawnRate_ = newSpawnRate;
         this->spawnTimer_->changeStopTime(this->calcSpawnRate());
@@ -76,7 +76,7 @@ namespace Lemmings {
         this->currentAnimationFrame_++;
     }
 
-    uint Entrance::getAmountOut() const
+    unsigned int Entrance::getAmountOut() const
     {
         return this->currentAmountOfLemmings_;
     }

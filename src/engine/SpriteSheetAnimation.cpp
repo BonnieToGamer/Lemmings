@@ -5,7 +5,7 @@
 #include "SpriteSheetAnimation.h"
 
 namespace Lemmings::Engine {
-    SpriteSheetAnimation::SpriteSheetAnimation(SpriteSheet* spriteSheet, AnimationDirection dir, uint amountOfFrames, sf::Vector2u offset) : spriteSheet_(spriteSheet), animationDir_(dir), maxFrames_(amountOfFrames), offset_(offset)
+    SpriteSheetAnimation::SpriteSheetAnimation(SpriteSheet* spriteSheet, AnimationDirection dir, unsigned int amountOfFrames, sf::Vector2u offset) : spriteSheet_(spriteSheet), animationDir_(dir), maxFrames_(amountOfFrames), offset_(offset)
     {
     }
 

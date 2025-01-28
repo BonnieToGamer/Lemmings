@@ -10,7 +10,7 @@ namespace Lemmings::States {
 
 class Winner final : public Engine::IState<Lemming> {
 private:
-    uint frameCounter = 0;
+    unsigned int frameCounter = 0;
     
 public:
     void enter() override;

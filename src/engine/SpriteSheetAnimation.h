@@ -19,12 +19,12 @@ public:
 private:
     SpriteSheet* spriteSheet_;
     AnimationDirection animationDir_;
-    uint maxFrames_;
-    uint currentFrame_ = 0;
+    unsigned int maxFrames_;
+    unsigned int currentFrame_ = 0;
     sf::Vector2u offset_;
 
 public:
-    SpriteSheetAnimation(SpriteSheet* spriteSheet, AnimationDirection dir, uint amountOfFrames, sf::Vector2u offset);
+    SpriteSheetAnimation(SpriteSheet* spriteSheet, AnimationDirection dir, unsigned int amountOfFrames, sf::Vector2u offset);
     void nextFrame();
     void resetAnimation();
 };

@@ -5,7 +5,7 @@
 #include "LevelLoader.h"
 
 namespace Lemmings::Scene {
-    Engine::Event<uint> LevelLoader::changeLevelEvent;
+    Engine::Event<unsigned int> LevelLoader::changeLevelEvent;
     
     void LevelLoader::init()
     {

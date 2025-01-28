@@ -21,29 +21,29 @@ public:
         stone = 4
     };
         
-    uint levelNum;
+    unsigned int levelNum;
     std::string name;
     std::string image;
-    uint dirtIndex;
-    uint exitIndex;
-    uint timeLimit;
-    uint saveRequirement;
-    uint amountOfLemmings;
-    uint releaseRate;
-    uint climbers;
-    uint floaters;
-    uint bombers;
-    uint blockers;
-    uint builders;
-    uint bashers;
-    uint miners;
-    uint diggers;
+    unsigned int dirtIndex;
+    unsigned int exitIndex;
+    unsigned int timeLimit;
+    unsigned int saveRequirement;
+    unsigned int amountOfLemmings;
+    unsigned int releaseRate;
+    unsigned int climbers;
+    unsigned int floaters;
+    unsigned int bombers;
+    unsigned int blockers;
+    unsigned int builders;
+    unsigned int bashers;
+    unsigned int miners;
+    unsigned int diggers;
     int spawnX;
     int spawnY;
     int exitX;
     int exitY;
-    uint cameraX;
-    uint cameraY;
+    unsigned int cameraX;
+    unsigned int cameraY;
 
     inline static const std::map<DirtIndexColor, sf::Color> indexToColor = {
         {dirt, sf::Color(120, 77, 0)},

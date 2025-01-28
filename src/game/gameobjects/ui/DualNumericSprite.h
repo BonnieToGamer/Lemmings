@@ -16,7 +16,7 @@ public:
     void init() override;
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;
-    void setValue(uint value);
+    void setValue(unsigned int value);
     void setEmpty();
     void setPosition(sf::Vector2f position);
     sf::Vector2f getPosition();

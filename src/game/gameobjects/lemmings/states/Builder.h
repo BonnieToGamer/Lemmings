@@ -11,11 +11,11 @@ namespace Lemmings::States {
 
 class Builder final : public Engine::IState<Lemming> {
 private:
-    uint frameCounter = 0;
-    uint placedTiles = 0;
+    unsigned int frameCounter = 0;
+    unsigned int placedTiles = 0;
     bool shrugState = false;
 
-    const uint AMOUNT_OF_TILES = 12; // DOS version has 12. This depends on version. NES has 16 for example
+    const unsigned int AMOUNT_OF_TILES = 12; // DOS version has 12. This depends on version. NES has 16 for example
     const sf::Color BUILD_BLOCK_COLOR = sf::Color(198, 185, 246);
     
 public:

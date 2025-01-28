@@ -9,7 +9,7 @@
 #include "../../../engine/Core.h"
 
 namespace Lemmings::UI {
-    TimeDisplay::TimeDisplay(sf::Vector2f position, uint time): currentTime_(time), position_(position)
+    TimeDisplay::TimeDisplay(sf::Vector2f position, unsigned int time): currentTime_(time), position_(position)
     {
         
     }
@@ -54,7 +54,7 @@ namespace Lemmings::UI {
         this->timer_.update(delta);
         this->minute_->setNumber(static_cast<NumericSprite::Number>(this->currentTime_ / 60));
 
-        const uint seconds = this->currentTime_ % 60;
+        const unsigned int seconds = this->currentTime_ % 60;
         this->secondsTens_->setNumber(static_cast<NumericSprite::Number>(seconds / 10));
         this->secondsOnes_->setNumber(static_cast<NumericSprite::Number>(seconds % 10));
         GameObject::update(delta);
@@ -66,7 +66,7 @@ namespace Lemmings::UI {
         GameObject::draw(renderTarget);
     }
 
-    void TimeDisplay::setTime(uint time)
+    void TimeDisplay::setTime(unsigned int time)
     {
         this->currentTime_ = time;
     }

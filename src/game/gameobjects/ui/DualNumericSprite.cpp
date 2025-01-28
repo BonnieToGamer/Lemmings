@@ -21,7 +21,7 @@ namespace Lemmings::UI {
         this->ones_.draw(renderTarget);
     }
 
-    void DualNumericSprite::setValue(uint value)
+    void DualNumericSprite::setValue(unsigned int value)
     {
         if (value >= 10)
         {

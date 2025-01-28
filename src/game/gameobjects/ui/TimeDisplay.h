@@ -12,7 +12,7 @@ namespace Lemmings::UI {
 
 class TimeDisplay final : public Engine::GameObject {
 private:
-    uint currentTime_;
+    unsigned int currentTime_;
     Engine::Timer timer_ = Engine::Timer(1.0f);
     sf::Vector2f position_;
     
@@ -25,13 +25,13 @@ private:
     NumericSprite* secondsOnes_;
 
 public:
-    static constexpr uint WIDTH = NumericSprite::NUMBER_BIG_WIDTH * 9;
+    static constexpr unsigned int WIDTH = NumericSprite::NUMBER_BIG_WIDTH * 9;
     
-    TimeDisplay(sf::Vector2f position, uint time);
+    TimeDisplay(sf::Vector2f position, unsigned int time);
     void init() override;
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;
-    void setTime(uint time);
+    void setTime(unsigned int time);
     void setPosition(sf::Vector2f position);
     sf::Vector2f getPosition();
     void onTimerComplete();

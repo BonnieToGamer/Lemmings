@@ -123,12 +123,12 @@ namespace Lemmings {
         return collidingLemmings;
     }
 
-    uint LemmingsHandler::getAmountWon() const
+    unsigned int LemmingsHandler::getAmountWon() const
     {
         return this->amountWon;
     }
 
-    uint LemmingsHandler::getAmountOfLemmings() const
+    unsigned int LemmingsHandler::getAmountOfLemmings() const
     {
         return this->lemmings_.size();
     }

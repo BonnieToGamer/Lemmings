@@ -21,10 +21,10 @@ private:
     FloaterStates state_;
     Walker walker_;
     Faller faller_;
-    uint fallFrames_ = 0;
-    uint frameCounter_ = 0;
+    unsigned int fallFrames_ = 0;
+    unsigned int frameCounter_ = 0;
 
-    const uint MAX_FALL_FRAMES_UNTIL_PARACHUTE = 6;
+    const unsigned int MAX_FALL_FRAMES_UNTIL_PARACHUTE = 6;
     
 public:
     void enter() override;

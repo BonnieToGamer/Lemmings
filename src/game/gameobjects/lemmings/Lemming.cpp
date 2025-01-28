@@ -26,7 +26,7 @@ namespace Lemmings {
     Engine::Event<Lemming*> Lemming::deathEvent;
     Engine::Event<Lemming*> Lemming::winEvent;
 
-    void Lemming::addAnimation(LemmingAnimations jobAnimation, uint amountOfFrames, const sf::Vector2u& offset)
+    void Lemming::addAnimation(LemmingAnimations jobAnimation, unsigned int amountOfFrames, const sf::Vector2u& offset)
     {
         auto animation = std::make_unique<Engine::SpriteSheetAnimation>(
             this->lemmingSpriteSheet_.get(),

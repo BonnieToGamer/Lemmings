@@ -11,7 +11,7 @@ namespace Lemmings::States {
 
 class Miner final : public Engine::IState<Lemming> {
 private:
-    uint mineCounter = 0;
+    unsigned int mineCounter = 0;
 
     void digStepOne(const sf::Vector2i& pos, HorizontalDirection direction);
     bool shouldSkipFirstStep(int y, int x);

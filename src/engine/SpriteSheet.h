@@ -26,7 +26,7 @@ public:
     void init() override;
     void update(float delta) override;
     void draw(sf::RenderTarget& renderTarget) override;
-    void setCurrentSprite(uint x, uint y);
+    void setCurrentSprite(unsigned int x, unsigned int y);
     void setPosition(int x, int y);
     void flipSprite();
     void setFlipped(int dir);

@@ -24,7 +24,7 @@ private:
     ClimberState state_;
     Walker walker_;
     Faller faller_;
-    uint frameCounter_ = 0;
+    unsigned int frameCounter_ = 0;
 
 public:
     void walkUpdate(float delta);

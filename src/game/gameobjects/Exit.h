@@ -18,14 +18,14 @@ private:
 
     Engine::Timer animationTimer_ = Engine::Timer(0.0667f);
 
-    static constexpr uint TEXTURE_WIDTH = 44;
-    static constexpr uint TEXTURE_HEIGHT = 52;
+    static constexpr unsigned int TEXTURE_WIDTH = 44;
+    static constexpr unsigned int TEXTURE_HEIGHT = 52;
 
     void animationTimerFinished() const;
     
 public:
-    static constexpr uint COLLIDER_WIDTH = 7;
-    static constexpr uint COLLIDER_HEIGHT = -TEXTURE_HEIGHT;
+    static constexpr unsigned int COLLIDER_WIDTH = 7;
+    static constexpr unsigned int COLLIDER_HEIGHT = -TEXTURE_HEIGHT;
     static sf::IntRect collisionArea;
 
     explicit Exit(LevelData* data);

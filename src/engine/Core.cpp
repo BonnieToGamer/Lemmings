@@ -19,7 +19,7 @@ namespace Lemmings::Engine
     Event<> Core::windowSizeChangedEvent = Event<>();
     std::unique_ptr<Asset::ContentManager> Core::contentManager = std::make_unique<Asset::ContentManager>();
 
-    void Core::loadNewLevel(uint levelIndex)
+    void Core::loadNewLevel(unsigned int levelIndex)
     {
         if (levelIndex > this->levels_.size())
         {
@@ -35,7 +35,7 @@ namespace Lemmings::Engine
     {
         for (const auto & entry : std::filesystem::directory_iterator(ASSETS_PATH"levels/"))
         {
-            std::string path = entry.path();
+            std::string path = entry.path().string();
             
             std::ifstream file(path);
             std::string line;
@@ -43,7 +43,7 @@ namespace Lemmings::Engine
             
             std::getline(file, line);
 
-            uint index = std::strtol(line.c_str(), &endPtr, 10);
+            unsigned int index = std::strtol(line.c_str(), &endPtr, 10);
 
             if (endPtr == line.c_str()) {
                 // No conversion was performed
@@ -65,13 +65,13 @@ namespace Lemmings::Engine
     Core::Core() : sceneManager_(), renderTexture_(), renderSprite_()
     {
         INSTANCE = this;
-        const uint width = DESIGNED_RESOLUTION_WIDTH * 4;
-        const uint height = DESIGNED_RESOLUTION_HEIGHT * 4;
+        const unsigned int width = DESIGNED_RESOLUTION_WIDTH * 4;
+        const unsigned int height = DESIGNED_RESOLUTION_HEIGHT * 4;
         this->renderWindow_ = std::make_unique<sf::RenderWindow>(sf::VideoMode{width, height}, "CMake SFML Project", sf::Style::Titlebar | sf::Style::Close);
         this->renderWindow_->setFramerateLimit(60);
 
-        const uint displayWidth = sf::VideoMode::getDesktopMode().width;
-        const uint displayHeight = sf::VideoMode::getDesktopMode().height;
+        const unsigned int displayWidth = sf::VideoMode::getDesktopMode().width;
+        const unsigned int displayHeight = sf::VideoMode::getDesktopMode().height;
         this->renderWindow_->setPosition(sf::Vector2i(
             static_cast<int>((displayWidth - width) / 2),
             static_cast<int>((displayHeight - height) / 2))
